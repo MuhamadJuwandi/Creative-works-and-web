@@ -1,136 +1,98 @@
-# 🌐 Web Projects
+# 🌐 Production Web Projects
 
-A curated collection of professional website projects that I have designed and developed for real clients, personal initiatives, and commercial use cases.
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:00C9FF,100:92FE9D&height=250&section=header&text=Web%20Development%20%26%20Deployment&fontSize=45&fontAlign=50&desc=Production-Ready%20Sites%20%7C%20Client%20Work%20%7C%20UI/UX&descAlign=50&descSize=20)
 
-This directory represents **production-ready web work**, focusing on structure, credibility, and real deployment — not experimental or tutorial-based projects.
+<div align="center">
 
----
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+<img src="https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white" />
+<img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" />
+<br/>
+<img src="https://img.shields.io/badge/Type-Client%20Projects-success?style=flat-square" />
+<img src="https://img.shields.io/badge/Focus-Production%20Ready-blue?style=flat-square" />
 
-## 🔗 Navigation
-[English](#english) | [日本語](#日本語) | [Bahasa Indonesia](#bahasa-indonesia)
+<br/>
 
----
+[English](#-english) | [日本語](#-japanese) | [Bahasa Indonesia](#-bahasa-indonesia)
 
-<a name="english"></a>
-## English
-
-### Overview
-This folder serves as the **main entry point** for my web development and web design portfolio.
-
-Each sub-project inside this directory is a **standalone website project**, complete with its own documentation, visual previews, and technical context.  
-The projects presented here were built for **real usage**, including business operations, information delivery, and client-facing purposes.
-
-### What You Will Find Here
-- Corporate & company profile websites  
-- Business and service landing pages  
-- Informational and media-oriented platforms  
-- Client-based UI implementation with real constraints  
-
-Each project folder contains:
-- A dedicated README
-- Visual mockups or screenshots
-- Clear explanation of design and technical decisions
-
-### Design & Engineering Focus
-- Information Architecture (IA)
-- Responsive and accessible layout
-- Clean, maintainable front-end structure
-- Business-oriented presentation
-- Deployment-aware implementation
-
-### Technologies & Stack
-- HTML5 (semantic structure)
-- CSS3 (modern layout & responsiveness)
-- JavaScript (interaction & usability)
-- Bootstrap (selected projects)
-- WordPress (selected projects)
-- Hosting & domain configuration (real deployment experience)
-
-### Important Notes
-- Some repositories include partial source files for portfolio clarity.
-- Sensitive client data, credentials, and internal configurations are excluded.
-- Live links are provided when public access is available.
+</div>
 
 ---
 
-<a name="日本語"></a>
-## 日本語
+## 🇬🇧 English
 
-### 概要
-このフォルダは、私のWeb制作ポートフォリオの**メインディレクトリ**です。
+### 🚀 Overview
+This directory serves as the **professional archive** for my web development work. Unlike tutorials or experimental snippets, these projects represent **production-grade deliverables** designed for real clients and business use cases.
 
-ここに含まれる各プロジェクトは、実際のクライアントや運用目的のために制作された  
-**実運用レベルのWebサイト**です。
+As a **Data Scientist** with web capabilities, I focus on bridging the gap between raw data and user accessibility through clean, responsive, and functional interfaces.
 
-各プロジェクトフォルダには、以下が含まれています：
-- 専用のREADME
-- UIモックアップまたはスクリーンショット
-- 設計・実装に関する説明
+### 📂 Featured Projects Gallery
 
-### 主なプロジェクト内容
-- コーポレートサイト・会社紹介サイト  
-- サービス・ビジネス向けランディングページ  
-- 情報発信・メディア系Webプラットフォーム  
-- クライアント要件に基づくUI実装  
+| Project | Type | Tech Stack | Status |
+| :--- | :--- | :--- | :---: |
+| **[Project Name A](./client-a-folder/)**<br>_Corporate profile for XYZ_ | 🏢 Company Profile | `WordPress` `CSS3` | 🟢 Live |
+| **[Project Name B](./client-b-folder/)**<br>_Landing page for campaign_ | 📢 Marketing | `HTML5` `Bootstrap` | 🏁 Done |
+| **[Project Name C](./client-c-folder/)**<br>_Custom dashboard UI_ | 📊 Data UI | `JS` `Chart.js` | 🚧 Demo |
 
-### 重視しているポイント
-- 情報アーキテクチャ（IA）
-- レスポンシブデザイン
-- 保守性の高いフロントエンド構成
-- ビジネス用途を想定したUI設計
-- 公開・運用を前提とした実装
+### 🛠 Engineering Focus
+* **Real-World Deployment:** Experience with hosting (cPanel, Vercel) and domain DNS configuration.
+* **Business-Centric UI:** Layouts designed for conversion and information hierarchy, not just aesthetics.
+* **Maintainability:** Clean code structure suitable for handover to other developers.
 
-### 使用技術
-- HTML5
-- CSS3
-- JavaScript
-- Bootstrap（一部プロジェクト）
-- WordPress（一部プロジェクト）
-- ドメイン・サーバー設定（実運用経験）
-
-### 補足事項
-- ポートフォリオ用途のため、一部ソースは省略されています。
-- クライアント情報や内部設定は公開していません。
-- 公開可能なプロジェクトには、ライブURLを掲載しています。
+> **⚠️ Privacy Note:** Some source codes are partial or obfuscated to protect client confidentiality (NDA) and proprietary assets.
 
 ---
 
-<a name="bahasa-indonesia"></a>
-## Bahasa Indonesia
+## 🇯🇵 Japanese
 
-### Gambaran Umum
-Folder ini merupakan **induk portofolio proyek website** yang pernah saya rancang dan kembangkan.
+### 🚀 概要 (Overview)
+このディレクトリは、私のWeb開発ポートフォリオの**メインアーカイブ**です。ここにあるプロジェクトは、チュートリアルや実験的なものではなく、実際のクライアントやビジネス目的のために制作された**実運用レベル（Production-Ready）のWebサイト**です。
 
-Setiap sub-folder di dalam direktori ini berisi **satu proyek website utuh**, lengkap dengan dokumentasi, visual, dan penjelasan teknis yang relevan.  
-Seluruh proyek difokuskan pada **kebutuhan nyata**, bukan proyek latihan.
+データサイエンティストとしての分析力とWeb開発スキルを組み合わせ、データとユーザーをつなぐ、機能的で使いやすいインターフェースの構築を目指しています。
 
-### Cakupan Proyek
-- Website company profile
-- Landing page layanan dan bisnis
-- Website media dan informasi
-- Implementasi UI berbasis kebutuhan klien
+### 📂 主なプロジェクト (Featured Projects)
 
-### Fokus Pengembangan
-- Arsitektur informasi yang jelas
-- Desain responsif dan profesional
-- Struktur kode yang rapi dan terawat
-- Pendekatan berbasis kebutuhan bisnis
-- Implementasi yang siap deploy
+| プロジェクト | タイプ | 使用技術 | ステータス |
+| :--- | :--- | :--- | :---: |
+| **[プロジェクト A](./client-a-folder/)**<br>_企業向けコーポレートサイト_ | 🏢 会社紹介 | `WordPress` `CSS3` | 🟢 稼働中 |
+| **[プロジェクト B](./client-b-folder/)**<br>_キャンペーン用LP_ | 📢 マーケティング | `HTML5` `Bootstrap` | 🏁 完了 |
+| **[プロジェクト C](./client-c-folder/)**<br>_データ可視化UI_ | 📊 データUI | `JS` `Chart.js` | 🚧 デモ |
 
-### Teknologi
-- HTML5
-- CSS3
-- JavaScript
-- Bootstrap (pada proyek tertentu)
-- WordPress (pada proyek tertentu)
-- Pengaturan hosting dan domain
+### 🛠 エンジニアリングの焦点
+* **実環境へのデプロイ:** ホスティングサーバー（cPanel等）やドメインDNS設定の実務経験。
+* **ビジネス視点のUI設計:** 単なる見た目だけでなく、コンバージョン（成果）と情報の優先順位を考慮。
+* **保守性:** 他の開発者に引き継ぎ可能な、クリーンなコード構造。
 
-### Catatan
-- Beberapa file ditampilkan secara selektif untuk keperluan portofolio.
-- Data sensitif, kredensial, dan konfigurasi internal tidak disertakan.
-- Proyek yang aktif menyertakan tautan live website jika tersedia.
+> **⚠️ 注意:** クライアントの機密保持契約（NDA）および知的財産保護のため、一部のソースコードは非公開または部分的な公開となっています。
 
 ---
 
-## 📌 Project Directory
-Silakan masuk ke masing-masing folder proyek untuk melihat dokumentasi lengkap, visual UI, dan konteks teknis setiap website.
+## 🇮🇩 Bahasa Indonesia
+
+### 🚀 Gambaran Umum
+Folder ini adalah **arsip profesional** dari karya pengembangan web saya. Berbeda dengan proyek latihan, seluruh proyek di sini adalah **hasil kerja nyata (Production-Grade)** yang dirancang untuk klien dan kebutuhan bisnis operasional.
+
+Sebagai seorang **Data Scientist**, kemampuan web ini mendukung saya dalam mendeliver hasil analisis ke dalam bentuk antarmuka yang mudah diakses dan dipahami oleh *end-user*.
+
+### 📂 Galeri Proyek Unggulan
+
+| Proyek | Tipe | Tech Stack | Status |
+| :--- | :--- | :--- | :---: |
+| **[Nama Proyek A](./client-a-folder/)**<br>_Profil perusahaan XYZ_ | 🏢 Company Profile | `WordPress` `CSS3` | 🟢 Live |
+| **[Nama Proyek B](./client-b-folder/)**<br>_Landing page kampanye_ | 📢 Marketing | `HTML5` `Bootstrap` | 🏁 Selesai |
+| **[Nama Proyek C](./client-c-folder/)**<br>_UI Dashboard Custom_ | 📊 Data UI | `JS` `Chart.js` | 🚧 Demo |
+
+### 🛠 Fokus Pengembangan
+* **Siap Deploy:** Pengalaman nyata mengelola hosting, cPanel, dan konfigurasi DNS domain.
+* **UI Berbasis Bisnis:** Tata letak yang dirancang untuk konversi dan hierarki informasi, bukan sekadar estetika.
+* **Struktur Kode:** Penulisan kode yang rapi dan mudah dipelihara (*maintainable*).
+
+> **⚠️ Catatan Privasi:** Beberapa kode sumber mungkin disamarkan atau tidak disertakan secara lengkap demi menjaga kerahasiaan data klien (NDA).
+
+---
+
+<div align="center">
+    <p><i>Building the web, one pixel at a time.</i></p>
+</div>
