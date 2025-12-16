@@ -1,7 +1,5 @@
 # 🌐 Production Web Projects
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:00C9FF,100:92FE9D&height=250&section=header&text=Web%20Development%20%26%20Deployment&fontSize=45&fontAlign=50&desc=Production-Ready%20Sites%20%7C%20Client%20Work%20%7C%20UI/UX&descAlign=50&descSize=20)
-
 <div align="center">
 
 <br>
