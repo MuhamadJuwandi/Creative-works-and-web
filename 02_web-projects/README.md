@@ -1,7 +1,8 @@
 # 🌐 Web Projects
 
-Collection of website projects that I have designed and developed, including commercial websites, informational platforms, and client-based web solutions.  
-This section focuses on **real-world implementation**, not experimental demos.
+A curated collection of professional website projects that I have designed and developed for real clients, personal initiatives, and commercial use cases.
+
+This directory represents **production-ready web work**, focusing on structure, credibility, and real deployment — not experimental or tutorial-based projects.
 
 ---
 
@@ -10,103 +11,126 @@ This section focuses on **real-world implementation**, not experimental demos.
 
 ---
 
+<a name="english"></a>
 ## English
 
 ### Overview
-This folder contains website projects that I have built for freelance work, personal initiatives, and client-based needs.  
-Each project emphasizes **usability, clean design, and functional implementation**.
+This folder serves as the **main entry point** for my web development and web design portfolio.
 
-The projects here are not tutorials or mockups, but actual websites that were designed to be published and used.
+Each sub-project inside this directory is a **standalone website project**, complete with its own documentation, visual previews, and technical context.  
+The projects presented here were built for **real usage**, including business operations, information delivery, and client-facing purposes.
 
-### Project Scope
-- Company profile websites  
-- Service & business landing pages  
-- Informational and media-based websites  
-- Custom UI implementation for real clients  
+### What You Will Find Here
+- Corporate & company profile websites  
+- Business and service landing pages  
+- Informational and media-oriented platforms  
+- Client-based UI implementation with real constraints  
 
-### Key Focus
-- Responsive layout
-- Clean and readable UI
-- Practical structure
-- Real deployment context
+Each project folder contains:
+- A dedicated README
+- Visual mockups or screenshots
+- Clear explanation of design and technical decisions
 
-### Technologies Used
-- HTML5
-- CSS3
-- JavaScript
-- WordPress (for selected projects)
-- Hosting & domain configuration (deployment-level experience)
+### Design & Engineering Focus
+- Information Architecture (IA)
+- Responsive and accessible layout
+- Clean, maintainable front-end structure
+- Business-oriented presentation
+- Deployment-aware implementation
 
-### Notes
-Some projects may only include selected files or documentation for portfolio purposes.  
-Sensitive client data and credentials are intentionally excluded.
+### Technologies & Stack
+- HTML5 (semantic structure)
+- CSS3 (modern layout & responsiveness)
+- JavaScript (interaction & usability)
+- Bootstrap (selected projects)
+- WordPress (selected projects)
+- Hosting & domain configuration (real deployment experience)
+
+### Important Notes
+- Some repositories include partial source files for portfolio clarity.
+- Sensitive client data, credentials, and internal configurations are excluded.
+- Live links are provided when public access is available.
 
 ---
 
+<a name="日本語"></a>
 ## 日本語
 
 ### 概要
-このフォルダには、私がこれまでに制作したWebサイトのプロジェクトをまとめています。  
-フリーランス業務、個人運営、クライアント向け案件など、**実運用を前提としたWeb制作**が中心です。
+このフォルダは、私のWeb制作ポートフォリオの**メインディレクトリ**です。
 
-学習用サンプルではなく、実際に公開・運用されたWebサイトを対象としています。
+ここに含まれる各プロジェクトは、実際のクライアントや運用目的のために制作された  
+**実運用レベルのWebサイト**です。
 
-### プロジェクト内容
-- 企業・サービス紹介サイト  
-- ビジネス用ランディングページ  
-- 情報発信・メディア系Webサイト  
-- クライアント向けUI実装  
+各プロジェクトフォルダには、以下が含まれています：
+- 専用のREADME
+- UIモックアップまたはスクリーンショット
+- 設計・実装に関する説明
 
-### 重視ポイント
+### 主なプロジェクト内容
+- コーポレートサイト・会社紹介サイト  
+- サービス・ビジネス向けランディングページ  
+- 情報発信・メディア系Webプラットフォーム  
+- クライアント要件に基づくUI実装  
+
+### 重視しているポイント
+- 情報アーキテクチャ（IA）
 - レスポンシブデザイン
-- 視認性の高いUI
-- 実務を想定した構成
-- 公開・運用を前提とした設計
+- 保守性の高いフロントエンド構成
+- ビジネス用途を想定したUI設計
+- 公開・運用を前提とした実装
 
 ### 使用技術
 - HTML5
 - CSS3
 - JavaScript
+- Bootstrap（一部プロジェクト）
 - WordPress（一部プロジェクト）
 - ドメイン・サーバー設定（実運用経験）
 
-### 補足
-クライアント情報保護のため、  
-一部ファイルや設定情報は公開していません。
+### 補足事項
+- ポートフォリオ用途のため、一部ソースは省略されています。
+- クライアント情報や内部設定は公開していません。
+- 公開可能なプロジェクトには、ライブURLを掲載しています。
 
 ---
 
+<a name="bahasa-indonesia"></a>
 ## Bahasa Indonesia
 
-### Deskripsi
-Folder ini berisi kumpulan proyek website yang pernah saya kerjakan, baik untuk kebutuhan freelance, proyek pribadi, maupun klien.  
-Fokus utama adalah **website yang benar-benar digunakan**, bukan sekadar latihan atau demo.
+### Gambaran Umum
+Folder ini merupakan **induk portofolio proyek website** yang pernah saya rancang dan kembangkan.
 
-### Jenis Proyek
+Setiap sub-folder di dalam direktori ini berisi **satu proyek website utuh**, lengkap dengan dokumentasi, visual, dan penjelasan teknis yang relevan.  
+Seluruh proyek difokuskan pada **kebutuhan nyata**, bukan proyek latihan.
+
+### Cakupan Proyek
 - Website company profile
 - Landing page layanan dan bisnis
 - Website media dan informasi
-- Implementasi UI untuk klien nyata
+- Implementasi UI berbasis kebutuhan klien
 
-### Fokus Utama
-- Desain responsif
-- Tampilan bersih dan profesional
-- Struktur yang rapi dan mudah dikembangkan
-- Konteks deployment nyata
+### Fokus Pengembangan
+- Arsitektur informasi yang jelas
+- Desain responsif dan profesional
+- Struktur kode yang rapi dan terawat
+- Pendekatan berbasis kebutuhan bisnis
+- Implementasi yang siap deploy
 
-### Teknologi yang Digunakan
+### Teknologi
 - HTML5
 - CSS3
 - JavaScript
-- WordPress (pada beberapa proyek)
+- Bootstrap (pada proyek tertentu)
+- WordPress (pada proyek tertentu)
 - Pengaturan hosting dan domain
 
 ### Catatan
-Beberapa proyek hanya ditampilkan sebagian untuk keperluan portofolio.  
-Data sensitif dan kredensial klien tidak disertakan.
+- Beberapa file ditampilkan secara selektif untuk keperluan portofolio.
+- Data sensitif, kredensial, dan konfigurasi internal tidak disertakan.
+- Proyek yang aktif menyertakan tautan live website jika tersedia.
 
 ---
 
-## 📌 Project List
-Silakan buka masing-masing folder di dalam direktori ini untuk melihat detail setiap proyek website.
-
+## 📌 Project Directory
+Silakan masuk ke masing-masing folder proyek untuk melihat dokumentasi lengkap, visual UI, dan konteks teknis setiap website.
