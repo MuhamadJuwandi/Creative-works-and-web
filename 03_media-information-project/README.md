@@ -1,7 +1,7 @@
 # 📰 Media & Information Operations
-
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:FF512F,100:DD2476&height=250&section=header&text=Content%20Strategy%20%26%20Media&fontSize=45&fontAlign=50&desc=Editorial%20Workflow%20%7C%20Digital%20Journalism%20%7C%20Branding&descAlign=50&descSize=20)
-
+<div align="center">
+  <img src="Keunal.id/Assets/img/banner1.jpg" width="100%" alt="Keunal.id Banner">
+  <br><br>
 <div align="center">
 
 <img src="https://img.shields.io/badge/Canva-00C4CC?style=for-the-badge&logo=Canva&logoColor=white" />
