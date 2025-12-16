@@ -1,7 +1,16 @@
 # 🧪 Digital App Laboratory
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:8E2DE2,100:4A00E0
-&height=260&section=header&text=Engineering%20Daily%20Life%0AProductivity%20Tools%20%7C%20EdTech%20%7C%20Personal%20Finance&fontSize=45&fontAlignY=45&desc=)
+![Banner](https://capsule-render.vercel.app/api?
+type=waving
+&color=0:8E2DE2,100:4A00E0
+&height=260
+&section=header
+&text=Engineering%20Daily%20Life%0AProductivity%20Tools%20%7C%20EdTech%20%7C%20Personal%20Finance
+&fontSize=45
+&fontAlignY=45
+&desc=
+)
+
 
 
 <div align="center">
