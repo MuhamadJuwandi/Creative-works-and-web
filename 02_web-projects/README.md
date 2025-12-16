@@ -1,11 +1,12 @@
 # 🌐 Production Web Projects
-<br><br>
 
-<img src="Azzuratour.co.id/assets/main_mockup.png" alt="Azzura Tour Website Mockup" width="100%">
-
-</div>
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:00C9FF,100:92FE9D&height=250&section=header&text=Web%20Development%20%26%20Deployment&fontSize=45&fontAlign=50&desc=Production-Ready%20Sites%20%7C%20Client%20Work%20%7C%20UI/UX&descAlign=50&descSize=20)
 
 <div align="center">
+
+<br>
+<img src="./Azzuratour.co.id/assets/main_mockup.png" alt="Azzura Tour Website Mockup" width="80%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+<br><br>
 
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
@@ -35,14 +36,12 @@ As a **Data Scientist** with web capabilities, I focus on bridging the gap betwe
 
 | Project | Type | Tech Stack | Status |
 | :--- | :--- | :--- | :---: |
-| **[Project Name A](./client-a-folder/)**<br>_Corporate profile for XYZ_ | 🏢 Company Profile | `WordPress` `CSS3` | 🟢 Live |
-| **[Project Name B](./client-b-folder/)**<br>_Landing page for campaign_ | 📢 Marketing | `HTML5` `Bootstrap` | 🏁 Done |
-| **[Project Name C](./client-c-folder/)**<br>_Custom dashboard UI_ | 📊 Data UI | `JS` `Chart.js` | 🚧 Demo |
+| **[Azzura Tour](./Azzuratour.co.id/)**<br>_Umrah & Hajj Travel Agency_ | 🏢 Company Profile | `WordPress` `HTML` `CSS` `JS` | [🟢 Live Site](https://azzuratour.co.id/) |
 
 ### 🛠 Engineering Focus
-* **Real-World Deployment:** Experience with hosting (cPanel, Vercel) and domain DNS configuration.
-* **Business-Centric UI:** Layouts designed for conversion and information hierarchy, not just aesthetics.
-* **Maintainability:** Clean code structure suitable for handover to other developers.
+* **Real-World Deployment:** Experience with hosting (cPanel), SSL configuration, and live domain management.
+* **Business-Centric UI:** Layouts designed for trust-building and information clarity (essential for Travel Agencies).
+* **Maintainability:** Utilizing CMS (WordPress) customized with code to allow clients to update content easily.
 
 > **⚠️ Privacy Note:** Some source codes are partial or obfuscated to protect client confidentiality (NDA) and proprietary assets.
 
@@ -59,14 +58,12 @@ As a **Data Scientist** with web capabilities, I focus on bridging the gap betwe
 
 | プロジェクト | タイプ | 使用技術 | ステータス |
 | :--- | :--- | :--- | :---: |
-| **[プロジェクト A](./client-a-folder/)**<br>_企業向けコーポレートサイト_ | 🏢 会社紹介 | `WordPress` `CSS3` | 🟢 稼働中 |
-| **[プロジェクト B](./client-b-folder/)**<br>_キャンペーン用LP_ | 📢 マーケティング | `HTML5` `Bootstrap` | 🏁 完了 |
-| **[プロジェクト C](./client-c-folder/)**<br>_データ可視化UI_ | 📊 データUI | `JS` `Chart.js` | 🚧 デモ |
+| **[Azzura Tour](./Azzuratour.co.id/)**<br>_ウムラ・ハッジ巡礼旅行代理店_ | 🏢 旅行代理店サイト | `WordPress` `HTML` `CSS` `JS` | [🟢 公開中](https://azzuratour.co.id/) |
 
 ### 🛠 エンジニアリングの焦点
-* **実環境へのデプロイ:** ホスティングサーバー（cPanel等）やドメインDNS設定の実務経験。
-* **ビジネス視点のUI設計:** 単なる見た目だけでなく、コンバージョン（成果）と情報の優先順位を考慮。
-* **保守性:** 他の開発者に引き継ぎ可能な、クリーンなコード構造。
+* **実環境へのデプロイ:** ホスティングサーバー（cPanel等）やSSL設定、ドメイン管理の実務経験。
+* **ビジネス視点のUI設計:** 信頼性の構築と情報の明確さを重視したレイアウト（旅行代理店にとって不可欠な要素）。
+* **保守性:** クライアントがコンテンツを容易に更新できるよう、CMS（WordPress）をコードでカスタマイズして活用。
 
 > **⚠️ 注意:** クライアントの機密保持契約（NDA）および知的財産保護のため、一部のソースコードは非公開または部分的な公開となっています。
 
@@ -83,14 +80,12 @@ Sebagai seorang **Data Scientist**, kemampuan web ini mendukung saya dalam mende
 
 | Proyek | Tipe | Tech Stack | Status |
 | :--- | :--- | :--- | :---: |
-| **[Nama Proyek A](./client-a-folder/)**<br>_Profil perusahaan XYZ_ | 🏢 Company Profile | `WordPress` `CSS3` | 🟢 Live |
-| **[Nama Proyek B](./client-b-folder/)**<br>_Landing page kampanye_ | 📢 Marketing | `HTML5` `Bootstrap` | 🏁 Selesai |
-| **[Nama Proyek C](./client-c-folder/)**<br>_UI Dashboard Custom_ | 📊 Data UI | `JS` `Chart.js` | 🚧 Demo |
+| **[Azzura Tour](./Azzuratour.co.id/)**<br>_Travel Umrah & Haji_ | 🏢 Company Profile | `WordPress` `HTML` `CSS` `JS` | [🟢 Live Site](https://azzuratour.co.id/) |
 
 ### 🛠 Fokus Pengembangan
-* **Siap Deploy:** Pengalaman nyata mengelola hosting, cPanel, dan konfigurasi DNS domain.
-* **UI Berbasis Bisnis:** Tata letak yang dirancang untuk konversi dan hierarki informasi, bukan sekadar estetika.
-* **Struktur Kode:** Penulisan kode yang rapi dan mudah dipelihara (*maintainable*).
+* **Siap Deploy:** Pengalaman nyata mengelola hosting, cPanel, SSL, dan manajemen domain aktif.
+* **UI Berbasis Bisnis:** Tata letak yang dirancang untuk membangun kepercayaan dan kejelasan informasi (krusial untuk bisnis Travel).
+* **Kemudahan Pemeliharaan:** Memanfaatkan CMS (WordPress) yang dikustomisasi dengan kode agar klien dapat memperbarui konten dengan mudah.
 
 > **⚠️ Catatan Privasi:** Beberapa kode sumber mungkin disamarkan atau tidak disertakan secara lengkap demi menjaga kerahasiaan data klien (NDA).
 
