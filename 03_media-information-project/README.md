@@ -1,7 +1,8 @@
 # 📰 Media & Information Projects
 
-Collection of media and information-based projects that I have managed and produced, including video clips, social media content, and article drafts.  
-This folder represents **real content production work**, not experimental or tutorial materials.
+A collection of media and information-based projects that I have managed and produced, including digital articles, social media content, and video materials.
+
+This directory represents **real content production and media operations**, not experimental or learning-only work.
 
 ---
 
@@ -13,103 +14,110 @@ This folder represents **real content production work**, not experimental or tut
 ## English
 
 ### Overview
-This folder contains media and information projects that I have handled as part of content creation, digital media management, and information publishing activities.
+This folder contains media and information projects that I have handled as part of content creation, editorial workflow, and digital publishing.
 
 The contents include:
-- Video clips
-- Instagram posts and visual assets
-- Article drafts and written content
+- Article drafts and published content
+- Instagram posts, carousels, and reels
+- Video clips and visual assets
 
-All materials here are based on **actual publishing workflows** and real audience-oriented content.
+Each sub-folder represents **actual media work** that has been produced for real audiences and platforms.
 
-### Content Types
-- Short-form video clips (social media oriented)
-- Instagram feed and carousel designs
-- Written article drafts and editorial content
-- Media assets used for information platforms
+### Flagship Project
+#### 📰 Keunal.id — Information & Educational Media Platform
+Keunal.id is the main media platform that I manage, focusing on educational and informational content such as:
+- Technology
+- Finance
+- Sports
+- General news
 
-### Key Focus
-- Clear information delivery
-- Visual consistency
-- Audience-oriented content
-- Practical content workflow
+Inside the `Keunal.id` folder, you will find:
+- Article drafts and visuals
+- Instagram feed & reels content
+- Video clips and media assets
+- Editorial materials used in real publishing workflows
 
-### Tools & Platforms
-- Canva
-- CapCut
-- Social media publishing platforms
-- Web-based content management systems
+➡️ See detailed documentation inside the **Keunal.id** folder.
+
+### Tools & Workflow
+- Canva (social media & visual design)
+- CapCut (video editing & reels)
+- Google Workspace (content planning & collaboration)
+- CMS-based publishing workflow
 
 ### Notes
-Some content is partially displayed or documented for portfolio purposes.  
-Original files, analytics data, and private platform credentials are not included.
+Some content is partially displayed for portfolio purposes.  
+Internal analytics, credentials, and unpublished drafts are intentionally excluded.
 
 ---
 
 ## 日本語
 
 ### 概要
-このフォルダには、私が運営・管理してきた情報発信系メディアプロジェクトをまとめています。  
-動画クリップ、Instagram投稿、記事原稿など、**実際の運用を前提としたコンテンツ制作**が中心です。
+このフォルダには、私が担当・制作してきた情報メディア関連プロジェクトをまとめています。  
+記事原稿、Instagram投稿、動画クリップなど、**実運用を前提としたコンテンツ制作**が中心です。
 
-学習用素材ではなく、実際に発信・管理されたコンテンツを収録しています。
+### メインプロジェクト
+#### 📰 Keunal.id（情報・教育系メディア）
+Keunal.id は、私が運営・管理している情報メディアプラットフォームです。
 
-### コンテンツ内容
-- ショート動画クリップ
-- Instagram投稿用デザイン
-- 記事原稿・編集用テキスト
-- 情報発信メディア向け素材
+主なコンテンツ分野：
+- テクノロジー
+- 金融
+- スポーツ
+- 一般ニュース
 
-### 重視ポイント
-- 分かりやすい情報設計
-- ビジュアルの統一感
-- 実運用を意識した制作フロー
-- 読者・視聴者視点のコンテンツ設計
+`Keunal.id` フォルダ内には、以下の制作物が含まれています：
+- 記事原稿およびビジュアル
+- Instagramフィード・リール
+- 動画クリップ
+- 実際の編集・公開用素材
 
-### 使用ツール・環境
-- Canva
-- CapCut
-- SNS運用プラットフォーム
-- WebベースCMS
+➡️ 詳細は **Keunal.id フォルダ内のREADME** をご覧ください。
+
+### 使用ツール・制作環境
+- Canva（ビジュアル制作）
+- CapCut（動画編集）
+- Google Workspace（企画・管理）
+- CMSを用いた運用フロー
 
 ### 補足
 ポートフォリオ用途のため、  
-一部コンテンツや管理情報は非公開としています。
+一部の内部データや非公開資料は含まれていません。
 
 ---
 
 ## Bahasa Indonesia
 
 ### Deskripsi
-Folder ini berisi kumpulan proyek media informasi yang pernah saya kelola dan produksi.  
-Isinya mencakup video clip, postingan Instagram, serta draft artikel yang digunakan untuk kebutuhan publikasi dan distribusi informasi.
+Folder ini berisi kumpulan proyek media informasi yang saya kelola dan produksi, mencakup artikel, konten Instagram, serta video.
 
-Semua konten di folder ini merupakan **hasil produksi nyata**, bukan sekadar latihan.
+Seluruh isi folder ini merupakan **hasil kerja nyata** yang digunakan dalam proses publikasi dan distribusi informasi.
 
-### Jenis Konten
-- Video pendek untuk media sosial
-- Desain feed dan carousel Instagram
-- Draft artikel dan konten tulisan
-- Aset media untuk platform informasi
+### Proyek Utama
+#### 📰 Keunal.id — Media Informasi & Edukasi
+Keunal.id adalah platform media informasi yang saya pegang dan kelola secara langsung.
 
-### Fokus Utama
-- Penyampaian informasi yang jelas
-- Konsistensi visual dan gaya konten
-- Konten berbasis audiens
-- Alur kerja produksi konten yang rapi
+Di dalam folder `Keunal.id` terdapat:
+- Draft dan visual artikel
+- Konten Instagram (feed, carousel, reels)
+- Video clip dan aset media
+- Materi editorial yang digunakan dalam publikasi nyata
 
-### Tools yang Digunakan
-- Canva
-- CapCut
-- Platform media sosial
-- Sistem manajemen konten berbasis web
+➡️ Dokumentasi lengkap tersedia di README dalam folder **Keunal.id**.
+
+### Tools & Alur Kerja
+- Canva (desain visual & media sosial)
+- CapCut (editing video)
+- Google Workspace (perencanaan konten)
+- CMS berbasis web
 
 ### Catatan
-Sebagian konten ditampilkan secara terbatas untuk keperluan portofolio.  
-Data internal, insight, dan kredensial platform tidak disertakan.
+Sebagian konten ditampilkan terbatas untuk keperluan portofolio.  
+Data internal dan kredensial platform tidak disertakan.
 
 ---
 
-## 📌 Content Directory
-Silakan buka sub-folder di dalam direktori ini untuk melihat detail konten media dan proyek informasi yang tersedia.
-
+<div align="center">
+  <small>Media & Content Portfolio — Muhamad Juwandi</small>
+</div>
