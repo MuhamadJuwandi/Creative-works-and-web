@@ -1,5 +1,4 @@
-<div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=ff4ecd&height=260&section=header&text=Creative%20Works%20%26%20Web&fontSize=48&fontAlignY=40&desc=Muhamad%20Juwandi%20%7C%20Design%20x%20Web%20x%20Creative&descAlignY=62&fontColor=ffffff" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=ff4ecd&height=260&section=header&text=Creative%20Works%20and%20Web&fontSize=48&fontAlignY=40&desc=Muhamad%20Juwandi%20%7C%20Design%20x%20Web%20x%20Creative&descAlignY=62&fontColor=ffffff" width="100%" />
 
   <p>
     <a href="https://www.linkedin.com/in/muhamadjuwandi/">
