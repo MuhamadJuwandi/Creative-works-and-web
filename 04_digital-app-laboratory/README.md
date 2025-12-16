@@ -1,76 +1,86 @@
-# 🧪 Digital App Laboratory
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:8E2DE2,100:4A00E0&height=250&section=header&text=Engineering%20Daily%20Life&fontSize=45&fontAlign=50&desc=Productivity%20Tools%20%7C%20EdTech%20%7C%20Personal%20Finance&descAlign=50&descSize=20)
+# 🎓 Universitas Terbuka Exam Simulator
+
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:005C97,100:363795&height=300&section=header&text=Exam%20Simulation%20Engine&fontSize=45&fontAlign=50&desc=CBT%20Replica%20%7C%20JSON%20Loader%20%7C%20EdTech&descAlign=50&descSize=20)
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-<img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" />
-<img src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white" />
-<br/>
-<img src="https://img.shields.io/badge/Category-Productivity-blue?style=flat-square" />
-<img src="https://img.shields.io/badge/Status-Active%20Use-success?style=flat-square" />
+<br> <img src="./assets/exam_interface_preview.png" alt="UT Exam Interface Replica" width="90%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
 
-<br/>
+<br><br> <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+<img src="https://img.shields.io/badge/Data-JSON-000000?style=for-the-badge&logo=json&logoColor=white" />
+<img src="https://img.shields.io/badge/Style-CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+<img src="https://img.shields.io/badge/Logic-Algorithm-FF0000?style=for-the-badge&logo=codewars&logoColor=white" />
 
-[English](#-english) | [日本語](#-japanese) | [Bahasa Indonesia](#-bahasa-indonesia)
+<br><br>
+
+[English](#-english) &nbsp;|&nbsp; [日本語](#-japanese) &nbsp;|&nbsp; [Bahasa Indonesia](#-bahasa-indonesia)
+
+<br>
 
 </div>
 
 ---
 
+<br>
+
 ## 🇬🇧 English
 
-### ⚡ Engineering Personal Productivity
-This directory acts as my **Innovation Laboratory**, where I build custom software solutions to solve my own daily challenges. Instead of relying on generic apps, I code specific tools to manage my finances, accelerate my language learning, and simulate academic exams.
+### 🎯 The Problem
+As a student at *Universitas Terbuka*, I realized that practicing for exams using PDF files was inefficient. I needed a way to simulate the **exact pressure and interface** of the real Computer Based Test (CBT).
 
-For a Data Scientist, this proves that I can **operationalize logic** into functional, user-friendly applications.
+### 💡 The Engineering Solution
+I reverse-engineered the logic of the exam interface and built a **custom simulator**.
+Instead of hard-coding the questions, I built a **Dynamic Engine**. I can simply upload a formatted file (JSON/CSV) containing questions and answers, and the system automatically generates a new exam session.
 
-### 🛠️ Utility Suite
+### ⚡ Key Features
+* **Exact UI Replica:** The buttons, timer, and layout mirror the official UT exam system to build familiarity.
+* **Dynamic Question Loader:** Separating logic from data. I can swap "Data Science" questions with "Japanese" questions instantly by changing the source file.
+* **Real-time Scoring:** Instant feedback logic calculates the score immediately after submission.
 
-| App Name | Category | Core Function & Logic |
-| :--- | :--- | :--- |
-| **[UT Exam Simulator](./ut-exam-simulator/)** | 🎓 EdTech | **CBT Engine.** Replicates the *Universitas Terbuka* exam interface. Features dynamic question loading (JSON/CSV) to simulate real test conditions. |
-| **[JLPT Flashcard](./jlpt-flashcard-v1/)** | 🇯🇵 Language | **Gamified Learning.** A custom study tool designed for JLPT N5/N4 prep, focusing on vocabulary retention and kanji recognition. |
-| **[FinTrack Cashflow](./fin-track-app/)** | 💰 Finance | **Financial Logging.** Tracks income/expense streams. Custom-built to analyze my personal cash flow patterns specifically. |
-| **[Task Manager](./task-manager-app/)** | ✅ Productivity | **Priority Logic.** A lightweight Todo list focused on minimalism and execution speed. |
+<br>
 
 ---
+
+<br>
 
 ## 🇯🇵 Japanese
 
-### ⚡ 概要 (Overview)
-このディレクトリは、私の**デジタル実験室**です。既存のアプリに頼るのではなく、自分自身の課題（学習、家計管理、タスク管理）を解決するために、独自に開発したツール群を格納しています。
+### 🎯 課題 (Problem)
+私は*Universitas Terbuka*（インドネシア・オープン大学）の学生として、PDFファイルを使った試験勉強が非効率だと感じていました。本番のCBT（コンピュータ試験）と同じ**プレッシャーと操作画面**を体験できる環境が必要でした。
 
-### 🛠️ 開発アプリ一覧
+### 💡 エンジニアリングによる解決策
+試験画面のロジックを解析し、独自の**模擬試験シミュレーター**を開発しました。
+問題をコードに埋め込むのではなく、**動的エンジン**を構築しました。フォーマットされたファイル（JSON/CSV）をアップロードするだけで、システムが自動的に新しい試験セッションを生成します。
 
-| アプリ名 | カテゴリ | 機能とロジック |
-| :--- | :--- | :--- |
-| **[UT模擬試験システム](./ut-exam-simulator/)**<br>*(UT Exam Simulator)* | 🎓 教育工学 | **CBT試験エンジン。** インドネシアのオープン大学（UT）の試験画面を完全再現。問題データをアップロードするだけで、本番同様の模擬試験が可能です。 |
-| **[JLPT単語帳アプリ](./jlpt-flashcard-v1/)**<br>*(JLPT Flashcard)* | 🇯🇵 日本語学習 | **暗記ツール。** JLPT（日本語能力試験）合格を目指し、自分の苦手な単語を効率よく覚えるために開発しました。 |
-| **[家計簿・資産管理](./fin-track-app/)**<br>*(FinTrack)* | 💰 金融 | **キャッシュフロー分析。** 収入と支出を記録し、個人的な資金の流れを可視化するためのカスタムアプリです。 |
-| **[タスク管理ツール](./task-manager-app/)**<br>*(Task Manager)* | ✅ 生産性 | **ToDoリスト。** 機能を最小限に絞り、実行速度を重視したタスク管理アプリ。 |
+### ⚡ 主な機能
+* **UIの完全再現:** ボタンの配置、タイマー、レイアウトなど、公式の試験システムを模倣し、本番慣れできるよう設計。
+* **動的ローダー (Dynamic Loader):** ロジックとデータを分離。ソースファイルを入れ替えるだけで、「データサイエンス」の問題から「日本語」の問題へ瞬時に切り替え可能。
+* **リアルタイム採点:** 提出ボタンを押すと同時にスコアを計算するアルゴリズムを実装。
+
+<br>
 
 ---
+
+<br>
 
 ## 🇮🇩 Bahasa Indonesia
 
-### ⚡ Gambaran Umum
-Folder ini adalah **Laboratorium Inovasi** pribadi saya. Di sini, saya membangun perangkat lunak untuk menyelesaikan masalah sehari-hari saya sendiri.
+### 🎯 Latar Belakang Masalah
+Sebagai mahasiswa *Universitas Terbuka*, saya merasa latihan ujian menggunakan file PDF statis sangat tidak efektif. Saya membutuhkan cara untuk mensimulasikan **tekanan waktu dan antarmuka** yang persis sama dengan Ujian Online (UO) asli.
 
-Saya percaya bahwa *coding* bukan hanya untuk pekerjaan kantor, tetapi juga untuk **Life Optimization**. Aplikasi-aplikasi ini saya gunakan secara aktif untuk mengatur keuangan, belajar bahasa Jepang, dan persiapan ujian kuliah.
+### 💡 Solusi Teknis
+Saya membangun **Simulator Kustom** yang mereplikasi logika antarmuka ujian kampus.
+Alih-alih menulis soal secara manual di dalam kode (*hard-code*), saya membuat **Dynamic Engine**. Saya cukup mengunggah file soal dan jawaban (format JSON), dan sistem akan merender ujian baru secara otomatis.
 
-### 🛠️ Daftar Aplikasi
+### ⚡ Fitur Unggulan
+* **Replika UI Persis:** Tata letak tombol, navigasi nomor soal, dan penghitung waktu mundur dibuat semirip mungkin dengan sistem asli UT untuk melatih mental.
+* **Dynamic Question Loader:** Pemisahan antara *Logic* aplikasi dan *Data* soal. Satu aplikasi bisa digunakan untuk mata kuliah apa saja.
+* **Algoritma Penilaian:** Sistem penilaian otomatis (Auto-grading) yang langsung menampilkan hasil akhir tepat setelah ujian selesai.
 
-| Nama Aplikasi | Kategori | Logika & Fitur Utama |
-| :--- | :--- | :--- |
-| **[Simulator Ujian UT](./ut-exam-simulator/)** | 🎓 EdTech | **Replika CBT Universitas Terbuka.** Saya membangun sistem ujian yang meniru tampilan dan logika ujian asli kampus saya. Fitur *dynamic loader* memungkinkan saya mengunggah soal latihan sendiri untuk simulasi tanpa batas. |
-| **[JLPT Flashcard](./jlpt-flashcard-v1/)** | 🇯🇵 Bahasa | **Alat Bantu Hafalan.** Aplikasi flashcard digital untuk persiapan tes JLPT, dirancang khusus untuk metode *active recall*. |
-| **[FinTrack Cashflow](./fin-track-app/)** | 💰 Finansial | **Pencatatan Arus Kas.** Aplikasi pencatat pemasukan dan pengeluaran yang disesuaikan dengan kebutuhan analisis finansial pribadi saya. |
-| **[Simple Todo](./task-manager-app/)** | ✅ Produktivitas | **Manajemen Tugas.** Aplikasi manajemen tugas yang ringan dan fokus pada eksekusi harian. |
-
----
+<br><br>
 
 <div align="center">
-    <small><i>"I code tools to make my life better." — Muhamad Juwandi</i></small>
+    <img src="https://img.shields.io/badge/Built%20by-Muhamad%20Juwandi-blue?style=flat-square" />
+    <br>
+    <small><i>Engineering tools for better education.</i></small>
 </div>
