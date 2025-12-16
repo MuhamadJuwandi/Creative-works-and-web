@@ -2,6 +2,7 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=00e5cc&height=260&section=header&text=Creative%20Works%20and%20Web&fontSize=48&fontAlignY=40&desc=Muhamad%20Juwandi%20%7C%20Design%20x%20Web%20x%20Creative&descAlignY=62&fontColor=ffffff" width="100%" />
 </div>
 
+<div align="center">
   <p>
     <a href="https://www.linkedin.com/in/muhamadjuwandi/">
       <img src="https://img.shields.io/badge/LinkedIn-Professional-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
@@ -10,9 +11,10 @@
       <img src="https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
     </a>
     <a href="https://keunal.id">
-      <img src="https://img.shields.io/badge/Creative%20Portfolio-keunal.id-ff0055?style=for-the-badge&logo=dribbble&logoColor=white" />
+      <img src="https://img.shields.io/badge/Creative%20Portfolio-keunal.id-00c2a8?style=for-the-badge&logo=dribbble&logoColor=white" />
     </a>
   </p>
+</div>
 
   <h3>
     <a href="#-english">🇬🇧 English</a> |
