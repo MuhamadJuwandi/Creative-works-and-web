@@ -1,7 +1,7 @@
 # 🌐 Production Web Projects
 <br><br>
 
-<img src="assets/main_mockup.png" alt="Azzura Tour Website Mockup" width="100%">
+<img src="/Azzuratour.co.id/assets/main_mockup.png" alt="Azzura Tour Website Mockup" width="100%">
 
 </div>
 
