@@ -3,7 +3,7 @@
 <div align="center">
   <img src="assets/Layout.png" width="100%" alt="Layout App">
   <br><br>
-<div align="center">
+
 
 <div align="center">
 
