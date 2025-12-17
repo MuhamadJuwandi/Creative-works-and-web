@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juwan Finance</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --accent: #ff0080;
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(79, 172, 254, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 0, 128, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.3) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date-display {
+            text-align: right;
+        }
+
+        .current-month {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .current-full-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Dashboard Cards */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .income-val {
+            color: var(--success);
+        }
+
+        .expense-val {
+            color: var(--danger);
+        }
+
+        .balance-val {
+            color: var(--primary);
+        }
+
+        /* Main Content Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Form Section */
+        .form-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .section-header {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .btn-add:hover {
+            opacity: 0.9;
+        }
+
+        /* Transaction List */
+        .list-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .t-info h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .t-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .t-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .t-delete {
+            margin-left: 15px;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .t-delete:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            height: 300px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 20px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+    <style>
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+
+            header,
+            .dashboard,
+            .form-section,
+            .charts-section,
+            footer,
+            .btn-add,
+            .t-delete,
+            #printBtn {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 20px;
+            }
+
+            .list-section {
+                border: none;
+                background: none;
+                box-shadow: none;
+                max-height: none;
+                /* Expand fully */
+                overflow: visible;
+                padding: 0;
+            }
+
+            .transaction-item {
+                border-bottom: 1px solid #ddd;
+                color: black;
+            }
+
+            .t-info p {
+                color: #555;
+            }
+
+            .section-header {
+                color: black;
+                border-bottom: 2px solid black;
+            }
+
+            /* Print Summary Display */
+            #printSummary {
+                display: block !important;
+                margin-bottom: 30px;
+                border: 1px solid black;
+                padding: 20px;
+            }
+
+            .print-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .print-logo {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 10px;
+            }
+
+            .summary-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .summary-item label {
+                color: #555;
+                font-weight: bold;
+            }
+
+            .summary-item .value {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <img src="logo.jpg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+                <div class="app-title">Juwan Finance</div>
+            </div>
+            <div class="date-display">
+                <div class="current-month" id="displayMonth">September 2023</div>
+                <div class="current-full-date" id="displayDate">Minggu, 12 September 2023</div>
+            </div>
+        </header>
+
+        <!-- Print Only Summary -->
+        <div id="printSummary" style="display: none;">
+            <div class="print-header">
+                <img src="logo.jpg" alt="Logo" class="print-logo" onerror="this.style.display='none'">
+                <h2>Laporan Keuangan - Juwan Finance</h2>
+                <h3 id="printMonth">Bulan Ini</h3>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <label>Total Pemasukan</label>
+                    <div class="value" id="printIncome">Rp 0</div>
+                </div>
+                <div class="summary-item">
+                    <label>Total Pengeluaran</label>
+                    <div class="value" id="printExpense">Rp 0</div>
+                </div>
+                <div class="summary-item">
+                    <label>Cashflow</label>
+                    <div class="value" id="printBalance">Rp 0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-title">Pemasukan Bulan Ini</div>
+                <div class="card-value income-val" id="totalIncome">Rp 0</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Pengeluaran Bulan Ini</div>
+                <div class="card-value expense-val" id="totalExpense">Rp 0</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Sisa Uang (Cashflow)</div>
+                <div class="card-value balance-val" id="totalBalance">Rp 0</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Input Form -->
+            <div class="form-section">
+                <div class="section-header">Tambah Transaksi</div>
+                <form id="transactionForm">
+                    <div class="input-group">
+                        <label>Jenis Transaksi</label>
+                        <select id="tType" required>
+                            <option value="expense">Pengeluaran</option>
+                            <option value="income">Pemasukan</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Keterangan</label>
+                        <input type="text" id="tDesc" placeholder="Contoh: Makan Siang" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Jumlah (Rp)</label>
+                        <input type="number" id="tAmount" placeholder="0" required min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Tanggal</label>
+                        <input type="date" id="tDate" required>
+                    </div>
+                    <button type="submit" class="btn-add">Simpan Transaksi</button>
+                </form>
+            </div>
+
+            <!-- List -->
+            <div class="list-section">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Riwayat Bulan Ini</span>
+                    <button id="printBtn" onclick="window.print()"
+                        style="background: var(--primary); border: none; padding: 8px 15px; border-radius: 5px; color: white; cursor: pointer; font-size: 0.9rem;">Cetak
+                        Laporan</button>
+                </div>
+                <div id="transactionList">
+                    <!-- Items will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-bottom: 20px; text-align: center;">Visualisasi Riwayat Bulanan</div>
+        <div class="charts-section">
+            <div class="chart-container">
+                <canvas id="incomeChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="expenseChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="cashflowChart"></canvas>
+            </div>
+        </div>
+
+        <footer>
+            &copy; Juwan Finance
+        </footer>
+    </div>
+
+    <script>
+        // --- State Management ---
+        const STORAGE_KEY = 'juwan_finance_data';
+        let appData = {
+            currentMonthKey: '', // Format: YYYY-MM
+            transactions: [],
+            history: {} // Key: YYYY-MM, Value: { income: 0, expense: 0, balance: 0 }
+        };
+
+        // --- Initialization ---
+        function init() {
+            loadData();
+            checkMonthChange();
+            updateUI();
+            renderCharts();
+
+            // Set default date to today
+            document.getElementById('tDate').valueAsDate = new Date();
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                appData = JSON.parse(stored);
+                // Ensure amounts are numbers
+                if (appData.transactions) {
+                    appData.transactions.forEach(t => t.amount = Number(t.amount));
+                }
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            updateUI();
+            renderCharts();
+        }
+
+        function getMonthKey(date) {
+            // Use local time instead of UTC to avoid timezone issues
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            return `${year}-${month}`;
+        }
+
+        function checkMonthChange() {
+            const now = new Date();
+            const currentKey = getMonthKey(now);
+
+            // First run or month changed
+            if (appData.currentMonthKey !== currentKey) {
+                if (appData.currentMonthKey) {
+                    // Archive previous month if it existed
+                    archiveCurrentMonth(appData.currentMonthKey);
+                }
+                // Reset for new month
+                appData.currentMonthKey = currentKey;
+                appData.transactions = []; // Clear transactions for new month
+                saveData();
+            }
+        }
+
+        function archiveCurrentMonth(oldKey) {
+            // Calculate totals for the old month
+            let inc = 0, exp = 0;
+            appData.transactions.forEach(t => {
+                if (t.type === 'income') inc += t.amount;
+                else exp += t.amount;
+            });
+
+            // Save to history
+            appData.history[oldKey] = {
+                income: inc,
+                expense: exp,
+                balance: inc - exp
+            };
+        }
+
+        // --- UI Updates ---
+        function updateUI() {
+            // Date Display
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('displayDate').textContent = now.toLocaleDateString('id-ID', options);
+
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            document.getElementById('displayMonth').textContent = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+
+            // Calculate Totals
+            let income = 0;
+            let expense = 0;
+
+            const listContainer = document.getElementById('transactionList');
+            listContainer.innerHTML = '';
+
+            // Sort transactions by date desc
+            const sortedTransactions = [...appData.transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedTransactions.forEach((t, index) => {
+                const amount = Number(t.amount);
+                if (t.type === 'income') income += amount;
+                else expense += amount;
+
+                // Render Item
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                item.innerHTML = `
+                <div class="t-info">
+                    <h4>${t.desc}</h4>
+                    <p>${new Date(t.date).toLocaleDateString('id-ID')} • ${t.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</p>
+                </div>
+                <div style="display:flex; align-items:center;">
+                    <div class="t-amount ${t.type === 'income' ? 'income-val' : 'expense-val'}">
+                        ${t.type === 'income' ? '+' : '-'} ${formatRupiah(amount)}
+                    </div>
+                    <button class="t-delete" onclick="deleteTransaction(${t.id})" title="Hapus Transaksi">Hapus</button>
+                </div>
+            `;
+                listContainer.appendChild(item);
+            });
+
+            if (sortedTransactions.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 20px;">Belum ada transaksi bulan ini.</p>';
+            }
+
+            document.getElementById('totalIncome').textContent = formatRupiah(income);
+            document.getElementById('totalExpense').textContent = formatRupiah(expense);
+            document.getElementById('totalBalance').textContent = formatRupiah(income - expense);
+
+            // Update Print Summary
+            document.getElementById('printIncome').textContent = formatRupiah(income);
+            document.getElementById('printExpense').textContent = formatRupiah(expense);
+            document.getElementById('printBalance').textContent = formatRupiah(income - expense);
+            document.getElementById('printMonth').textContent = document.getElementById('displayMonth').textContent;
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number);
+        }
+
+        // --- CRUD ---
+        document.getElementById('transactionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const type = document.getElementById('tType').value;
+            const desc = document.getElementById('tDesc').value;
+            const amount = parseFloat(document.getElementById('tAmount').value);
+            const dateStr = document.getElementById('tDate').value; // YYYY-MM-DD
+
+            if (!dateStr) {
+                alert("Mohon pilih tanggal");
+                return;
+            }
+
+            const dateObj = new Date(dateStr);
+            // Check if date belongs to current month
+            const transDateKey = getMonthKey(dateObj);
+
+            // Allow transactions for the current month key
+            if (transDateKey !== appData.currentMonthKey) {
+                alert(`Anda hanya dapat mencatat transaksi untuk bulan ini (${appData.currentMonthKey}). Tanggal yang anda pilih: ${transDateKey}`);
+                return;
+            }
+
+            const newTransaction = {
+                id: Date.now(),
+                type,
+                desc,
+                amount,
+                date: dateStr
+            };
+
+            appData.transactions.push(newTransaction);
+            saveData();
+
+            // Reset form
+            document.getElementById('tDesc').value = '';
+            document.getElementById('tAmount').value = '';
+        });
+
+        window.deleteTransaction = function (id) {
+            // Removed confirm dialog for easier deletion
+            appData.transactions = appData.transactions.filter(t => t.id !== id);
+            saveData();
+        };
+
+        // --- Charts ---
+        let charts = {};
+
+        function renderCharts() {
+            const ctxIncome = document.getElementById('incomeChart').getContext('2d');
+            const ctxExpense = document.getElementById('expenseChart').getContext('2d');
+            const ctxCashflow = document.getElementById('cashflowChart').getContext('2d');
+
+            // Prepare Data
+            // Combine history + current month live data
+            // We need to calculate current month totals first
+            let currentInc = 0, currentExp = 0;
+            appData.transactions.forEach(t => {
+                if (t.type === 'income') currentInc += t.amount;
+                else currentExp += t.amount;
+            });
+
+            // Create a temporary full history object including current month
+            const fullHistory = { ...appData.history };
+            fullHistory[appData.currentMonthKey] = {
+                income: currentInc,
+                expense: currentExp,
+                balance: currentInc - currentExp
+            };
+
+            const labels = Object.keys(fullHistory).sort();
+            const incomeData = labels.map(k => fullHistory[k].income);
+            const expenseData = labels.map(k => fullHistory[k].expense);
+            const cashflowData = labels.map(k => fullHistory[k].balance);
+
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#fff' } }
+                },
+                scales: {
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            };
+
+            // Helper to create/update chart
+            const createChart = (ctx, id, label, data, color, type = 'line') => {
+                if (charts[id]) charts[id].destroy();
+                charts[id] = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label,
+                            data: data,
+                            borderColor: color,
+                            backgroundColor: color + '40', // semi-transparent
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: commonOptions
+                });
+            };
+
+            createChart(ctxIncome, 'income', 'Total Pemasukan', incomeData, '#10b981');
+            createChart(ctxExpense, 'expense', 'Total Pengeluaran', expenseData, '#ef4444');
+            createChart(ctxCashflow, 'cashflow', 'Cashflow (Sisa Uang)', cashflowData, '#4facfe', 'bar');
+        }
+
+        // Start App
+        init();
+
+    </script>
+</body>
+
+</html>
