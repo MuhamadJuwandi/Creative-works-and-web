@@ -1,13 +1,15 @@
-# 🏢 Balda Corporate ID Automation Suite
+# 🆔 Balda ID Card Generator (Web Edition)
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:333333,100:000000&height=200&section=header&text=Corporate%20Automation&fontSize=40&fontAlignY=40&desc=Data%20Processing%20%7C%20Dynamic%20PDF%20%7C%20Identity%20Management&descAlignY=65&descSize=18&animation=fadeIn)
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:13519a,100:000000&height=220&section=header&text=Corporate%20Identity%20Automation&fontSize=40&fontAlignY=38&desc=HTML5%20Canvas%20%7C%20CSV%20Processing%20%7C%20Client-Side%20Gen&descAlignY=68&descSize=16&animation=fadeIn)
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-<img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" />
-<img src="https://img.shields.io/badge/ReportLab-FF9900?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" />
-<img src="https://img.shields.io/badge/Security-Data_Privacy-success?style=flat-square" />
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+<img src="https://img.shields.io/badge/Fabric.js-Canvas-blue?style=for-the-badge" />
+<img src="https://img.shields.io/badge/jsPDF-Export-red?style=for-the-badge" />
+
+<br/>
 
 [English](#-english) | [日本語](#-japanese) | [Bahasa Indonesia](#-bahasa-indonesia)
 
@@ -15,64 +17,53 @@
 
 ---
 
-## 🔒 Confidentiality Notice / Privasi Data
-> **Note:** Real employee data (photos, NIK, names) and production output files are **excluded** from this repository to comply with Data Privacy regulations. The CSV files provided in the `examples/` folder contain **synthetic/dummy data** for demonstration purposes only.
+## 🔒 Privacy Notice
+> **Note:** This is a client-side web application. No data is uploaded to any server. All CSV processing and image generation happen locally in your browser to ensure data privacy.
 
 ---
 
 ## 🇬🇧 English
 
-### ⚡ Overview
-This is a custom Desktop Automation Tool built for **Balda Company**. It bridges the gap between HR Database (CSV) and Graphic Design. Previously, ID Cards were designed manually one by one. This tool automates the process using Python.
+### ⚡ Project Overview
+A web-based automation tool designed for **Balda Company** to streamline employee ID Card creation. Unlike traditional design software, this tool allows HR staff to **drag-and-drop** elements and generate hundreds of ID cards instantly from a single CSV file.
 
-### 🚀 Key Features
-* **Batch Processing:** Converts raw CSV data (hundreds of employees) into ID Cards in seconds.
-* **Dynamic Asset Loading:** Auto-imports employee photos based on ID numbers.
-* **Smart QR Generation:** Automatically generates QR Codes linking to employee digital profiles.
-* **Print-Ready Export:** Outputs high-resolution PDFs ready for the ID Card printer.
-
-### 🔧 Tech Logic
-1.  **Pandas**: Cleans and validates the `employee.csv` input.
-2.  **QRcode Lib**: Generates unique QR images.
-3.  **ReportLab / PIL**: Composites the photo, text, and QR onto the company ID template canvas.
+### 🛠️ Key Features
+* **Visual Editor:** Drag & drop photos, text, and logos directly on the canvas (powered by `Canvas API`).
+* **Batch Automation:** Upload a CSV file to auto-populate names, positions, and IDs.
+* **QR Integration:** Auto-generates unique QR codes for each employee.
+* **Privacy-First:** Zero-backend. All processing is done locally using JavaScript.
 
 ---
 
 ## 🇯🇵 Japanese
 
 ### ⚡ 概要 (Overview)
-これは「Balda社」向けに開発された**業務自動化ツール**です。人事データ（CSV）とデザイン作業を連携させます。従来の手作業によるIDカード作成プロセスをPythonで完全自動化しました。
+「Balda社」のために開発された、WebベースのIDカード自動生成ツールです。従来のソフトウェアとは異なり、このアプリはブラウザ上で動作し、ドラッグ＆ドロップでデザインを調整できます。CSVファイルを読み込むだけで、数百人分のIDカードを瞬時に作成可能です。
 
-> **注意:** 個人情報保護のため、実際社員データや写真は本リポジトリには含まれていません。デモ用にはダミーデータを使用しています。
-
-### 🚀 主な機能
-* **一括処理 (Batch Processing):** 数百人分の従業員データを数秒でIDカードに変換。
-* **動的アセット読み込み:** 社員番号に基づいて顔写真を自動マッチング。
-* **QRコード自動生成:** デジタルプロフィールにリンクするQRコードを瞬時に作成。
-* **PDF出力:** 印刷機にそのまま送信可能な高解像度PDFを生成。
+### 🛠️ 技術的特徴
+* **ビジュアルエディタ:** 写真やテキストをキャンバス上で自由に配置 (Canvas API)。
+* **一括自動化:** CSVデータをアップロードして、名前や役職を自動入力。
+* **QRコード生成:** 社員ごとのユニークQRコードを自動作成。
+* **プライバシー重視:** サーバー不要。すべての処理はブラウザ内のJavaScriptで完結します。
 
 ---
 
 ## 🇮🇩 Bahasa Indonesia
 
 ### ⚡ Gambaran Umum
-Aplikasi desktop otomatisasi yang dibuat khusus untuk kebutuhan operasional **Perusahaan Balda**. Alat ini menghubungkan database HR (CSV) dengan output desain grafis, menghilangkan proses manual pembuatan ID Card satu per satu.
+Aplikasi web yang dibuat untuk mempermudah operasional **Perusahaan Balda**. Alat ini mengubah cara pembuatan ID Card dari manual menjadi otomatis. HRD cukup mengunggah data CSV, dan aplikasi akan merender desain ID Card siap cetak lengkap dengan Foto dan QR Code.
 
-### 🚀 Fitur Utama
-* **Import Data Massal:** Membaca data CSV karyawan dan memprosesnya sekaligus.
-* **Auto-Design:** Menempelkan Foto, Nama, Jabatan, dan NIK ke template desain secara presisi.
-* **QR Code Generator:** Membuat QR Code unik untuk setiap karyawan secara otomatis.
-* **Ekspor PDF:** Hasil akhir berupa file PDF yang siap dicetak oleh mesin printer ID Card.
+### 🛠️ Fitur Teknis
+* **Editor Visual:** Fitur drag-and-drop untuk mengatur tata letak elemen desain.
+* **Proses Massal:** Menggunakan `PapaParse` untuk membaca data karyawan dari CSV.
+* **Render PDF:** Menggunakan `jsPDF` untuk menyimpan hasil desain menjadi file siap cetak.
+* **Client-Side:** Aman, tidak ada data karyawan yang dikirim ke server luar.
 
 ---
 
-### 💻 How to Run (Demo)
+### 💻 How to Use
 
-Because the real data is private, use the provided dummy generator:
-
-```bash
-# 1. Install Dependencies
-pip install -r requirements.txt
-
-# 2. Run the application (using dummy data in /examples)
-python src/app.py --demo
+1.  Clone this repository.
+2.  Open `index.html` in your browser (Chrome/Edge recommended).
+3.  Upload the sample CSV provided in `examples/`.
+4.  Export the results as PDF.
