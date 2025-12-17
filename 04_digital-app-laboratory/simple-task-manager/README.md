@@ -1,6 +1,6 @@
 # 🌱 EcoFocus: Gamified Task Manager
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:F0FDF9,100:20B2AA&height=250&section=header&text=EcoFocus&fontSize=45&fontAlignY=35&desc=Gamified%20Productivity%20%7C%20Grow%20Your%20Tree%20%7C%20Minimalist%20UI&descAlignY=65&descSize=18&animation=fadeIn&fontColor=333333)
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:F0FDF9,100:20B2AA&height=250&section=header&text=EcoFocus&fontSize=45&fontAlignY=40&desc=Gamified%20Productivity%20%7C%20Grow%20Your%20Tree%20%7C%20Minimalist%20UI&descAlignY=60&descSize=18&animation=fadeIn&fontColor=333333)
 
 <div align="center">
   <img src="assets/app-preview.png" width="100%" alt="EcoFocus Dashboard">
