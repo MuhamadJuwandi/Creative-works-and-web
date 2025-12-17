@@ -1,6 +1,9 @@
 # 🆔 Balda ID Card Generator (Web Edition)
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:13519a,100:000000&height=220&section=header&text=Corporate%20Identity%20Automation&fontSize=40&fontAlignY=38&desc=HTML5%20Canvas%20%7C%20CSV%20Processing%20%7C%20Client-Side%20Gen&descAlignY=68&descSize=16&animation=fadeIn)
+<div align="center">
+  <img src="assets/Layout.png" width="100%" alt="Layout App">
+  <br><br>
+<div align="center">
 
 <div align="center">
 
