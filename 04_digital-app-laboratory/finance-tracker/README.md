@@ -3,7 +3,7 @@
 <div align="center">
   
   <br>
-  <img src="assets/dashboard-demo.png" width="100%" alt="Finance Dashboard Interface">
+  <img src="assets/dashboard-demo1.png" width="100%" alt="Finance Dashboard Interface">
   
   <br><br>
 
