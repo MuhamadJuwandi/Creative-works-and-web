@@ -1,0 +1,9 @@
+# Ignore Real Data
+*.csv
+*.xlsx
+*.pdf
+secrets.json
+
+# Allow Example Data
+!examples/*.csv
+!examples/*.pdf
