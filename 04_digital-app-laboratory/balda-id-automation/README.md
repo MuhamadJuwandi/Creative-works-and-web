@@ -1,19 +1,18 @@
 # 🆔 Balda ID Card Generator (Web Edition)
 
 <div align="center">
-  <img src="assets/Layout.png" width="100%" alt="Layout App">
+  <img src="assets/Layout.png" width="100%" alt="Layout App App Interface">
+  
   <br><br>
 
-<div align="center">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/Fabric.js-Canvas-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/jsPDF-Export-red?style=for-the-badge" />
 
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
-<img src="https://img.shields.io/badge/Fabric.js-Canvas-blue?style=for-the-badge" />
-<img src="https://img.shields.io/badge/jsPDF-Export-red?style=for-the-badge" />
+  <br/>
 
-<br/>
-
-[English](#-english) | [日本語](#-japanese) | [Bahasa Indonesia](#-bahasa-indonesia)
+  [English](#-english) | [日本語](#-japanese) | [Bahasa Indonesia](#-bahasa-indonesia)
 
 </div>
 
@@ -65,7 +64,7 @@ Aplikasi web yang dibuat untuk mempermudah operasional **Perusahaan Balda**. Ala
 
 ### 💻 How to Use
 
-1.  Clone this repository.
-2.  Open `index.html` in your browser (Chrome/Edge recommended).
-3.  Upload the sample CSV provided in `examples/`.
-4.  Export the results as PDF.
+1. Clone this repository.
+2. Open `index.html` in your browser (Chrome/Edge recommended).
+3. Upload the sample CSV provided in `examples/`.
+4. Export the results as PDF.
