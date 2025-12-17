@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFocus - Gamified To-Do List V2.1</title>
+    <style>
+        :root {
+            --primary-bg: #FFFFFF;
+            --secondary-bg: #F0FDF9;
+            --accent-color: #7FFFD4;
+            --accent-dark: #20B2AA;
+            --text-color: #000000;
+            --card-bg: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border-radius: 12px;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--secondary-bg);
+            border-right: 1px solid var(--accent-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background-color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .section {
+            display: none;
+            height: 100%;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            height: 100%;
+        }
+
+        .tree-container {
+            background-color: var(--secondary-bg);
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            box-shadow: var(--shadow);
+            overflow: hidden; /* Penting untuk animasi masuk/keluar */
+        }
+
+        .stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--accent-color);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--accent-dark);
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Level Progress */
+        .level-info {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .progress-bar-container {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-dark);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Task Board */
+        .board {
+            display: flex;
+            gap: 20px;
+            height: 100%;
+            overflow-x: auto;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid var(--accent-dark);
+        }
+
+        .column-header {
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .task-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            cursor: grab;
+            border-left: 4px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-card.priority-low {
+            border-left-color: #81C784;
+        }
+
+        .task-card.priority-medium {
+            border-left-color: #FFD54F;
+        }
+
+        .task-card.priority-high {
+            border-left-color: #E57373;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .task-title {
+            font-weight: 600;
+        }
+
+        .task-timer {
+            font-family: monospace;
+            font-size: 0.9em;
+            color: var(--accent-dark);
+            background: var(--secondary-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .task-timer.active {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Calendar */
+        .calendar-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            flex: 1;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            color: #666;
+        }
+
+        .calendar-day {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--secondary-bg);
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--accent-dark);
+        }
+
+        .day-stats {
+            font-size: 0.7em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-dark);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-dark);
+            color: white;
+            font-size: 30px;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Task List in Modal */
+        #day-task-list-ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+        }
+
+        #day-task-list-ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        #day-task-list-ul li .priority-badge {
+            font-size: 0.8em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #eee;
+        }
+
+        /* --- TREE ANIMATION CSS --- */
+        .tree-svg {
+            width: 300px;
+            height: 300px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            overflow: visible;
+        }
+
+        /* Keyframes */
+        @keyframes growTrunk {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+
+        @keyframes growFoliage {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes windSway {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Animation Classes */
+        .anim-grow .trunk {
+            transform-origin: bottom center;
+            animation: growTrunk 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .anim-grow .foliage {
+            transform-origin: center center;
+            transform-box: fill-box;
+            animation: 
+                growFoliage 0.8s ease-out 0.5s forwards,
+                windSway 3s ease-in-out infinite alternate;
+        }
+        
+        .anim-grow .fruit {
+            transform-origin: center center;
+            transform-box: fill-box;
+            animation: growFoliage 0.5s ease-out 1.2s backwards;
+        }
+
+        /* Idle State (No Growth, Just Sway) */
+        .anim-idle .foliage {
+            transform-origin: center center;
+            transform-box: fill-box;
+            animation: windSway 3s ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <span>🌱</span> Juwan Project
+        </div>
+        <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="showSection('tasks')">Tugas Saya</button>
+        <button class="nav-btn" onclick="showSection('calendar')">Kalender & Statistik</button>
+    </div>
+
+    <div class="main-content">
+        <div id="dashboard" class="section active">
+            <h2 style="margin-bottom: 20px;">Dashboard Anda</h2>
+            <div class="dashboard-grid">
+                <div class="tree-container">
+                    <div id="tree-visual">
+                        </div>
+                    <div class="level-info">
+                        <h3 id="level-display">Level 0: Bibit</h3>
+                        <div class="progress-bar-container">
+                            <div id="exp-bar" class="progress-bar"></div>
+                        </div>
+                        <p style="margin-top: 5px; font-size: 0.9em; color: #666;">
+                            <span id="current-exp">0</span> / <span id="next-level-exp">100</span> XP
+                        </p>
+                    </div>
+                </div>
+                <div class="stats-panel">
+                    <div class="stat-card">
+                        <div class="stat-label">Waktu Fokus (Hari Ini)</div>
+                        <div class="stat-value" id="total-time-display">00:00:00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Efisiensi Hari Ini</div>
+                        <div class="stat-value" id="efficiency-display">0%</div>
+                        <div class="stat-label" style="font-size: 0.8em; margin-top: 5px;">Tugas Selesai / Total Aktif
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Tugas Selesai (Hari Ini)</div>
+                        <div class="stat-value" id="total-completed-display">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tasks" class="section">
+            <h2 style="margin-bottom: 20px;">Papan Tugas</h2>
+            <div class="board">
+                <div class="column" id="col-todo" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)">
+                    <div class="column-header">
+                        <span>Akan Dikerjakan</span>
+                        <span class="count-badge" id="count-todo">0</span>
+                    </div>
+                    <div class="task-list" id="list-todo"></div>
+                </div>
+                <div class="column" id="col-inprogress" ondrop="drop(event, 'inprogress')"
+                    ondragover="allowDrop(event)">
+                    <div class="column-header">
+                        <span>Sedang Dikerjakan</span>
+                        <span class="count-badge" id="count-inprogress">0</span>
+                    </div>
+                    <div class="task-list" id="list-inprogress"></div>
+                </div>
+                <div class="column" id="col-done" ondrop="drop(event, 'done')" ondragover="allowDrop(event)">
+                    <div class="column-header">
+                        <span>Selesai (Hari Ini)</span>
+                        <span class="count-badge" id="count-done">0</span>
+                    </div>
+                    <div class="task-list" id="list-done"></div>
+                </div>
+            </div>
+            <button class="fab" onclick="openAddTaskModal()">+</button>
+        </div>
+
+        <div id="calendar" class="section">
+            <div class="calendar-header">
+                <h2 id="calendar-month-year">November 2025</h2>
+                <div>
+                    <button class="btn btn-secondary" onclick="changeMonth(-1)">Previous</button>
+                    <button class="btn btn-secondary" onclick="changeMonth(1)">Next</button>
+                </div>
+            </div>
+            <div class="calendar-container">
+                <div class="calendar-grid" id="calendar-grid">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-task-modal" class="modal">
+        <div class="modal-content">
+            <h3>Tambah Tugas Baru</h3>
+            <div class="form-group">
+                <label>Judul Tugas</label>
+                <input type="text" id="new-task-title" placeholder="Contoh: Belajar Coding">
+            </div>
+            <div class="form-group">
+                <label>Prioritas</label>
+                <select id="new-task-priority">
+                    <option value="low">Rendah (10 XP)</option>
+                    <option value="medium">Sedang (15 XP)</option>
+                    <option value="high">Tinggi (20 XP)</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-secondary" onclick="closeModal('add-task-modal')">Batal</button>
+                <button class="btn btn-primary" onclick="addTask()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="day-details-modal" class="modal">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <h3 id="day-details-title">Detail Tanggal</h3>
+            <div style="margin: 20px 0;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    <div><strong>Tugas Selesai:</strong> <span id="day-completed">0</span></div>
+                    <div><strong>Total Waktu:</strong> <span id="day-time">00:00:00</span></div>
+                    <div><strong>Efisiensi:</strong> <span id="day-efficiency">0%</span></div>
+                </div>
+                
+                <h4>Daftar Tugas Selesai:</h4>
+                <ul id="day-task-list-ul">
+                    </ul>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" onclick="closeModal('day-details-modal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let state = {
+            tasks: [],
+            user: {
+                level: 0,
+                currentExp: 0,
+                totalExp: 0,
+                displayedLevel: 0 // New property to track visual state
+            }
+        };
+
+        let currentDate = new Date();
+
+        // --- Constants ---
+        const EXP_RATES = {
+            low: 10,
+            medium: 15,
+            high: 20
+        };
+
+        // --- Initialization ---
+        function init() {
+            loadData();
+            // Fallback for old save data without displayedLevel
+            if (typeof state.user.displayedLevel === 'undefined') {
+                state.user.displayedLevel = state.user.level;
+            }
+            renderApp();
+            setInterval(updateTimers, 1000);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('ecoFocusData');
+            if (saved) {
+                state = JSON.parse(saved);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('ecoFocusData', JSON.stringify(state));
+            // Note: We deliberately don't call renderApp() here in all cases 
+            // to allow animation logic to control rendering.
+        }
+
+        // --- Gamification Logic ---
+        function getExpForNextLevel(level) {
+            return Math.floor(100 * Math.pow(1.05, level));
+        }
+
+        function addExp(amount) {
+            state.user.currentExp += amount;
+            state.user.totalExp += amount;
+
+            let required = getExpForNextLevel(state.user.level);
+            let leveledUp = false;
+
+            while (state.user.currentExp >= required && state.user.level < 100) {
+                state.user.currentExp -= required;
+                state.user.level++; // Only update actual level, NOT displayedLevel
+                required = getExpForNextLevel(state.user.level);
+                leveledUp = true;
+            }
+
+            if (leveledUp) {
+                alert(`Selamat! Anda naik ke Level ${state.user.level}!`);
+            }
+            
+            // Save but don't force render dashboard yet (user is in tasks view)
+            saveData();
+            // Only update dashboard stats part, not the tree, if we are currently looking at it
+            if(document.getElementById('dashboard').classList.contains('active')) {
+                renderDashboard();
+            }
+        }
+
+        // --- Enhanced Tree Visualizer with Animation Support ---
+        function getTreeSVG(level, animate = false) {
+            const animationClass = animate ? 'anim-grow' : 'anim-idle';
+            
+            // Definisi Gradasi Warna
+            const defs = `
+                <defs>
+                    <linearGradient id="trunkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#5D4037;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#8D6E63;stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="leafGrad" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
+                        <stop offset="0%" style="stop-color:#66BB6A;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+            `;
+
+            let content = '';
+
+            // Tahap 1: Benih (Level 0)
+            if (level < 1) {
+                content = `
+                    <circle cx="150" cy="220" r="10" fill="#5D4037" class="trunk"/>
+                    <path d="M150 220 Q150 200 160 190" stroke="#81C784" stroke-width="4" fill="none" class="foliage"/>
+                    <circle cx="160" cy="190" r="5" fill="#A5D6A7" class="foliage"/>
+                `;
+            } 
+            // Tahap 2: Tunas (Level 1-4)
+            else if (level < 5) {
+                content = `
+                    <path d="M150 250 Q160 200 150 180" stroke="url(#trunkGrad)" stroke-width="8" fill="none" stroke-linecap="round" class="trunk"/>
+                    <path d="M150 180 Q130 160 120 170" stroke="#81C784" stroke-width="4" fill="none" class="trunk" style="animation-delay: 0.2s"/>
+                    <ellipse cx="150" cy="170" rx="20" ry="10" fill="url(#leafGrad)" class="foliage"/>
+                    <ellipse cx="120" cy="170" rx="15" ry="8" fill="url(#leafGrad)" class="foliage" style="animation-delay: 0.7s"/>
+                `;
+            } 
+            // Tahap 3: Pohon Muda (Level 5-19)
+            else if (level < 20) {
+                content = `
+                    <path d="M150 250 Q140 200 150 150" stroke="url(#trunkGrad)" stroke-width="12" fill="none" stroke-linecap="round" class="trunk"/>
+                    <path d="M150 200 Q180 180 190 190" stroke="url(#trunkGrad)" stroke-width="6" fill="none" class="trunk"/>
+                    <path d="M150 170 Q120 150 110 160" stroke="url(#trunkGrad)" stroke-width="6" fill="none" class="trunk"/>
+                    <circle cx="150" cy="140" r="40" fill="url(#leafGrad)" class="foliage"/>
+                    <circle cx="190" cy="190" r="25" fill="url(#leafGrad)" class="foliage" style="animation-delay: 0.6s"/>
+                    <circle cx="110" cy="160" r="25" fill="url(#leafGrad)" class="foliage" style="animation-delay: 0.8s"/>
+                `;
+            } 
+            // Tahap 4: Pohon Dewasa (Level 20+)
+            else {
+                content = `
+                    <path d="M140 280 Q150 200 140 120 L160 120 Q150 200 160 280 Z" fill="url(#trunkGrad)" class="trunk"/>
+                    <circle cx="150" cy="100" r="80" fill="#2E7D32" class="foliage" style="animation-delay: 0.3s"/>
+                    <circle cx="100" cy="140" r="50" fill="url(#leafGrad)" class="foliage" style="animation-delay: 0.5s"/>
+                    <circle cx="200" cy="140" r="50" fill="url(#leafGrad)" class="foliage" style="animation-delay: 0.6s"/>
+                    <circle cx="150" cy="60" r="50" fill="#66BB6A" class="foliage" style="animation-delay: 0.7s"/>
+                    <circle cx="120" cy="120" r="8" fill="#F44336" class="fruit"/>
+                    <circle cx="180" cy="110" r="8" fill="#F44336" class="fruit" style="animation-delay: 1.3s"/>
+                    <circle cx="150" cy="90" r="8" fill="#F44336" class="fruit" style="animation-delay: 1.4s"/>
+                `;
+            }
+
+            const ground = `<path d="M20 280 Q150 260 280 280 L280 300 L20 300 Z" fill="#795548"/>`;
+
+            return `
+                <svg class="tree-svg ${animationClass}" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                    ${defs}
+                    ${ground}
+                    ${content}
+                </svg>
+            `;
+        }
+
+        // --- Task Logic ---
+        function addTask() {
+            const title = document.getElementById('new-task-title').value;
+            const priority = document.getElementById('new-task-priority').value;
+
+            if (!title) return;
+
+            const newTask = {
+                id: Date.now().toString(),
+                title,
+                priority,
+                status: 'todo',
+                startTime: null,
+                elapsedTime: 0,
+                createdAt: new Date().toISOString(),
+                completedAt: null
+            };
+
+            state.tasks.push(newTask);
+            saveData();
+            closeModal('add-task-modal');
+            document.getElementById('new-task-title').value = '';
+            renderTasks(); // Update task board directly
+        }
+
+        function updateTimers() {
+            const now = Date.now();
+            let updated = false;
+
+            state.tasks.forEach(task => {
+                if (task.status === 'inprogress' && task.startTime) {
+                    const currentSession = now - task.startTime;
+                    const total = task.elapsedTime + currentSession;
+                    const timerEl = document.getElementById(`timer-${task.id}`);
+                    if (timerEl) {
+                        timerEl.innerText = formatTime(total);
+                    }
+                    updated = true;
+                }
+            });
+        }
+
+        function formatTime(ms) {
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor((ms / (1000 * 60 * 60)));
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function pad(n) {
+            return n.toString().padStart(2, '0');
+        }
+
+        // --- Drag and Drop ---
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev, id) {
+            ev.dataTransfer.setData("text", id);
+        }
+
+        function drop(ev, newStatus) {
+            ev.preventDefault();
+            const id = ev.dataTransfer.getData("text");
+            const task = state.tasks.find(t => t.id === id);
+
+            if (task && task.status !== newStatus) {
+                if (newStatus === 'inprogress') {
+                    task.startTime = Date.now();
+                } else {
+                    if (task.status === 'inprogress') {
+                        task.elapsedTime += Date.now() - task.startTime;
+                        task.startTime = null;
+                    }
+                }
+
+                if (newStatus === 'done' && task.status !== 'done') {
+                    task.completedAt = new Date().toISOString();
+                    addExp(EXP_RATES[task.priority]);
+                }
+                
+                if (task.status === 'done' && newStatus !== 'done') {
+                    task.completedAt = null;
+                }
+
+                task.status = newStatus;
+                saveData();
+                renderTasks();
+            }
+        }
+
+        // --- Rendering ---
+        function renderApp() {
+            renderDashboard();
+            renderTasks();
+            renderCalendar();
+        }
+
+        function renderDashboard() {
+            const container = document.getElementById('tree-visual');
+            
+            // LOGIKA VISUALISASI PERTUMBUHAN
+            // Cek apakah ada perbedaan antara level asli dan level yang ditampilkan
+            if (state.user.level > state.user.displayedLevel) {
+                // 1. Tampilkan pohon level LAMA terlebih dahulu (tanpa animasi tumbuh)
+                container.innerHTML = getTreeSVG(state.user.displayedLevel, false);
+                
+                // Update teks level sementara ke yang lama agar user sadar
+                document.getElementById('level-display').innerText = `Level ${state.user.displayedLevel} -> ${state.user.level}...`;
+
+                // 2. Tunda sebentar, lalu ubah ke level BARU dengan animasi
+                setTimeout(() => {
+                    container.innerHTML = getTreeSVG(state.user.level, true); // true = animate growth
+                    document.getElementById('level-display').innerText = `Level ${state.user.level}`;
+                    
+                    // Update state agar tidak animasi lagi nanti
+                    state.user.displayedLevel = state.user.level;
+                    saveData();
+                }, 1000); // Jeda 1 detik sebelum transformasi
+            } else {
+                // Jika level sama, tampilkan saja (dengan animasi sway/idle, tanpa tumbuh)
+                // Ini mencegah pohon "tumbuh ulang" setiap kali refresh atau pindah tab
+                // Kita gunakan idle animation
+                // Cek apakah SVG sudah ada, jika sudah, jangan dirender ulang biar animasinya smooth
+                // Kecuali jika kosong
+                if(container.innerHTML.trim() === '' || container.querySelector('svg') === null) {
+                    container.innerHTML = getTreeSVG(state.user.level, false);
+                }
+            }
+
+            // Level Info Bars
+            const required = getExpForNextLevel(state.user.level);
+            const percent = (state.user.currentExp / required) * 100;
+            document.getElementById('exp-bar').style.width = `${percent}%`;
+            document.getElementById('current-exp').innerText = state.user.currentExp;
+            document.getElementById('next-level-exp').innerText = required;
+            
+            // Jika tidak sedang transisi level, pastikan teks level benar
+            if (state.user.level === state.user.displayedLevel) {
+                 document.getElementById('level-display').innerText = `Level ${state.user.level}`;
+            }
+
+            // Stats Logic
+            let totalMsToday = 0;
+            let completedToday = 0;
+            let activeToday = 0; 
+            const todayStr = new Date().toDateString();
+
+            state.tasks.forEach(t => {
+                const createdDate = new Date(t.createdAt).toDateString();
+                const completedDate = t.completedAt ? new Date(t.completedAt).toDateString() : null;
+                
+                if (completedDate === todayStr) {
+                    totalMsToday += t.elapsedTime;
+                    completedToday++;
+                    activeToday++;
+                } else if (t.status === 'inprogress') {
+                     totalMsToday += t.elapsedTime;
+                     if(t.startTime) {
+                        totalMsToday += (Date.now() - t.startTime);
+                     }
+                     activeToday++;
+                } else if (t.status === 'todo' && createdDate === todayStr) {
+                    activeToday++;
+                }
+            });
+
+            document.getElementById('total-time-display').innerText = formatTime(totalMsToday);
+            document.getElementById('total-completed-display').innerText = completedToday;
+
+            const efficiency = activeToday > 0 ? Math.round((completedToday / activeToday) * 100) : 0;
+            document.getElementById('efficiency-display').innerText = `${efficiency}%`;
+        }
+
+        function renderTasks() {
+            const todayStr = new Date().toDateString();
+
+            ['todo', 'inprogress', 'done'].forEach(status => {
+                const list = document.getElementById(`list-${status}`);
+                
+                const tasks = state.tasks.filter(t => {
+                    if(t.status !== status) return false;
+                    if(status === 'done') {
+                        if(!t.completedAt) return false;
+                        const cDate = new Date(t.completedAt).toDateString();
+                        return cDate === todayStr;
+                    }
+                    return true;
+                });
+
+                document.getElementById(`count-${status}`).innerText = tasks.length;
+
+                list.innerHTML = '';
+                tasks.forEach(task => {
+                    const el = document.createElement('div');
+                    el.className = `task-card priority-${task.priority}`;
+                    el.draggable = true;
+                    el.ondragstart = (ev) => drag(ev, task.id);
+
+                    let timeDisplay = formatTime(task.elapsedTime);
+
+                    el.innerHTML = `
+                        <div class="task-header">
+                            <span class="task-title">${task.title}</span>
+                            <span style="font-size:0.8em; color:#666;">${task.priority.toUpperCase()}</span>
+                        </div>
+                        ${status === 'inprogress'
+                            ? `<div id="timer-${task.id}" class="task-timer active">${timeDisplay}</div>`
+                            : `<div class="task-timer">${timeDisplay}</div>`
+                        }
+                    `;
+                    list.appendChild(el);
+                });
+            });
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            document.getElementById('calendar-month-year').innerText =
+                new Date(year, month).toLocaleString('id-ID', { month: 'long', year: 'numeric' });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateObj = new Date(year, month, d);
+                const dateStr = dateObj.toDateString();
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                if (dateStr === new Date().toDateString()) {
+                    dayEl.classList.add('today');
+                }
+
+                let dayCompleted = 0;
+                let dayActive = 0;
+
+                state.tasks.forEach(t => {
+                    const cDate = t.completedAt ? new Date(t.completedAt).toDateString() : null;
+                    if (cDate === dateStr) {
+                        dayCompleted++;
+                        dayActive++; 
+                    }
+                });
+
+                const efficiency = dayActive > 0 ? Math.round((dayCompleted / dayActive) * 100) : 0;
+
+                dayEl.innerHTML = `
+                    <div>${d}</div>
+                    ${dayCompleted > 0 ? `
+                    <div class="day-stats">
+                        ✅ ${dayCompleted}<br>
+                        ⚡ ${efficiency}%
+                    </div>` : ''}
+                `;
+
+                dayEl.onclick = () => showDayDetails(d, month, year);
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function showDayDetails(day, month, year) {
+            const date = new Date(year, month, day);
+            const dateStr = date.toDateString();
+
+            document.getElementById('day-details-title').innerText = date.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const dayTasks = state.tasks.filter(t => 
+                t.status === 'done' && 
+                t.completedAt && 
+                new Date(t.completedAt).toDateString() === dateStr
+            );
+
+            let dayTime = 0;
+            dayTasks.forEach(t => dayTime += t.elapsedTime);
+            
+            document.getElementById('day-completed').innerText = dayTasks.length;
+            document.getElementById('day-time').innerText = formatTime(dayTime);
+            const efficiency = dayTasks.length > 0 ? 100 : 0; 
+            document.getElementById('day-efficiency').innerText = `${efficiency}%`;
+
+            const listContainer = document.getElementById('day-task-list-ul');
+            listContainer.innerHTML = '';
+            
+            if (dayTasks.length === 0) {
+                listContainer.innerHTML = '<li style="color:#999; text-align:center;">Tidak ada tugas selesai.</li>';
+            } else {
+                dayTasks.forEach(t => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${t.title}</span>
+                        <span class="priority-badge">${t.priority}</span>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            }
+
+            openModal('day-details-modal');
+        }
+
+        // --- UI Helpers ---
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            const btns = document.querySelectorAll('.nav-btn');
+            if (id === 'dashboard') btns[0].classList.add('active');
+            if (id === 'tasks') btns[1].classList.add('active');
+            if (id === 'calendar') btns[2].classList.add('active');
+
+            // Force render logic to check for animations
+            renderApp();
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function openAddTaskModal() {
+            openModal('add-task-modal');
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>
