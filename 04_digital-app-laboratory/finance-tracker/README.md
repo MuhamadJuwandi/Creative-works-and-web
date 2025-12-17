@@ -1,7 +1,8 @@
-# 💰 JWN Finance Dashboard
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,100:00f2fe&height=220&section=header&text=Personal%20Finance%20Analytics&fontSize=40&fontAlignY=38&desc=Data%20Visualization%20%7C%20Cashflow%20Logic%20%7C%20Glassmorphism&descAlignY=68&descSize=16&animation=fadeIn)
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,100:00f2fe&height=250&section=header&text=JWN%20Finance%20Dashboard&fontSize=42&fontAlignY=35&desc=Personal%20Analytics%20%7C%20Data%20Visualization%20%7C%20Glassmorphism&descAlignY=65&descSize=18&animation=fadeIn)
 
 <div align="center">
+  
+  <br>
   <img src="assets/dashboard-demo.png" width="100%" alt="Finance Dashboard Interface">
   
   <br><br>
