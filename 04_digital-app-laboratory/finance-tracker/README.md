@@ -1,4 +1,4 @@
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,100:00f2fe&height=250&section=header&text=JWN%20Finance%20Dashboard&fontSize=42&fontAlignY=35&desc=Personal%20Analytics%20%7C%20Data%20Visualization%20%7C%20Glassmorphism&descAlignY=65&descSize=18&animation=fadeIn)
+# 💰 JWN Finance Dashboard
 
 <div align="center">
   
