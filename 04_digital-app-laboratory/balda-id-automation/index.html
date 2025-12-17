@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Card Pro - Drag & Drop Editor</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@400;700&family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar: Tools & Templates -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="assets/logo.png" alt="Logo" style="height: 70px; border-radius: 4px;">
+                <!-- <span>ID Card Pro</span> -->
+            </div>
+
+            <nav class="tools-nav">
+                <div class="tool-section">
+                    <h3>Add Elements</h3>
+                    <button class="tool-btn" id="add-text-btn">
+                        <i class="ph ph-text-t"></i>
+                        <span>Text</span>
+                    </button>
+                    <button class="tool-btn" id="add-image-btn">
+                        <i class="ph ph-image"></i>
+                        <span>Image</span>
+                        <input type="file" id="image-upload" hidden accept="image/*">
+                    </button>
+                    <button class="tool-btn" id="add-qr-btn">
+                        <i class="ph ph-qr-code"></i>
+                        <span>QR Code</span>
+                    </button>
+                </div>
+
+                <div class="tool-section">
+                    <h3>Data</h3>
+                    <button class="tool-btn" id="data-merge-btn">
+                        <i class="ph ph-database"></i>
+                        <span>Import CSV</span>
+                        <input type="file" id="csv-upload" hidden accept=".csv">
+                    </button>
+                    <div id="data-stats" class="hidden">
+                        <span id="record-count">0</span> records loaded
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3>Templates</h3>
+                    <button class="tool-btn" id="save-template-btn">
+                        <i class="ph ph-floppy-disk"></i>
+                        <span>Save Template</span>
+                    </button>
+                    <div id="template-list">
+                        <!-- Templates injected here -->
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Editor Area -->
+        <main class="workspace">
+            <div class="toolbar">
+                <div class="canvas-controls">
+                    <button class="icon-btn" id="clear-canvas" title="Clear Canvas"><i class="ph ph-trash"></i></button>
+                    <div class="divider"></div>
+                    <!-- Zoom Controls -->
+                    <button class="icon-btn" id="zoom-out"><i class="ph ph-minus"></i></button>
+                    <span id="zoom-level" style="font-size: 0.8rem; color: var(--text-muted); opacity: 0.8;">100%</span>
+                    <button class="icon-btn" id="zoom-in"><i class="ph ph-plus"></i></button>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-white" id="preview-btn">
+                        <i class="ph ph-eye"></i> Preview
+                    </button>
+                    <button class="btn btn-primary" id="export-pdf-btn">
+                        <i class="ph ph-file-pdf"></i> Generate PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper">
+                <div class="canvas-scroll-area">
+                    <!-- Dynamic List of Canvases -->
+                    <div id="canvas-list" style="display: flex; flex-direction: column; align-items: center;"></div>
+
+                    <!-- Add Design Button -->
+                    <div class="canvas-controls-area">
+                        <button id="add-canvas-btn" class="btn">
+                            <i class="ph ph-plus"></i> Add New Design
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Properties Panel (Right) -->
+        <aside class="properties-panel" id="properties-panel">
+            <div class="panel-header">
+                <h3>Properties</h3>
+            </div>
+
+            <!-- Global Canvas Properties (Shown when no selection) -->
+            <!-- Global Canvas Properties (Shown when no selection) -->
+            <div id="no-selection" class="panel-content">
+                <h3 style="margin-bottom: 1rem; color: #ffffff; font-size: 1rem; font-weight: 600;">Canvas Settings</h3>
+                <div class="prop-group">
+                    <div style="display: flex; gap: 1rem;"> <!-- Increased gap for separation -->
+                        <div style="flex: 1;">
+                            <label style="color:white; font-size: 0.8rem; opacity: 0.9;">Width (px)</label>
+                            <input type="number" id="canvas-width" value="638">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color:white; font-size: 0.8rem; opacity: 0.9;">Height (px)</label>
+                            <input type="number" id="canvas-height" value="1011">
+                        </div>
+                    </div>
+                    <small
+                        style="color: rgba(255,255,255,0.5); font-size: 0.7rem; display: block; margin-top: 5px;">Defaults:
+                        CR80 (638x1011 @ 300dpi)</small>
+                </div>
+                <div class="prop-group">
+                    <label>Background Color</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="canvas-bg-color" value="#ffffff">
+                        <span id="canvas-bg-hex">#ffffff</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary full-width" id="apply-canvas-size">Apply Size</button>
+            </div>
+
+            <div id="object-properties" class="panel-content hidden">
+                <div class="prop-group">
+                    <label>Content / Variable</label>
+                    <input type="text" id="prop-text" placeholder="Value or {{Variable}}">
+                    <small>Use {{ColumnName}} for dynamic data</small>
+                </div>
+
+                <div class="prop-group">
+                    <label>Color</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="prop-fill">
+                        <span id="prop-fill-hex">#000000</span>
+                    </div>
+                </div>
+
+                <div class="prop-group show-text-only">
+                    <label>Font Size</label>
+                    <input type="number" id="prop-fontSize" min="10" max="200">
+                </div>
+
+                <div class="prop-group show-text-only">
+                    <label>Font Family</label>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <select id="prop-fontFamily" style="flex:1;">
+                            <option value="Outfit">Outfit</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Roboto">Roboto</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Playfair Display">Playfair Display</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                        </select>
+                        <button id="load-fonts-btn" title="Load System Fonts" class="icon-btn"
+                            style="border: 1px solid #ccc;"><i class="ph ph-desktop"></i></button>
+                    </div>
+                </div>
+
+                <div class="prop-group">
+                    <label>Opacity</label>
+                    <input type="range" id="prop-opacity" min="0" max="1" step="0.1">
+                </div>
+
+                <div class="prop-group">
+                    <button class="btn btn-danger full-width" id="delete-btn">Delete Object</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modals -->
+    <div id="preview-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Data Merge Preview</h2>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="preview-controls">
+                    <button id="prev-record"><i class="ph ph-caret-left"></i></button>
+                    <span id="preview-counter">Record 1 of 10</span>
+                    <button id="next-record"><i class="ph ph-caret-right"></i></button>
+                </div>
+                <div class="preview-canvas-container">
+                    <!-- Preview Image rendered here -->
+                    <img id="preview-image" src="" alt="Preview">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="confirm-export">Download All as PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/canvas-manager.js"></script>
+    <script src="js/data-processor.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
