@@ -1,6 +1,6 @@
-# 🎨 Freelance Design Portfolio & Creative Assets
+# 🎨 Creative Design & Visual Strategy
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:FF0080,100:7928CA&height=250&section=header&text=Visual%20Design%20Portfolio&fontSize=50&fontAlign=50&desc=Muhamad%20Juwandi%20%7C%20Graphic%20Designer%20%26%20Data%20Scientist&descAlign=50&descSize=20)
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:FF0080,100:7928CA&height=250&section=header&text=Visual%20Design%20Portfolio&fontSize=50&fontAlign=50&desc=Data-Driven%20Design%20by%20Muhamad%20Juwandi&descAlign=50&descSize=20)
 
 <div align="center">
 
@@ -9,76 +9,89 @@
 <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Figma" />
 <img src="https://img.shields.io/badge/Canva-00C4CC?style=for-the-badge&logo=Canva&logoColor=white" alt="Canva" />
 <br/>
-<img src="https://img.shields.io/badge/Status-Open%20for%20Work-success?style=flat-square" />
-<img src="https://img.shields.io/badge/Freelance-Active-blueviolet?style=flat-square" />
+<img src="https://img.shields.io/badge/Role-Graphic%20Designer-blueviolet?style=flat-square" />
+<img src="https://img.shields.io/badge/Focus-Brand%20Identity%20%26%20Marketing-success?style=flat-square" />
 
 <br/>
+<br/>
 
-[English](#-english) | [日本語](#-japanese) | [Bahasa Indonesia](#-bahasa-indonesia)
+[🇬🇧 English](#-english) | [🇯🇵 日本語](#-japanese) | [🇮🇩 Bahasa Indonesia](#-bahasa-indonesia)
 
 </div>
 
 ---
 
+<a id="-english"></a>
 ## 🇬🇧 English
 
 ### 🖌️ Overview
-Welcome to my curated collection of freelance design projects. This portfolio highlights my ability to blend **aesthetic principles** with **marketing objectives**. As a Data Scientist with a background in design, I approach visuals with an analytical mindset—focusing on user attention, hierarchy, and conversion.
+Welcome to my creative portfolio. As a **Data Scientist**, I believe that data needs a story to be understood. This repository showcases my capability to blend **aesthetic principles** with **strategic communication**. 
 
-### 📂 Portfolio Gallery
+Here, I categorize my work into **Corporate Projects** (Balda Corp) and **Freelance Client Work**, focusing on user attention, hierarchy, and visual conversion.
+
+### 🏢 Featured Project: Balda Corp
+*Corporate design assets created for Balda.*
+
+| Preview | Project Details |
+| :--- | :--- |
+| <img src="./01_balda_corp/showcase/branding_mockup.jpg" width="300" alt="Balda Design"> | **Scope:** Brand Identity & Corporate Assets<br>**Role:** Lead Designer<br>**Tools:** Illustrator, Photoshop<br>**Impact:** Established a consistent visual language for corporate communications. |
+
+### 📂 Freelance Projects Gallery
 
 | Project Type | Preview | Details |
 | :--- | :---: | :--- |
-| **Marketing Materials** | <img src="./marketing-materials/example-flyer-thumb.jpg" width="200" alt="Flyer Design"> | **Title:** Product Launch Flyer<br>**Client:** F&B Startups<br>**Tools:** Photoshop, Illustrator<br>**Role:** Layout & Photo Manipulation |
-| **Social Media Kit** | <img src="./social-media/example-ig-thumb.jpg" width="200" alt="Social Media"> | **Title:** Instagram Feed Grid<br>**Client:** Tech Education<br>**Tools:** Figma, Canva<br>**Role:** Visual Identity & Template Creation |
-| **Web Banners** | <img src="./web-assets/example-banner-thumb.jpg" width="200" alt="Web Banner"> | **Title:** E-commerce Hero Banner<br>**Client:** Fashion Brand<br>**Tools:** Photoshop<br>**Role:** Composition & Typography |
-
-### 🛠️ Services Offered
-* **Print Design:** Flyers, Brochures, Posters.
-* **Digital:** Social Media Content, Web Banners, Thumbnails.
-* **Branding:** Logo Concept, Color Palette selection.
+| **Marketing Materials** | <img src="./02_freelance_projects/fnb_client/flyer_preview.jpg" width="200" alt="Flyer"> | **Client:** F&B Startup<br>**Output:** Product Launch Flyer<br>**Focus:** High-impact typography and appetite appeal. |
+| **Social Media Kit** | <img src="./02_freelance_projects/tech_edu_client/ig_grid_preview.jpg" width="200" alt="Social Media"> | **Client:** EdTech Company<br>**Output:** Instagram Grid Layout<br>**Focus:** Educational content retention and brand consistency. |
+| **Web Banners** | <img src="./02_freelance_projects/fashion_brand/banner_preview.jpg" width="200" alt="Banner"> | **Client:** Fashion Brand<br>**Output:** E-commerce Hero Banner<br>**Focus:** CTR optimization and seasonal theming. |
 
 ---
 
+<a id="-japanese"></a>
 ## 🇯🇵 Japanese
 
 ### 🖌️ 概要 (Overview)
-私のフリーランスデザイン作品集へようこそ。ここでは、**美的原則**と**マーケティング目標**を融合させたデザインを紹介しています。データサイエンティストとしての視点を活かし、ユーザーの注目、情報の優先順位、そしてコンバージョン（成果）を意識したデザイン制作を行っています。
+私のクリエイティブ・ポートフォリオへようこそ。
+私は**データサイエンティスト**として、「データは物語（デザイン）を通して初めて人々に伝わる」と考えています。本リポジトリでは、**美的原則**と**戦略的コミュニケーション**を融合させたデザインワークを紹介します。
 
-### 📂 ポートフォリオギャラリー (Portfolio Gallery)
+### 🏢 主要実績: 株式会社Balda (Balda Corp)
+*企業向け公式デザインアセットの制作*
 
-| プロジェクトの種類 | プレビュー | 詳細 |
+| プレビュー | プロジェクト詳細 |
+| :--- | :--- |
+| <img src="./01_balda_corp/showcase/branding_mockup.jpg" width="300" alt="Balda Design"> | **プロジェクト:** 企業ブランディング・アセット制作<br>**担当範囲:** リードデザイン、ビジュアルアイデンティティ<br>**使用ツール:** Illustrator, Photoshop<br>**成果:** 企業コミュニケーションにおける視覚的一貫性の確立。 |
+
+### 📂 フリーランス案件 (Freelance Works)
+
+| カテゴリ | プレビュー | 詳細 |
 | :--- | :---: | :--- |
-| **マーケティング素材**<br>(Marketing Materials) | <img src="./marketing-materials/example-flyer-thumb.jpg" width="200" alt="チラシデザイン"> | **タイトル:** 新商品発売チラシ<br>**クライアント:** 飲食系スタートアップ<br>**ツール:** Photoshop, Illustrator<br>**役割:** レイアウト、画像編集 |
-| **SNSキット**<br>(Social Media Kit) | <img src="./social-media/example-ig-thumb.jpg" width="200" alt="SNSデザイン"> | **タイトル:** Instagramフィードデザイン<br>**クライアント:** IT教育関連<br>**ツール:** Figma, Canva<br>**役割:** ビジュアルアイデンティティ作成 |
-| **ウェブバナー**<br>(Web Banners) | <img src="./web-assets/example-banner-thumb.jpg" width="200" alt="ウェブバナー"> | **タイトル:** ECサイト用ヒーローバナー<br>**クライアント:** アパレルブランド<br>**ツール:** Photoshop<br>**役割:** 構図、タイポグラフィ |
-
-### 🛠️ 提供サービス (Services)
-* **印刷物:** チラシ、パンフレット、ポスター制作。
-* **デジタル:** SNSコンテンツ、ウェブバナー、サムネイル画像。
-* **ブランディング:** ロゴコンセプト、配色選定。
+| **マーケティング素材**<br>(Marketing Materials) | <img src="./02_freelance_projects/fnb_client/flyer_preview.jpg" width="200" alt="チラシ"> | **クライアント:** 飲食系スタートアップ<br>**制作物:** 新商品発売チラシ<br>**注力点:** 購買意欲を高めるレイアウトとシズル感の演出。 |
+| **SNSキット**<br>(Social Media Kit) | <img src="./02_freelance_projects/tech_edu_client/ig_grid_preview.jpg" width="200" alt="SNS"> | **クライアント:** 教育系IT企業<br>**制作物:** Instagramフィードデザイン<br>**注力点:** 学習内容の定着率向上とブランド統一。 |
+| **ウェブバナー**<br>(Web Banners) | <img src="./02_freelance_projects/fashion_brand/banner_preview.jpg" width="200" alt="バナー"> | **クライアント:** アパレルブランド<br>**制作物:** ECサイト用ヒーローバナー<br>**注力点:** CTR（クリック率）を意識した構図と配色。 |
 
 ---
 
+<a id="-bahasa-indonesia"></a>
 ## 🇮🇩 Bahasa Indonesia
 
 ### 🖌️ Ringkasan
-Selamat datang di koleksi proyek desain freelance saya yang telah dikurasi. Portofolio ini menyoroti kemampuan saya dalam memadukan **prinsip estetika** dengan **tujuan pemasaran**. Sebagai seorang Data Scientist dengan latar belakang desain, saya melakukan pendekatan visual dengan pola pikir analitis—berfokus pada hierarki informasi dan psikologi audiens.
+Selamat datang di portofolio kreatif saya. Sebagai seorang **Data Scientist**, saya percaya bahwa data membutuhkan cerita agar dapat dipahami. Repositori ini menampilkan kemampuan saya dalam memadukan **prinsip estetika** dengan **komunikasi strategis**.
 
-### 📂 Galeri Portofolio
+### 🏢 Proyek Unggulan: Perusahaan Balda
+*Aset desain korporat yang dibuat untuk Balda.*
+
+| Pratinjau | Detail Proyek |
+| :--- | :--- |
+| <img src="./01_balda_corp/showcase/branding_mockup.jpg" width="300" alt="Desain Balda"> | **Lingkup:** Identitas Merek & Aset Korporat<br>**Peran:** Desainer Utama<br>**Tools:** Illustrator, Photoshop<br>**Dampak:** Membangun bahasa visual yang konsisten untuk komunikasi perusahaan. |
+
+### 📂 Galeri Proyek Freelance
 
 | Tipe Proyek | Pratinjau | Detail |
 | :--- | :---: | :--- |
-| **Materi Pemasaran** | <img src="./marketing-materials/example-flyer-thumb.jpg" width="200" alt="Desain Flyer"> | **Judul:** Flyer Peluncuran Produk<br>**Klien:** Startup F&B<br>**Tools:** Photoshop, Illustrator<br>**Peran:** Tata Letak & Manipulasi Foto |
-| **Social Media Kit** | <img src="./social-media/example-ig-thumb.jpg" width="200" alt="Desain Sosmed"> | **Judul:** Grid Feed Instagram<br>**Klien:** Edukasi Teknologi<br>**Tools:** Figma, Canva<br>**Peran:** Identitas Visual & Pembuatan Template |
-| **Banner Web** | <img src="./web-assets/example-banner-thumb.jpg" width="200" alt="Banner Web"> | **Judul:** Hero Banner E-commerce<br>**Klien:** Brand Fashion<br>**Tools:** Photoshop<br>**Peran:** Komposisi & Tipografi |
-
-### 🛠️ Layanan
-* **Desain Cetak:** Flyer, Brosur, Poster.
-* **Digital:** Konten Media Sosial, Banner Website, Thumbnail YouTube.
-* **Branding:** Konsep Logo, Pemilihan Palet Warna.
+| **Materi Pemasaran** | <img src="./02_freelance_projects/fnb_client/flyer_preview.jpg" width="200" alt="Flyer"> | **Klien:** Startup F&B<br>**Output:** Flyer Peluncuran Produk<br>**Fokus:** Tipografi yang berdampak tinggi dan daya tarik visual. |
+| **Social Media Kit** | <img src="./02_freelance_projects/tech_edu_client/ig_grid_preview.jpg" width="200" alt="Sosmed"> | **Klien:** Perusahaan EdTech<br>**Output:** Tata Letak Grid Instagram<br>**Fokus:** Konsistensi merek dan penyampaian materi edukasi. |
+| **Banner Web** | <img src="./02_freelance_projects/fashion_brand/banner_preview.jpg" width="200" alt="Banner"> | **Klien:** Brand Fashion<br>**Output:** Hero Banner E-commerce<br>**Fokus:** Optimasi CTR dan penyesuaian tema musiman. |
 
 ---
 <div align="center">
-    <p><i>Design meets Data. Crafted by Muhamad Juwandi.</i></p>
+    <p><i>Visuals engineered by Muhamad Juwandi.</i></p>
 </div>
