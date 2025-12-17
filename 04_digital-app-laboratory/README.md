@@ -1,6 +1,5 @@
 # 🧪 Digital App Laboratory
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:8E2DE2,100:4A00E0&height=250&section=header&text=Engineering%20Daily%20Life&fontSize=45&fontAlign=50&desc=Productivity%20Tools%20%7C%20EdTech%20%7C%20Personal%20Finance&descAlign=50&descSize=20)
-
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:8E2DE2,100:4A00E0&height=250&section=header&text=Engineering%20Daily%20Life&fontSize=45&fontAlignY=35&desc=Productivity%20Tools%20%7C%20EdTech%20%7C%20Personal%20Finance&descAlignY=65&descSize=20&animation=fadeIn)
 <div align="center">
 
 <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
