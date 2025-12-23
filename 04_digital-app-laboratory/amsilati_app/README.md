@@ -71,19 +71,3 @@ Google Apps Script (GAS) を利用してスプレッドシートのデータをJ
 
 Aplikasi ini menggunakan pendekatan **"No-Code Database"** di mana seluruh data materi dan kuis dikontrol penuh melalui Google Sheets. Berikut adalah panduan teknis untuk menghubungkan aplikasi dengan database Anda.
 
-### 📂 Struktur Data & Deployment
-
-#### 1. Persiapan Database (Google Sheets)
-Untuk menjalankan aplikasi ini, Anda memerlukan endpoint API sendiri.
-1.  **Duplikasi Template Database**:
-    * [Template Materi (Spreadsheet)](https://docs.google.com/spreadsheets/d/16iKrQEe6FW4LUP5F7HP4dvyUM-qvjaZ2tH95x0WkZdw/edit?usp=sharing)
-    * [Template Quiz (Spreadsheet)](https://docs.google.com/spreadsheets/d/1sTQUgJ9fOFh1zWNgW4BiSDHmvjx9F-4KFHSJA9uz3xg/edit?usp=sharing)
-    * *Note: Pastikan nama Tab Sheet adalah `Materi` dan `Quiz` (Case sensitive).*
-2.  **Setup Google Apps Script**:
-    * Di Google Sheets, buka menu **Extensions > Apps Script**.
-    * Copy-Paste kode dari file `google_apps_script.js` di repository ini.
-3.  **Generate API Endpoint**:
-    * Klik **Deploy > New Deployment**.
-    * Pilih type: **Web App**.
-    * Who has access: **Anyone** (Wajib, agar app bisa membaca data JSON).
-    * Klik **Deploy** dan salin URL yang berakhiran `/
