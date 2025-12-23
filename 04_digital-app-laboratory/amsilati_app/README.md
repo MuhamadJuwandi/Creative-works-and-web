@@ -17,7 +17,7 @@
 
 <br>
 
-<img src="https://via.placeholder.com/800x400/165c2f/ffffff?text=App+Dashboard+Screenshot+(Desktop+%26+Mobile)" alt="App Demo" style="border-radius: 15px; box-shadow: 0px 10px 20px rgba(0,0,0,0.2);">
+<img src="assets/Banner Amsilati.png" width="100%" alt="Layout App Interface">
 
 </div>
 
