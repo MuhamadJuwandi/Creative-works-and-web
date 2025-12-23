@@ -1,0 +1,52 @@
+{
+    "version": "2025-12-22T06:00:00Z",
+    "materi": [
+        {
+            "id": "m1",
+            "jilid": 1,
+            "judul": "Pengenalan Kalimat",
+            "urutan": 1,
+            "konten_md": "## Definisi Kalimat\n\nKalimat adalah susunan kata yang memberikan pengertian yang sempurna.\n\n<div class='arabic-text'>الْكَلَامُ هُوَ اللَّفْظُ الْمُرَكَّبُ الْمُفِيدُ بِالْوَضْعِ</div>\n\nArtinya: Kalam adalah lafaz yang tersusun, yang berfaedah, dengan disengaja."
+        },
+        {
+            "id": "m2",
+            "jilid": 1,
+            "judul": "Tanda-tanda Isim",
+            "urutan": 2,
+            "konten_md": "Isim dapat diketahui dengan tanda-tandanya, antara lain:\n1. Tanwin\n2. Alif Lam\n3. Huruf Jar"
+        },
+        {
+            "id": "m3",
+            "jilid": 2,
+            "judul": "Mubtada dan Khabar",
+            "urutan": 1,
+            "konten_md": "Mubtada adalah isim marfu yang terletak di awal kalimat. Khabar adalah penyempurna makna mubtada."
+        }
+    ],
+    "quiz": [
+        {
+            "question_id": "q1",
+            "jilid": 1,
+            "nomor": 1,
+            "pertanyaan": "Apa arti dari الْكَلَامُ ?",
+            "opsi_a": "Lafadz yang bermanfaat",
+            "opsi_b": "Tulisan yang indah",
+            "opsi_c": "Perkataan",
+            "opsi_d": "Susunan kata",
+            "jawaban_benar": "A",
+            "pembahasan": "Kalam secara istilah nahwu adalah lafaz yang tersusun, berfaedah, dan disengaja."
+        },
+        {
+            "question_id": "q2",
+            "jilid": 1,
+            "nomor": 2,
+            "pertanyaan": "Manakah yang termasuk tanda isim?",
+            "opsi_a": "Sin",
+            "opsi_b": "Saufa",
+            "opsi_c": "Tanwin",
+            "opsi_d": "Ta' Ta'nits",
+            "jawaban_benar": "C",
+            "pembahasan": "Tanwin adalah salah satu ciri khusus Isim."
+        }
+    ]
+}

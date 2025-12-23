@@ -1,0 +1,22 @@
+{
+    "name": "Ngarti — Ngaji Amsilati",
+    "short_name": "Ngarti",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F6FAF7",
+    "theme_color": "#1F7A3F",
+    "description": "Aplikasi bantu belajar Amsilati",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "assets/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
