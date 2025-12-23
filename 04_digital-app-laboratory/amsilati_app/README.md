@@ -1,4 +1,4 @@
-# Panduan Deployment Aplikasi Ngarti (Amsilati)
+# Panduan Deployment Aplikasi Ngarti (Ngaji Amsilati)
 
 Aplikasi ini adalah Progressive Web App (PWA) yang menggunakan Google Sheets sebagai database.
 
