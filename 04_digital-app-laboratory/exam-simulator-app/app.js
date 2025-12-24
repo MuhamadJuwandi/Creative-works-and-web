@@ -6,11 +6,12 @@ const app = {
         currentExam: null,     // The Exam Object
         currentSession: null,  // The Session Object
         pdfDoc: null,          // Charged PDF Document
-        scale: 1.5,            // PDF Zoom Scale
+        scale: 1.0,            // PDF Zoom Scale (Multiplier)
         currentPage: 1,        // Current Question/Page
         totalPages: 0,         // Total pages in the current PDF
         timerInterval: null,
         isDrawerOpen: false,   // UI State for mobile drawer
+        isFocusMode: false     // UI State for 'Crop' view
     },
 
     async init() {
@@ -385,12 +386,26 @@ const app = {
             const targetWidth = containerWidth - 32;
 
             const viewport = page.getViewport({ scale: 1.0 });
-            const scale = targetWidth / viewport.width;
+            // Base scale fits width, then multiply by state.scale (Zoom Level)
+            const baseScale = targetWidth / viewport.width;
+            const finalScale = baseScale * this.state.scale;
 
-            const scaledViewport = page.getViewport({ scale: scale });
+            const scaledViewport = page.getViewport({ scale: finalScale });
 
-            canvas.height = scaledViewport.height;
-            canvas.width = scaledViewport.width;
+            // High DPI Rendering
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = scaledViewport.width * dpr;
+            canvas.height = scaledViewport.height * dpr;
+
+            // CSS size controls visual size
+            canvas.style.width = `${scaledViewport.width}px`;
+            canvas.style.height = `${scaledViewport.height}px`;
+
+            // Scale context to match High DPI
+            context.scale(dpr, dpr);
+
+            // Clean canvas
+            context.clearRect(0, 0, canvas.width, canvas.height);
 
             const renderContext = {
                 canvasContext: context,
@@ -401,25 +416,26 @@ const app = {
         } catch (e) {
             console.error('Page render error', e);
         }
-
-        // 2. Update Answers UI for this page
-        const currentAns = this.state.currentSession.answers[pageNum];
-        document.querySelectorAll('.answer-btn').forEach(btn => {
-            const val = btn.dataset.val;
-            if (val === currentAns) {
-                btn.classList.add('bg-black', 'text-white', 'border-black');
-                btn.classList.remove('text-gray-700', 'border-gray-300');
-            } else {
-                btn.classList.remove('bg-black', 'text-white', 'border-black');
-                btn.classList.add('text-gray-700', 'border-gray-300');
-            }
-        });
-
-        // 3. Update Sidebar Highlight
-        this.renderQuestionList();
-
-        // 4. Update Header Page Display (if existing in UI)
     },
+
+    // 2. Update Answers UI for this page
+    const currentAns = this.state.currentSession.answers[pageNum];
+    document.querySelectorAll('.answer-btn').forEach(btn => {
+        const val = btn.dataset.val;
+        if (val === currentAns) {
+            btn.classList.add('bg-black', 'text-white', 'border-black');
+            btn.classList.remove('text-gray-700', 'border-gray-300');
+        } else {
+            btn.classList.remove('bg-black', 'text-white', 'border-black');
+            btn.classList.add('text-gray-700', 'border-gray-300');
+        }
+    });
+
+    // 3. Update Sidebar Highlight
+    this.renderQuestionList();
+
+    // 4. Update Header Page Display (if existing in UI)
+},
 
     jumpToPage(num) {
         this.state.currentPage = num;
@@ -431,85 +447,85 @@ const app = {
         }
     },
 
-    changePage(delta) {
-        const newPage = this.state.currentPage + delta;
-        if (newPage >= 1 && newPage <= this.state.currentExam.questionCount) {
-            this.state.currentPage = newPage;
-            this.renderCurrentPage();
-        }
-    },
-
-    changeZoom(delta) {
-        this.state.scale = Math.max(0.5, this.state.scale + delta);
+        changePage(delta) {
+    const newPage = this.state.currentPage + delta;
+    if (newPage >= 1 && newPage <= this.state.currentExam.questionCount) {
+        this.state.currentPage = newPage;
         this.renderCurrentPage();
-    },
+    }
+},
+
+changeZoom(delta) {
+    this.state.scale = Math.max(0.5, this.state.scale + delta);
+    this.renderCurrentPage();
+},
 
     async handleAnswer(val) {
-        if (!this.state.currentSession) return;
+    if (!this.state.currentSession) return;
 
-        // Save Answer
-        this.state.currentSession.answers[this.state.currentPage] = val;
+    // Save Answer
+    this.state.currentSession.answers[this.state.currentPage] = val;
 
-        // Update DB
-        await DB.saveSession(this.state.currentSession);
+    // Update DB
+    await DB.saveSession(this.state.currentSession);
 
-        // Update UI
-        this.renderCurrentPage();
+    // Update UI
+    this.renderCurrentPage();
 
-        // Auto-next? (Optional: The screenshots don't imply auto-next, but it's common)
-        // Let's stay on page to allow review.
-    },
+    // Auto-next? (Optional: The screenshots don't imply auto-next, but it's common)
+    // Let's stay on page to allow review.
+},
 
     async finishExam() {
-        if (!confirm('Apakah anda yakin ingin mengakhiri ujian?')) return;
+    if (!confirm('Apakah anda yakin ingin mengakhiri ujian?')) return;
 
-        clearInterval(this.state.timerInterval);
-        this.state.currentSession.isComplete = true;
-        this.state.currentSession.score = this.calculateScore();
-        await DB.saveSession(this.state.currentSession);
+    clearInterval(this.state.timerInterval);
+    this.state.currentSession.isComplete = true;
+    this.state.currentSession.score = this.calculateScore();
+    await DB.saveSession(this.state.currentSession);
 
-        this.navigateTo('result', { sessionId: this.state.currentSession.id });
-    },
+    this.navigateTo('result', { sessionId: this.state.currentSession.id });
+},
 
-    calculateScore() {
-        let correct = 0;
-        const answers = this.state.currentSession.answers;
-        const key = this.state.currentExam.answerKey;
+calculateScore() {
+    let correct = 0;
+    const answers = this.state.currentSession.answers;
+    const key = this.state.currentExam.answerKey;
 
-        for (const [qNum, ans] of Object.entries(answers)) {
-            if (key[qNum] === ans) correct++;
-        }
-        return correct;
-    },
+    for (const [qNum, ans] of Object.entries(answers)) {
+        if (key[qNum] === ans) correct++;
+    }
+    return correct;
+},
 
     // --- RESULTS ---
     async renderResult(sessionId) {
-        const session = await DB.getSession(sessionId);
-        const exam = await DB.getExam(session.examId);
+    const session = await DB.getSession(sessionId);
+    const exam = await DB.getExam(session.examId);
 
-        document.getElementById('res-score').textContent = session.score;
-        document.getElementById('res-total').textContent = exam.questionCount;
+    document.getElementById('res-score').textContent = session.score;
+    document.getElementById('res-total').textContent = exam.questionCount;
 
-        // Generate Review List
-        const reviewList = document.getElementById('review-list');
-        const key = exam.answerKey;
-        const answers = session.answers;
-        let html = '';
+    // Generate Review List
+    const reviewList = document.getElementById('review-list');
+    const key = exam.answerKey;
+    const answers = session.answers;
+    let html = '';
 
-        for (let i = 1; i <= exam.questionCount; i++) {
-            const userAns = answers[i];
-            const correctAns = key[i];
-            const isCorrect = userAns === correctAns;
-            const isAnswered = !!userAns;
+    for (let i = 1; i <= exam.questionCount; i++) {
+        const userAns = answers[i];
+        const correctAns = key[i];
+        const isCorrect = userAns === correctAns;
+        const isAnswered = !!userAns;
 
-            let statusClass = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-            if (!isAnswered) statusClass = 'bg-orange-50 border-orange-200';
+        let statusClass = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        if (!isAnswered) statusClass = 'bg-orange-50 border-orange-200';
 
-            let icon = isCorrect
-                ? '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>'
-                : '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
+        let icon = isCorrect
+            ? '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>'
+            : '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
 
-            html += `
+        html += `
                 <div class="border rounded-xl p-4 ${statusClass} flex flex-col gap-2 shadow-sm">
                     <div class="flex justify-between items-start">
                         <span class="font-bold text-gray-800 text-lg">Soal ${i}</span>
@@ -533,18 +549,47 @@ const app = {
                     ` : ''}
                 </div>
             `;
-        }
-        reviewList.innerHTML = html;
-        lucide.createIcons();
-    },
-
-    toggleReview() {
-        const el = document.getElementById('review-container');
-        el.classList.toggle('hidden');
-        if (!el.classList.contains('hidden')) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
     }
+    reviewList.innerHTML = html;
+    lucide.createIcons();
+},
+
+toggleReview() {
+    const el = document.getElementById('review-container');
+    el.classList.toggle('hidden');
+    if (!el.classList.contains('hidden')) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+},
+
+toggleFocusMode() {
+    const wrapper = document.getElementById('pdf-wrapper');
+    const btn = document.getElementById('btn-focus-top');
+    const indicator = document.getElementById('crop-indicator');
+
+    this.state.isFocusMode = !this.state.isFocusMode;
+
+    if (this.state.isFocusMode) {
+        // "Crop" mode: Limit height and overflow hidden
+        wrapper.style.maxHeight = '50vh'; // Show roughly top half of mobile screen
+        wrapper.style.overflowY = 'hidden';
+        wrapper.classList.add('border-b-4', 'border-orange-500');
+
+        btn.classList.add('bg-orange-600');
+        btn.classList.remove('bg-blue-600');
+        btn.innerHTML = '<i data-lucide="maximize" class="w-4 h-4"></i> Full';
+    } else {
+        // Normal mode
+        wrapper.style.maxHeight = '';
+        wrapper.style.overflowY = '';
+        wrapper.classList.remove('border-b-4', 'border-orange-500');
+
+        btn.classList.remove('bg-orange-600');
+        btn.classList.add('bg-blue-600');
+        btn.innerHTML = '<i data-lucide="crop" class="w-4 h-4"></i> Potong';
+    }
+    lucide.createIcons();
+}
 };
 
 // Start
