@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Ujian Online - Universitas Terbuka</title>
+
+    <!-- Tailwind CSS (Dev Script for No-Build) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- PDF.js -->
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    </script>
+
+    <!-- IDB (IndexedDB Wrapper) - REMOVED (Now Native) -->
+    <!-- <script src="https://unpkg.com/idb@7.1.1/build/iife/index-min.js"></script> -->
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Configuration for Tailwind to match UT colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ut: {
+                            ut: {
+                                orange: '#F97316', // Deprecated, keeping for safety
+                                bg: '#F3F4F6',     // Light gray
+                                blue: '#004073',   // Deep Blue UT
+                                yellow: '#FFCA05', // UT Yellow
+                                lightblue: '#009ADE', // Optional lighter blue
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- PWA Config -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#004073">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered', reg))
+                    .catch(err => console.log('SW Failed', err));
+            });
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden font-sans">
+
+    <!-- =========================== -->
+    <!-- VIEW: DASHBOARD (Exam List) -->
+    <!-- =========================== -->
+    <div id="view-dashboard" class="view-section h-full flex flex-col bg-gray-50">
+        <header class="bg-white shadow-md p-4 border-b-4 border-ut-blue z-10">
+            <div class="max-w-5xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <img src="assets/logo.png" class="w-14 h-auto" alt="Logo UT">
+                    <div>
+                        <h1 class="text-xl font-bold text-ut-blue leading-tight">Sistem Ujian Online</h1>
+                        <p class="text-xs text-ut-yellow font-bold tracking-wider">UNIVERSITAS TERBUKA</p>
+                    </div>
+                </div>
+                <button onclick="app.navigateTo('create')"
+                    class="bg-ut-blue hover:bg-blue-800 text-white px-6 py-2 rounded-full flex items-center gap-2 shadow-md transition font-bold">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    Tambah Ujian Baru
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-auto p-6 bg-ut-bg/30">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-gray-700">Daftar Ujian Tersedia</h2>
+
+                <!-- Exam Grid -->
+                <div id="exam-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic Content Here -->
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-sm border border-orange-100 flex flex-col items-center justify-center text-gray-400 py-12">
+                        <i data-lucide="loader-2" class="w-8 h-8 animate-spin"></i>
+                        <span class="mt-2">Memuat data...</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="bg-white/50 p-2 text-center text-[10px] text-gray-400 border-t border-gray-100">
+            &copy; 2025 Jwn Education
+        </footer>
+    </div>
+
+    <!-- =========================== -->
+    <!-- VIEW: CREATE EXAM           -->
+    <!-- =========================== -->
+    <div id="view-create" class="view-section hidden h-full flex flex-col bg-white">
+        <header class="bg-white border-b p-4 flex items-center gap-4">
+            <button onclick="app.navigateTo('dashboard')" class="text-gray-500 hover:text-gray-800">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </button>
+            <h1 class="text-xl font-bold">Tambah Ujian Baru</h1>
+        </header>
+
+        <main class="max-w-2xl mx-auto w-full p-8 overflow-auto">
+            <form id="create-exam-form" class="space-y-6">
+
+                <!-- 1. PDF Upload -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">1. Upload File Soal (PDF)</label>
+                    <div
+                        class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition relative">
+                        <input type="file" id="exam-pdf" accept="application/pdf"
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
+                        <div id="file-upload-preview">
+                            <i data-lucide="upload-cloud" class="w-10 h-10 text-gray-400 mx-auto mb-2"></i>
+                            <p class="text-sm text-gray-500">Klik atau tarik file PDF ke sini</p>
+                            <p class="text-xs text-xs text-gray-400 mt-1">(1 Halaman = 1 Soal)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Metadata -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kode Mata Kuliah</label>
+                        <input type="text" id="exam-code" placeholder="Misal: STDA4203"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
+                            required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Mata Kuliah</label>
+                        <input type="text" id="exam-title" placeholder="Misal: Kecerdasan Artifisial"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 outline-none"
+                            required>
+                    </div>
+                </div>
+
+                <!-- 3. Answer Key -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">2. Kunci Jawaban</label>
+                    <p class="text-xs text-gray-500 mb-2">Masukkan kunci jawaban secara berurutan. Bisa format:
+                        "ABCD..." atau "1.A 2.B ..."</p>
+                    <textarea id="exam-key" rows="5"
+                        class="w-full border border-gray-300 rounded-lg p-3 font-mono text-sm tracking-widest focus:ring-2 focus:ring-orange-500 outline-none"
+                        placeholder="Contoh: ADCB... atau 1.A 2.D"></textarea>
+                    <div id="key-parsing-status" class="mt-2 text-sm text-gray-500">Menunggu input...</div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-ut-orange text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition shadow-md">
+                    Simpan Ujian
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <!-- =========================== -->
+    <!-- VIEW: EXAM SIMULATOR        -->
+    <!-- =========================== -->
+    <div id="view-exam" class="view-section hidden h-full flex flex-col bg-gray-100">
+
+        <!-- Top Bar -->
+        <!-- Top Bar -->
+        <header
+            class="bg-white px-4 py-2 border-b border-gray-300 shadow-sm z-30 flex justify-between items-center sticky top-0 text-black">
+            <div class="flex items-center gap-3">
+                <!-- Mobile Drawer Toggle -->
+                <button onclick="app.toggleDrawer(true)" class="md:hidden p-2 -ml-2 text-ut-blue">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+
+                <img src="assets/logo.png" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white p-1 shadow-md"
+                    alt="Logo UT">
+                <div>
+                    <div class="font-bold text-sm md:text-lg leading-tight text-black" id="sim-nim">052550559</div>
+                    <div class="text-gray-600 text-[10px] md:text-xs font-bold tracking-widest hidden md:block">
+                        SIMULATOR UJIAN</div>
+                </div>
+            </div>
+
+            <div class="text-center flex-1 mx-2">
+                <!-- Mobile: Show simplified Timer/Title -->
+                <div class="md:hidden flex flex-col items-center">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase truncate max-w-[150px]"
+                        id="sim-code-mobile">DEMO01</div>
+                    <div class="text-lg font-bold text-red-600 font-mono leading-none" id="sim-timer-mobile">--:--</div>
+                </div>
+
+                <div class="hidden md:block">
+                    <div class="text-gray-500 text-xs uppercase tracking-wider">Mata Kuliah</div>
+                    <div class="font-bold text-lg text-black" id="sim-code">DEMO0001</div>
+                    <div class="text-black font-medium text-sm truncate max-w-xs" id="sim-title">Mata Kuliah Demo</div>
+                </div>
+            </div>
+
+            <div class="text-right hidden md:block">
+                <div class="text-gray-500 text-xs">Sisa Waktu</div>
+                <div class="text-2xl font-bold text-red-600 font-mono bg-white px-2 rounded border border-gray-300"
+                    id="sim-timer">00:00:00
+                </div>
+            </div>
+
+            <!-- Mobile Finish Button (Compact) -->
+            <button onclick="app.finishExam()"
+                class="md:hidden text-red-600 font-bold text-xs flex flex-col items-center">
+                <i data-lucide="flag" class="w-5 h-5"></i>
+                <span>Selesai</span>
+            </button>
+        </header>
+
+        <!-- Toolkit Bar -->
+        <div
+            class="bg-gray-100 border-b border-gray-300 px-2 md:px-4 py-2 flex items-center justify-between shadow-inner z-20 overflow-x-auto">
+            <div class="flex items-center gap-4 text-gray-600">
+                <!-- Navigation Controls (Mobile & Desktop) -->
+                <div class="flex items-center gap-6">
+                    <button class="flex items-center gap-1 cursor-pointer hover:text-black active:scale-95 transition"
+                        id="btn-prev-page">
+                        <i data-lucide="arrow-left-circle" class="w-6 h-6 md:w-5 md:h-5"></i>
+                    </button>
+                    <span class="text-sm font-mono font-bold" id="page-indicator">1 / ?</span>
+                    <button class="flex items-center gap-1 cursor-pointer hover:text-black active:scale-95 transition"
+                        id="btn-next-page">
+                        <i data-lucide="arrow-right-circle" class="w-6 h-6 md:w-5 md:h-5"></i>
+                    </button>
+                </div>
+
+                <div class="hidden md:flex items-center gap-1 cursor-pointer hover:text-black" id="btn-zoom-out">
+                    <i data-lucide="minus-circle" class="w-5 h-5"></i>
+                </div>
+                <div class="hidden md:flex items-center gap-1 cursor-pointer hover:text-black" id="btn-zoom-in">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                </div>
+            </div>
+
+            <div class="flex gap-2 hidden md:flex">
+                <button
+                    class="bg-red-700 text-white px-3 py-1 rounded text-xs font-bold hover:bg-red-800 flex items-center gap-1">
+                    Tutup Buku
+                </button>
+                <button
+                    class="bg-red-700 text-white px-3 py-1 rounded text-xs font-bold hover:bg-red-800 flex items-center gap-1">
+                    Kalkulator
+                </button>
+                <button onclick="app.finishExam()"
+                    class="bg-[#E65100] text-white px-4 py-1 rounded text-sm font-bold hover:bg-orange-700 flex items-center gap-2 shadow-sm ml-4">
+                    SELESAI <i data-lucide="flag" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="flex-1 flex overflow-hidden relative">
+
+            <!-- Left Sidebar (Question List) - DESKTOP & DRAWER Mobile -->
+            <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"
+                onclick="app.toggleDrawer(false)"></div>
+            <aside id="question-drawer"
+                class="fixed md:static inset-y-0 left-0 w-64 md:w-20 bg-[#E8E8E8] border-r border-gray-300 flex flex-col overflow-y-auto shrink-0 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+                <div
+                    class="p-2 text-center text-xs font-bold text-gray-600 bg-gray-200 border-b flex justify-between md:justify-center items-center">
+                    <span class="md:hidden text-lg font-bold ml-2">Soal</span>
+                    <span>No: Jawab</span>
+                    <button class="md:hidden p-1" onclick="app.toggleDrawer(false)"><i data-lucide="x"
+                            class="w-5 h-5"></i></button>
+                </div>
+                <div id="question-list-container" class="flex-1 p-1 space-y-1">
+                    <!-- Dynamic Question Items -->
+                </div>
+            </aside>
+
+            <!-- PDF Container -->
+            <main class="flex-1 bg-gray-500 overflow-auto flex justify-center p-4 relative" id="pdf-scroll-container">
+                <div class="shadow-2xl bg-white min-h-[800px] transition-transform origin-top" id="pdf-wrapper">
+                    <canvas id="pdf-render" class="w-full"></canvas>
+                </div>
+
+                <!-- Footer Navigation (Floating/Sticky) -->
+                <div class="fixed bottom-0 left-0 right-0 p-0 md:p-4 pointer-events-none flex justify-center z-50">
+                    <div
+                        class="bg-white/95 md:rounded-xl md:shadow-2xl w-full md:w-auto p-2 md:p-3 flex items-center justify-between md:justify-center gap-2 md:gap-4 border-t md:border border-gray-300 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+
+                        <!-- Navigation Hand (Mobile: Hidden/Replaced) -->
+                        <div
+                            class="hidden md:flex w-12 h-12 bg-[#B73E10] rounded-full items-center justify-center text-white shadow-lg cursor-pointer transform hover:scale-105 transition">
+                            <i data-lucide="hand" class="w-6 h-6"></i>
+                        </div>
+
+                        <div class="text-red-800 font-bold px-2 hidden md:block">JAWABAN:</div>
+
+                        <!-- Answer Buttons (Mobile: Full Width Grid) -->
+                        <div class="flex-1 md:flex-none grid grid-cols-4 md:flex gap-2">
+                            <button
+                                class="answer-btn h-12 md:w-12 md:h-12 border-2 border-gray-300 rounded-lg md:rounded font-bold text-xl md:text-base text-gray-700 hover:bg-gray-100 focus:bg-orange-600 focus:text-white focus:border-orange-600 transition shadow-sm"
+                                data-val="A">A</button>
+                            <button
+                                class="answer-btn h-12 md:w-12 md:h-12 border-2 border-gray-300 rounded-lg md:rounded font-bold text-xl md:text-base text-gray-700 hover:bg-gray-100 focus:bg-orange-600 focus:text-white focus:border-orange-600 transition shadow-sm"
+                                data-val="B">B</button>
+                            <button
+                                class="answer-btn h-12 md:w-12 md:h-12 border-2 border-gray-300 rounded-lg md:rounded font-bold text-xl md:text-base text-gray-700 hover:bg-gray-100 focus:bg-orange-600 focus:text-white focus:border-orange-600 transition shadow-sm"
+                                data-val="C">C</button>
+                            <button
+                                class="answer-btn h-12 md:w-12 md:h-12 border-2 border-gray-300 rounded-lg md:rounded font-bold text-xl md:text-base text-gray-700 hover:bg-gray-100 focus:bg-orange-600 focus:text-white focus:border-orange-600 transition shadow-sm"
+                                data-val="D">D</button>
+                        </div>
+
+                        <div class="h-8 w-px bg-gray-300 mx-2 hidden md:block"></div>
+
+                        <button
+                            class="hidden md:flex bg-[#E69500] hover:bg-yellow-600 text-white px-4 py-2 rounded font-bold text-sm shadow-sm items-center gap-2">
+                            PETUNJUK MENJAWAB SOAL UJIAN
+                            <i data-lucide="mouse-pointer-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- =========================== -->
+    <!-- VIEW: RESULT                -->
+    <!-- =========================== -->
+    <div id="view-result"
+        class="view-section hidden h-full flex flex-col bg-white overflow-auto relative bg-cover bg-bottom"
+        style="background-image: url('assets/bg-result.png');">
+        <div class="p-4">
+            <button onclick="app.navigateTo('dashboard')"
+                class="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 inline-flex border border-blue-900">
+                <i data-lucide="home" class="w-4 h-4"></i>
+                KEMBALI KE HALAMAN UTAMA
+            </button>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center text-center p-8">
+            <div class="mb-6">
+                <img src="assets/logo.png" class="w-24 md:w-32 h-auto mx-auto" alt="Logo UT">
+            </div>
+            <h2 class="text-2xl md:text-3xl text-black font-normal mb-8 max-w-4xl">
+                INFORMASI PEROLEHAN SKOR DENGAN JUMLAH JAWABAN BENAR
+            </h2>
+
+            <div class="text-4xl md:text-6xl mb-12">
+                <span class="text-blue-900 font-bold" id="res-score">20</span>
+                <span class="text-black text-2xl md:text-4xl px-2">DARI</span>
+                <span class="text-blue-900 font-bold" id="res-total">30</span>
+                <span class="text-black text-2xl md:text-4xl px-2">SOAL</span>
+            </div>
+
+            <button onclick="app.toggleReview()"
+                class="mb-12 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg flex items-center gap-2 transition hover:scale-105">
+                <i data-lucide="list-checks" class="w-5 h-5"></i>
+                LIHAT HASIL TERPERINCI
+            </button>
+
+            <!-- Review Container -->
+            <div id="review-container"
+                class="hidden w-full max-w-5xl text-left bg-white/95 backdrop-blur p-6 md:p-8 rounded-xl shadow-lg border border-blue-100 mb-12">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-2 border-b pb-4">
+                    <i data-lucide="check-circle-2" class="text-green-600"></i>
+                    Rincian Jawaban
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="review-list">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+
+            <p class="text-xl max-w-4xl leading-relaxed mb-6 font-medium text-gray-800">
+                TERIMAKASIH ATAS PERAN SERTA ANDA DALAM MENGIKUTI UJIAN ONLINE
+            </p>
+            <div class="text-3xl md:text-4xl text-ut-blue font-bold pb-48">
+                UNIVERSITAS TERBUKA
+            </div>
+
+            <div class="absolute bottom-2 left-0 right-0 text-center text-[10px] text-white/60 font-medium pb-2">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals & Overlays can go here -->
+
+    <!-- Main Application Scripts -->
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Init Icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
