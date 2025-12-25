@@ -7,7 +7,12 @@
 [![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge&logo=activitypub&logoColor=white)](https://github.com/MuhamadJuwandi)
 [![Tech](https://img.shields.io/badge/Stack-PWA%20%7C%20Vanilla%20JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Style](https://img.shields.io/badge/Design-Minimalist%20Dark-121212?style=for-the-badge&logo=figma&logoColor=white)](style.css)
+[![Live Demo](https://img.shields.io/badge/Demo-Launch%20App-FF5722?style=for-the-badge&logo=google-chrome&logoColor=white)](https://muhamadjuwandi.github.io/Creative-works-and-web/04_digital-app-laboratory/jwn-flow-app/)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+
+<br>
+
+<h3>🚀 <a href="https://muhamadjuwandi.github.io/Creative-works-and-web/04_digital-app-laboratory/jwn-flow-app/">Click here to try the Live App</a></h3>
 
 <br>
 
