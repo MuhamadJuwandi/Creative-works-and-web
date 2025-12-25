@@ -117,9 +117,6 @@ Open `http://localhost:8000` in your browser.
 
 **Developed by Muhamad Juwandi**
 
-*Data Science Student | Graphic Designer | Japanese Learner*
-
-<a href="https://www.google.com/search?q=https://linkedin.com/in/muhamadjuwandi"><img src="https://www.google.com/search?q=https://img.shields.io/badge/LinkedIn-Connect-0077B5%3Fstyle%3Dfor-the-badge%26logo%3Dlinkedin%26logoColor%3Dwhite"></a>
-<a href="https://www.google.com/search?q=https://instagram.com/muhamadjuwandi"><img src="https://www.google.com/search?q=https://img.shields.io/badge/Instagram-Follow-E4405F%3Fstyle%3Dfor-the-badge%26logo%3Dinstagram%26logoColor%3Dwhite"></a>
+*Data Science Student | Graphic Designer | Japanese Learner*>
 
 </div>
