@@ -1,8 +1,8 @@
+# 🌊 JWN Flow: Algorithmic Habit Architecture
+
 <div align="center">
 
 <img src="assets/Landscape.png" alt="JWN Flow Dashboard" width="100%" style="border-radius: 12px; margin-bottom: 20px;">
-
-# 🌊 JWN Flow: Algorithmic Habit Architecture
 
 [![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge&logo=activitypub&logoColor=white)](https://github.com/MuhamadJuwandi)
 [![Tech](https://img.shields.io/badge/Stack-PWA%20%7C%20Vanilla%20JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
