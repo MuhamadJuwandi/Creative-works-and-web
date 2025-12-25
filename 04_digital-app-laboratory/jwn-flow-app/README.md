@@ -11,9 +11,9 @@
 
 <br>
 
-<b>
-[🇬🇧 English](#english) | [🇯🇵 日本語](#japanese) | [🇮🇩 Bahasa Indonesia](#indonesian)
-</b>
+<a href="#english">🇬🇧 English</a> &nbsp;|&nbsp; 
+<a href="#japanese">🇯🇵 日本語</a> &nbsp;|&nbsp; 
+<a href="#indonesian">🇮🇩 Bahasa Indonesia</a>
 
 </div>
 
@@ -23,9 +23,7 @@
 <tr>
 <td width="65%" valign="top">
 
-<div id="english"></div>
-
-## 🇬🇧 English
+<h2 id="english">🇬🇧 English</h2>
 
 ### ⚡ Overview
 **JWN Flow** is a Progressive Web App (PWA) designed to engineer personal productivity through a **7-Day Cyclic Algorithm**. Unlike standard to-do lists, this application treats habit formation as a progressive data stream.
@@ -40,9 +38,7 @@ As a **Data Scientist & Graphic Designer**, I built this to merge aesthetic usab
 
 <br>
 
-<div id="japanese"></div>
-
-## 🇯🇵 Japanese
+<h2 id="japanese">🇯🇵 Japanese</h2>
 
 ### ⚡ 概要 (Overview)
 **JWN Flow**は、7日間のサイクルアルゴリズムを通じて個人の生産性を設計する**PWA (Progressive Web App)** です。習慣形成を「データストリーム」として扱い、ユーザーを自己改善へと導きます。
@@ -57,21 +53,19 @@ As a **Data Scientist & Graphic Designer**, I built this to merge aesthetic usab
 </td>
 
 <td width="35%" valign="top" align="center">
-  <br>
-  <img src="assets/Potrait.png" alt="Mobile View" width="100%" style="border-radius: 15px; border: 2px solid #30363d;">
-  <br><br>
-  <div align="center">
-    <i>📱 Mobile Interface</i>
-  </div>
+  <br>
+  <img src="assets/Potrait.png" alt="Mobile View" width="100%" style="border-radius: 15px; border: 2px solid #30363d;">
+  <br><br>
+  <div align="center">
+    <i>📱 Mobile Interface</i>
+  </div>
 </td>
 </tr>
 </table>
 
 ---
 
-<div id="indonesian"></div>
-
-## 🇮🇩 Indonesian
+<h2 id="indonesian">🇮🇩 Indonesian</h2>
 
 ### ⚡ Ringkasan
 **JWN Flow** adalah aplikasi PWA yang dirancang menggunakan **Logika Siklus 7-Hari**. Aplikasi ini tidak sekadar mencatat tugas, tetapi mengatur pembentukan kebiasaan melalui fase "Upgrade Diri" yang terstruktur secara matematis.
@@ -89,11 +83,11 @@ Menggabungkan **Logic Coding** dan **UI/UX Design**, proyek ini berfokus pada ef
 
 ```bash
 JWN-Flow/
-├── 📄 index.html      # DOM Structure & Layout
-├── 🧠 script.js       # Core Logic (Time Calculation)
-├── 🎨 style.css       # UI Design (CSS Variables)
-├── ⚙️ sw.js           # Service Worker (Offline Cache)
-└── 📱 manifest.json   # PWA Config (Installability)
+├── 📄 index.html      # DOM Structure & Layout
+├── 🧠 script.js       # Core Logic (Time Calculation)
+├── 🎨 style.css       # UI Design (CSS Variables)
+├── ⚙️ sw.js           # Service Worker (Offline Cache)
+└── 📱 manifest.json   # PWA Config (Installability)
 
 ## 💻 Installation
 
