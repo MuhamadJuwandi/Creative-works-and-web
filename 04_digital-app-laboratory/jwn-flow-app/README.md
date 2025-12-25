@@ -123,17 +123,3 @@ Open `http://localhost:8000` in your browser.
 <a href="https://www.google.com/search?q=https://instagram.com/muhamadjuwandi"><img src="https://www.google.com/search?q=https://img.shields.io/badge/Instagram-Follow-E4405F%3Fstyle%3Dfor-the-badge%26logo%3Dinstagram%26logoColor%3Dwhite"></a>
 
 </div>
-
-```
-
-### 💡 Why this layout works for YOU:
-
-1.  **Visual Impact (The Graphic Designer side):** The top "Hero" image (Landscape) fills the screen width, acting like a website header. It shows you know how to direct the user's eye.
-2.  **Space Efficiency (The Data Scientist side):** By putting the Portrait image in a column *next* to the English/Japanese text, we utilize the empty whitespace that usually appears to the right of bullet points.
-3.  **Cross-Device Context:** The layout subtly tells the recruiter: "I built this on Desktop (Top Image), but it works perfectly on Mobile (Side Image)."
-
-### 🔧 Next Step
-
-Would you like me to generate the **`manifest.json`** code tailored for this PWA so the "Install App" button actually works with your custom branding icons?
-
-```
