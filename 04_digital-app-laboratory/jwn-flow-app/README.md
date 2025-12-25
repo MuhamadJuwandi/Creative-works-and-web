@@ -1,5 +1,20 @@
 # 🌊 JWN Flow: Algorithmic Habit Architecture
-
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <img src="PATH_FOTO_1.png" alt="Main Interface" style="width: 100%; border-radius: 10px;">
+        <br>
+        <b>🏠 Dashboard View</b>
+      </td>
+      <td align="center" width="50%">
+        <img src="PATH_FOTO_2.png" alt="Journal Feature" style="width: 100%; border-radius: 10px;">
+        <br>
+        <b>📝 Journal Input</b>
+      </td>
+    </tr>
+  </table>
+</div>
 ![Project Banner](https://via.placeholder.com/1200x400/121212/1E6FD9?text=JWN+FLOW+|+Self-Optimization+PWA)
 <div align="center">
 
