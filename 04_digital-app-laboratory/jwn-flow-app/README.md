@@ -12,7 +12,7 @@
 <br>
 
 <b>
-[🇬🇧 English](#-english) | [🇯🇵 日本語](#-japanese) | [🇮🇩 Bahasa Indonesia](#-indonesian)
+[🇬🇧 English](#english) | [🇯🇵 日本語](#japanese) | [🇮🇩 Bahasa Indonesia](#indonesian)
 </b>
 
 </div>
@@ -22,6 +22,8 @@
 <table>
 <tr>
 <td width="65%" valign="top">
+
+<div id="english"></div>
 
 ## 🇬🇧 English
 
@@ -38,6 +40,8 @@ As a **Data Scientist & Graphic Designer**, I built this to merge aesthetic usab
 
 <br>
 
+<div id="japanese"></div>
+
 ## 🇯🇵 Japanese
 
 ### ⚡ 概要 (Overview)
@@ -53,17 +57,19 @@ As a **Data Scientist & Graphic Designer**, I built this to merge aesthetic usab
 </td>
 
 <td width="35%" valign="top" align="center">
-  <br>
-  <img src="assets/Potrait.png" alt="Mobile View" width="100%" style="border-radius: 15px; border: 2px solid #30363d;">
-  <br><br>
-  <div align="center">
-    <i>📱 Mobile Interface</i>
-  </div>
+  <br>
+  <img src="assets/Potrait.png" alt="Mobile View" width="100%" style="border-radius: 15px; border: 2px solid #30363d;">
+  <br><br>
+  <div align="center">
+    <i>📱 Mobile Interface</i>
+  </div>
 </td>
 </tr>
 </table>
 
 ---
+
+<div id="indonesian"></div>
 
 ## 🇮🇩 Indonesian
 
@@ -83,13 +89,11 @@ Menggabungkan **Logic Coding** dan **UI/UX Design**, proyek ini berfokus pada ef
 
 ```bash
 JWN-Flow/
-├── 📄 index.html      # DOM Structure & Layout
-├── 🧠 script.js       # Core Logic (Time Calculation)
-├── 🎨 style.css       # UI Design (CSS Variables)
-├── ⚙️ sw.js           # Service Worker (Offline Cache)
-└── 📱 manifest.json   # PWA Config (Installability)
-
-```
+├── 📄 index.html      # DOM Structure & Layout
+├── 🧠 script.js       # Core Logic (Time Calculation)
+├── 🎨 style.css       # UI Design (CSS Variables)
+├── ⚙️ sw.js           # Service Worker (Offline Cache)
+└── 📱 manifest.json   # PWA Config (Installability)
 
 ## 💻 Installation
 
