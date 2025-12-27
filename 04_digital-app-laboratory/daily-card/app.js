@@ -11,9 +11,11 @@ const app = {
         courses: [], // Fetched data
         categories: [], // Chunked data
         currentCategoryData: [], // Current active category (50 items)
+        currentPartId: null, // For tracking progress
         currentIndex: 0,
         isReviewMode: false,
         hardItems: [], // IDs of hard items
+        progress: {} // { partId: count }
     },
 
     // Data Sources
@@ -52,45 +54,76 @@ const app = {
     // Initialization
     init() {
         this.loadHardItems();
+        this.loadProgress();
 
         // Handle Back Button
         document.getElementById('back-btn').addEventListener('click', () => {
-            this.navigateBack();
+            // If history stack is empty or we are deep, use history.back()
+            // But for PWA simplicity, manual view management is safer unless we fully sync history
+            if (window.history.state && window.history.state.view) {
+                window.history.back();
+            } else {
+                this.navigateBack();
+            }
         });
-    },
 
-    // Navigation Logic
-    navigateBack() {
-        const views = ['home-view', 'dashboard-view', 'parts-view', 'flashcard-view'];
-        // Find visible view
-        let activeIndex = views.findIndex(id => document.getElementById(id).style.display === 'block' || document.getElementById(id).classList.contains('active'));
+        // Handle Hardware Back Button
+        window.onpopstate = (event) => {
+            if (event.state && event.state.view) {
+                this.restoreView(event.state.view);
+            } else {
+                // If popping state goes to null (initial), go home
+                this.restoreView('home-view');
+            }
+        };
 
-        // Hard refresh logic for now to simplify
-        if (document.getElementById('flashcard-view').classList.contains('active')) {
-            this.showView('parts-view');
-        } else if (document.getElementById('parts-view').classList.contains('active')) {
-            this.showView('dashboard-view');
-        } else if (document.getElementById('dashboard-view').classList.contains('active')) {
-            this.showView('home-view');
-            // Reset Theme
-            document.documentElement.style.setProperty('--theme-primary', '#243A5E');
-            document.getElementById('page-title').innerText = 'Daily Card';
-            document.getElementById('back-btn').classList.add('hidden');
-        } else if (document.getElementById('about-view').classList.contains('active')) {
-            this.showView('home-view');
-            document.getElementById('page-title').innerText = 'Daily Card';
-            document.getElementById('back-btn').classList.add('hidden');
+        // Initial history state
+        if (!history.state) {
+            window.history.replaceState({ view: 'home-view' }, '', '');
         }
     },
 
-    showView(viewId) {
+    // Navigation Logic
+    restoreView(viewId) {
         document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
 
         if (viewId === 'home-view') {
             document.getElementById('back-btn').classList.add('hidden');
+            document.getElementById('page-title').innerText = 'Daily Card';
+            document.documentElement.style.setProperty('--theme-primary', '#243A5E');
         } else {
             document.getElementById('back-btn').classList.remove('hidden');
+        }
+    },
+
+    navigateBack() {
+        // Fallback if history.back fails or for manual button
+        const views = ['home-view', 'dashboard-view', 'parts-view', 'flashcard-view', 'about-view'];
+        let activeId = views.find(id => document.getElementById(id).classList.contains('active'));
+
+        if (activeId === 'flashcard-view') this.showView('parts-view');
+        else if (activeId === 'parts-view') this.showView('dashboard-view');
+        else if (activeId === 'dashboard-view') this.showView('home-view');
+        else if (activeId === 'about-view') this.showView('home-view');
+        else this.showView('home-view');
+    },
+
+    showView(viewId, pushHistory = true) {
+        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+
+        if (viewId === 'home-view') {
+            document.getElementById('back-btn').classList.add('hidden');
+            // Reset title when going home
+            document.getElementById('page-title').innerText = 'Daily Card';
+            document.documentElement.style.setProperty('--theme-primary', '#243A5E');
+        } else {
+            document.getElementById('back-btn').classList.remove('hidden');
+        }
+
+        if (pushHistory) {
+            window.history.pushState({ view: viewId }, '', '');
         }
     },
 
@@ -99,8 +132,10 @@ const app = {
         this.state.currentLevel = level;
         this.applyTheme(level);
         document.getElementById('page-title').innerText = `${level} Dashboard`;
-        this.updateReviewCount();
         this.showView('dashboard-view');
+
+        // Update review count after selecting level
+        setTimeout(() => this.updateReviewCount(), 100);
     },
 
     applyTheme(level) {
@@ -116,7 +151,7 @@ const app = {
 
         try {
             const level = this.state.currentLevel;
-            const url = this.getDataSourceUrl(level, mode); // Helper to fix url
+            const url = this.getDataSourceUrl(level, mode);
 
             if (!url) throw new Error("Data source not found");
 
@@ -126,6 +161,7 @@ const app = {
             this.state.courses = data;
             this.chunkData(data);
             this.renderPartsList();
+            this.updateReviewCount();
             this.showView('parts-view');
         } catch (error) {
             console.error(error);
@@ -135,12 +171,7 @@ const app = {
         }
     },
 
-    // Fix Google Sheet URL to be proper published CSV link if needed, 
-    // but the source map above assumes correct published CSV links.
     getDataSourceUrl(level, mode) {
-        // The user provided edit links, but I should use the published CSV format.
-        // The logic in `sources` object uses 'pub?gid=...&output=csv' which is correct.
-        // I will map the raw GID provided in the user request into the structure.
         return this.sources[level][mode];
     },
 
@@ -258,11 +289,22 @@ const app = {
         container.innerHTML = `<h3>${this.state.currentLevel} - ${this.state.currentMode === 'kanji' ? 'Kanji' : 'Kotoba'} List</h3>`;
 
         this.state.categories.forEach((chunk, index) => {
+            const partId = `${this.state.currentLevel}-${this.state.currentMode}-${index}`;
+            const progress = this.state.progress[partId] || 0;
+            const total = chunk.length;
+            const percent = Math.round((progress / total) * 100);
+
             const btn = document.createElement('div');
             btn.className = 'list-group-item';
             btn.innerHTML = `
-                <span>Bagian ${index + 1}</span>
-                <span>${chunk.length} item</span>
+                <div class="part-info">
+                     <span>Bagian ${index + 1}</span>
+                     <span class="part-count">${chunk.length} item</span>
+                </div>
+                <div class="part-progress">
+                    <span class="progress-text">${percent}% Dikuasai</span>
+                    <div class="mini-progress-bar"><div style="width:${percent}%"></div></div>
+                </div>
             `;
             btn.onclick = () => this.startStudy(index);
             container.appendChild(btn);
@@ -272,6 +314,7 @@ const app = {
     // Study Logic
     startStudy(partIndex) {
         this.state.currentCategoryData = this.state.categories[partIndex];
+        this.state.currentPartId = `${this.state.currentLevel}-${this.state.currentMode}-${partIndex}`;
         this.state.currentIndex = 0;
         this.state.isReviewMode = false;
         this.showView('flashcard-view');
@@ -279,31 +322,30 @@ const app = {
     },
 
     startReviewSession() {
-        const hardIds = this.state.hardItems;
-        // Filter logical hard items for current level if needed, or just all global hard items?
-        // User asked "menu keseluruhan kosakata/kanji di tingkatan itu yang saya kategorikan sulit"
-        // So we filter state.courses (if loaded) or we might need to lazy load all for review.
-        // For MVP, we presume user loads Review from dashboard after selecting Level/Mode. 
-        // But better: global storage.
+        // Filter logic: Find items in current loaded course that match Hard IDs
+        if (!this.state.courses || this.state.courses.length === 0) {
+            alert("Silakan masuk ke menu Kanji/Kotoba terlebih dahulu untuk memuat data.");
+            return;
+        }
 
-        // Currently 'selectMode' fetches courses. If we are in Dashboard, we might not have courses yet.
-        // Let's simplify: Review only works if Mode is selected.
-        // Wait, the Review Button is on Level Dashboard. So we don't know if Kanji or Kotoba yet?
-        // The user said "menu keseluruhan kosakata/kanji". It's better to split Kanji/Kotoba review.
+        const hardItems = this.state.courses.filter(item => this.state.hardItems.includes(item.id));
 
-        // Update: Let's assume Review button appears after mode selection or inside the Dashboard.
-        // My HTML put Review Area in Dashboard.
-        // Let's verify Hard Items for this Level ONLY.
-        // This requires loading ALL data for the level to match IDs. Heavy operation?
-        // Let's stick to LocalStorage data. We save the whole item data in LC? No, just ID.
-        // Implementation Detail: To simplify, Review Mode might just show "Not Available Offline" if data not cached.
+        if (hardItems.length === 0) {
+            alert("Tidak ada item sulit di mode ini.");
+            return;
+        }
 
-        alert("Fitur Review Global akan diimplementasikan pada update berikutnya. Silakan gunakan mode per-bagian.");
+        this.state.currentCategoryData = hardItems;
+        this.state.currentIndex = 0;
+        this.state.isReviewMode = true;
+        this.showView('flashcard-view');
+        this.renderCard();
     },
 
     updateReviewCount() {
-        // Just a placeholder count for now
-        const count = this.state.hardItems.filter(id => id.startsWith(this.state.currentLevel)).length;
+        // Count hard items starting with current level prefix
+        const prefix = `${this.state.currentLevel}-`;
+        const count = this.state.hardItems.filter(id => id.startsWith(prefix)).length;
         document.getElementById('hard-count').innerText = count;
         if (count > 0) {
             document.getElementById('review-area').classList.remove('hidden');
@@ -315,25 +357,48 @@ const app = {
     // Flashcard Actions
     renderCard() {
         const item = this.state.currentCategoryData[this.state.currentIndex];
-
         const card = document.getElementById('current-card');
+
+        // Ensure flip is reset
         card.classList.remove('flipped');
 
-        // Reset check if needed
-        setTimeout(() => {
-            document.getElementById('card-front-text').innerText = item.front || '?';
-            document.getElementById('card-back-main').innerText = item.backMain || '...';
-            document.getElementById('card-back-sub').innerText = item.reading || '';
-            document.getElementById('card-back-sub').innerText = item.reading || '';
+        // Add click listener dynamically or ensure unique
+        card.onclick = () => this.flipCard();
 
-            // Use innerHTML for formatted details (lists/colors)
+        setTimeout(() => {
+            // Front
+            document.getElementById('card-front-text').innerText = item.front || '?';
+
+            // Back - Labels for Kanji
+            if (item.type === 'kanji') {
+                const parts = item.reading.split('|');
+                const onyomi = parts[0] ? parts[0].trim() : '-';
+                const kunyomi = parts[1] ? parts[1].trim() : '-';
+
+                document.getElementById('card-back-sub').innerHTML = `
+                    <div class="reading-row">
+                        <span class="reading-label">ONYOMI</span>
+                        <span class="reading-val">${onyomi}</span>
+                    </div>
+                    <div class="reading-row">
+                        <span class="reading-label">KUNYOMI</span>
+                        <span class="reading-val">${kunyomi}</span>
+                    </div>
+                `;
+            } else {
+                // Kotoba
+                document.getElementById('card-back-sub').innerText = item.reading || '';
+            }
+
+            document.getElementById('card-back-main').innerText = item.backMain || '...';
+
             if (item.detailHtml) {
                 document.getElementById('card-back-detail').innerHTML = item.detailHtml;
             } else {
                 document.getElementById('card-back-detail').innerText = item.detail || '';
             }
 
-            // Highlight Buttons if Hard
+            // Button State
             const btnHard = document.querySelector('.btn-hard');
             if (this.state.hardItems.includes(item.id)) {
                 btnHard.style.background = '#FFCDD2';
@@ -342,7 +407,7 @@ const app = {
             }
         }, 200);
 
-        // Progress
+        // Progress Bar
         const progress = ((this.state.currentIndex + 1) / this.state.currentCategoryData.length) * 100;
         document.getElementById('study-progress').style.width = `${progress}%`;
     },
@@ -356,16 +421,46 @@ const app = {
         if (!this.state.hardItems.includes(item.id)) {
             this.state.hardItems.push(item.id);
             this.saveHardItems();
+            this.updateReviewCount();
         }
+        // Hard doesn't increment "Mastered" progress
         this.nextCard();
     },
 
     markEasy() {
         const item = this.state.currentCategoryData[this.state.currentIndex];
+
+        // If in review mode, removing it from hard list
+        if (this.state.isReviewMode) {
+            this.state.hardItems = this.state.hardItems.filter(id => id !== item.id);
+            this.saveHardItems();
+            this.updateReviewCount();
+
+            // If empty, exit review
+            if (this.state.currentCategoryData.length === 1) {
+                alert("Review Selesai! Semua item sudah mudah.");
+                this.navigateBack();
+                return;
+            }
+
+            // Remove current item from view queue
+            this.state.currentCategoryData.splice(this.state.currentIndex, 1);
+            if (this.state.currentIndex >= this.state.currentCategoryData.length) {
+                this.state.currentIndex = 0;
+            }
+            this.renderCard(); // Re-render current index (which is now next item)
+            return;
+        }
+
+        // Normal Mode
         if (this.state.hardItems.includes(item.id)) {
             this.state.hardItems = this.state.hardItems.filter(id => id !== item.id);
             this.saveHardItems();
+            this.updateReviewCount();
+        } else {
+            this.incrementProgress(this.state.currentPartId);
         }
+
         this.nextCard();
     },
 
@@ -374,7 +469,7 @@ const app = {
             this.state.currentIndex++;
             this.renderCard();
         } else {
-            alert("Bagian ini selesai!");
+            alert("Selesai!");
             this.navigateBack();
         }
     },
@@ -389,6 +484,22 @@ const app = {
 
     saveHardItems() {
         localStorage.setItem('dailyCard_hardItems', JSON.stringify(this.state.hardItems));
+    },
+
+    loadProgress() {
+        const stored = localStorage.getItem('dailyCard_progress');
+        if (stored) {
+            this.state.progress = JSON.parse(stored);
+        } else {
+            this.state.progress = {};
+        }
+    },
+
+    incrementProgress(partId) {
+        if (!partId) return;
+        if (!this.state.progress[partId]) this.state.progress[partId] = 0;
+        this.state.progress[partId]++;
+        localStorage.setItem('dailyCard_progress', JSON.stringify(this.state.progress));
     },
 
     showLoading(show) {

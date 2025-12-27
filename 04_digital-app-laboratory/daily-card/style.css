@@ -387,24 +387,6 @@ body {
     padding: 0 10px;
 }
 
-/* Parts List */
-.list-group-item {
-    background: var(--surface);
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 0.75rem;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    border-left: 5px solid transparent;
-}
-
-.list-group-item:hover {
-    background-color: #f1f5f9;
-}
-
 /* Flashcard Styles */
 .card-container {
     perspective: 1000px;
@@ -602,6 +584,90 @@ body {
     background: var(--theme-primary);
     width: 0%;
     transition: width 0.3s ease;
+}
+
+/* New: Reading Rows for Kanji */
+.reading-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    align-items: center;
+    /* Center for card */
+}
+
+.reading-label {
+    font-size: 0.75rem;
+    color: #999;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.reading-val {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    font-family: 'Calibri', sans-serif;
+    font-weight: 500;
+}
+
+/* Part List Progress */
+.part-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.part-count {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.part-progress {
+    width: 100%;
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    color: var(--theme-primary);
+    font-weight: 600;
+    display: block;
+    text-align: right;
+    margin-bottom: 2px;
+}
+
+.mini-progress-bar {
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.mini-progress-bar div {
+    height: 100%;
+    background: var(--theme-primary);
+    transition: width 0.3s;
+}
+
+/* List Group Item Update */
+.list-group-item {
+    background: var(--surface);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    /* Changed to column for progress */
+    cursor: pointer;
+    border-left: 5px solid transparent;
+}
+
+.list-group-item:hover {
+    background-color: #f1f5f9;
 }
 
 /* Loader */
