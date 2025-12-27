@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Card - JLPT Flashcards</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#243A5E">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icon-app.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header Global -->
+    <header class="app-header">
+        <div class="header-content">
+            <button id="back-btn" class="icon-btn hidden" aria-label="Kembali">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <img id="page-logo" src="assets/Banner Logo.png" alt="Daily Card" class="header-logo">
+            <h1 id="page-title" class="hidden">Daily Card</h1>
+            <div class="header-actions">
+                <!-- Placeholder for future actions -->
+            </div>
+        </div>
+    </header>
+
+    <main id="app-container">
+
+        <!-- View 1: Home (Level Selection) -->
+        <section id="home-view" class="view active">
+            <div class="hero-section">
+                <!-- Logo Container -->
+                <div class="brand-container">
+                    <img src="assets/Spanduk App.png" alt="Daily Card Banner" class="hero-banner">
+                </div>
+                <p class="hero-subtitle">Master Your Japanese Vocabulary</p>
+            </div>
+
+            <div class="level-grid-container">
+                <div class="level-grid">
+                    <button class="level-card level-n5" onclick="app.selectLevel('N5')">
+                        <div class="card-bg">N5</div>
+                        <div class="card-info">
+                            <span class="level-label">N5</span>
+                            <span class="level-sub">Beginner</span>
+                        </div>
+                        <span class="card-arrow">➔</span>
+                    </button>
+                    <button class="level-card level-n4" onclick="app.selectLevel('N4')">
+                        <div class="card-bg">N4</div>
+                        <div class="card-info">
+                            <span class="level-label">N4</span>
+                            <span class="level-sub">Basic</span>
+                        </div>
+                        <span class="card-arrow">➔</span>
+                    </button>
+                    <button class="level-card level-n3" onclick="app.selectLevel('N3')">
+                        <div class="card-bg">N3</div>
+                        <div class="card-info">
+                            <span class="level-label">N3</span>
+                            <span class="level-sub">Intermediate</span>
+                        </div>
+                        <span class="card-arrow">➔</span>
+                    </button>
+                    <button class="level-card level-n2" onclick="app.selectLevel('N2')">
+                        <div class="card-bg">N2</div>
+                        <div class="card-info">
+                            <span class="level-label">N2</span>
+                            <span class="level-sub">Advanced</span>
+                        </div>
+                        <span class="card-arrow">➔</span>
+                    </button>
+                    <button class="level-card level-n1" onclick="app.selectLevel('N1')">
+                        <div class="card-bg">N1</div>
+                        <div class="card-info">
+                            <span class="level-label">N1</span>
+                            <span class="level-sub">Expert</span>
+                        </div>
+                        <span class="card-arrow">➔</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- About Button -->
+            <div class="about-btn-container">
+                <button class="btn-about" onclick="app.showView('about-view')">About Us</button>
+            </div>
+
+            <footer class="app-footer">
+                <p>&copy; 2026 Jwn Project</p>
+            </footer>
+        </section>
+
+        <!-- View 5: About Us -->
+        <section id="about-view" class="view">
+            <div class="about-content">
+                <img src="assets/logo+text.jpg" alt="Daily Card Original Logo" class="about-logo">
+                <h3>Daily Card</h3>
+                <p class="about-desc">
+                    Daily Card is a dedicated flashcard application designed to help you master Japanese Kanji and
+                    Vocabulary for JLPT N5 to N1 levels.
+                </p>
+                <div class="divider"></div>
+                <p class="about-credit">
+                    Created by<br>
+                    <strong>Muhamad Juwandi</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- View 2: Level Dashboard (Kanji vs Kotoba) -->
+        <section id="dashboard-view" class="view">
+            <div class="study-mode-grid">
+                <button class="mode-card" onclick="app.selectMode('kanji')">
+                    <div class="mode-icon">字</div>
+                    <h3>Kanji</h3>
+                    <p>Pelajari karakter & bacaan</p>
+                </button>
+                <button class="mode-card" onclick="app.selectMode('kotoba')">
+                    <div class="mode-icon">言</div>
+                    <h3>Kotoba</h3>
+                    <p>Perkaya kosakata Anda</p>
+                </button>
+            </div>
+
+            <div id="review-area" class="hidden">
+                <div class="section-divider">
+                    <span>Review</span>
+                </div>
+                <button class="review-card" onclick="app.startReviewSession()">
+                    <div class="review-info">
+                        <h3>Daftar Sulit</h3>
+                        <p><span id="hard-count">0</span> item perlu diulang</p>
+                    </div>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- View 3: Part Selection (List of 50s) -->
+        <section id="parts-view" class="view">
+            <div id="parts-list" class="list-group">
+                <!-- Parts injected by JS -->
+            </div>
+        </section>
+
+        <!-- View 4: Flashcard Study -->
+        <section id="flashcard-view" class="view">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="study-progress"></div>
+            </div>
+
+            <div class="card-container">
+                <div class="flashcard" id="current-card">
+                    <div class="card-face card-front">
+                        <div class="kanji-main" id="card-front-text">?</div>
+                        <div class="card-hint" id="card-front-sub">Tap to flip</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-content-wrapper">
+                            <h3 id="card-back-main">Meaning</h3>
+                            <p id="card-back-sub" class="reading-text">Reading</p>
+                            <div class="divider"></div>
+                            <p id="card-back-detail" class="detail-text">Contoh kalimat...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-container">
+                <button class="control-btn btn-hard" onclick="app.markHard()">
+                    <span class="icon">✕</span>
+                    <span>Sulit</span>
+                </button>
+                <button class="control-btn btn-flip" onclick="app.flipCard()">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
+                <button class="control-btn btn-easy" onclick="app.markEasy()">
+                    <span class="icon">✓</span>
+                    <span>Mudah</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast-container"></div>
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+        <p>Memuat Data...</p>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW Registered', reg))
+                .catch(err => console.log('SW Failed', err));
+        }
+    </script>
+</body>
+
+</html>
