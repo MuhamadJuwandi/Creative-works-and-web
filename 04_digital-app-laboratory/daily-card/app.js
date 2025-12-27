@@ -1,6 +1,7 @@
 /**
  * Daily Card - JLPT Flashcard PWA Logic
  * Author: Antigravity
+ * Version: 2.1 (Fixes Review location, Labels, Back Button)
  */
 
 const app = {
@@ -58,8 +59,6 @@ const app = {
 
         // Handle Back Button
         document.getElementById('back-btn').addEventListener('click', () => {
-            // If history stack is empty or we are deep, use history.back()
-            // But for PWA simplicity, manual view management is safer unless we fully sync history
             if (window.history.state && window.history.state.view) {
                 window.history.back();
             } else {
@@ -83,7 +82,6 @@ const app = {
         }
     },
 
-    // Navigation Logic
     restoreView(viewId) {
         document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
@@ -97,8 +95,8 @@ const app = {
         }
     },
 
+    // Navigation Logic
     navigateBack() {
-        // Fallback if history.back fails or for manual button
         const views = ['home-view', 'dashboard-view', 'parts-view', 'flashcard-view', 'about-view'];
         let activeId = views.find(id => document.getElementById(id).classList.contains('active'));
 
@@ -115,7 +113,6 @@ const app = {
 
         if (viewId === 'home-view') {
             document.getElementById('back-btn').classList.add('hidden');
-            // Reset title when going home
             document.getElementById('page-title').innerText = 'Daily Card';
             document.documentElement.style.setProperty('--theme-primary', '#243A5E');
         } else {
@@ -134,8 +131,7 @@ const app = {
         document.getElementById('page-title').innerText = `${level} Dashboard`;
         this.showView('dashboard-view');
 
-        // Update review count after selecting level
-        setTimeout(() => this.updateReviewCount(), 100);
+        // Removed global updateReviewCount (review moved to mode)
     },
 
     applyTheme(level) {
@@ -161,7 +157,6 @@ const app = {
             this.state.courses = data;
             this.chunkData(data);
             this.renderPartsList();
-            this.updateReviewCount();
             this.showView('parts-view');
         } catch (error) {
             console.error(error);
@@ -181,13 +176,11 @@ const app = {
     },
 
     parseCSV(text) {
-        // Robust CSV Parser
         const rows = [];
         let currentRow = [];
         let curStr = '';
         let inQuote = false;
 
-        // Normalize line endings
         text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
         for (let i = 0; i < text.length; i++) {
@@ -224,16 +217,12 @@ const app = {
             rows.push(currentRow);
         }
 
-        // Headers are first row, remove them
         if (rows.length < 2) return [];
         rows.shift();
 
         return rows.map((cols, index) => {
             if (this.state.currentMode === 'kanji') {
                 // New Format: Kanji, Onyomi, Kunyomi, Arti Indo, Arti Inggris, Contoh
-                // [0]Kanji, [1]Onyomi, [2]Kunyomi, [3]Arti Indo, [4]Arti Inggris, [5]Contoh
-
-                // Format "Contoh" column
                 let rawDetail = cols[5] || '';
                 let formattedDetail = rawDetail;
 
@@ -242,11 +231,7 @@ const app = {
                         if (line.includes('=')) {
                             const parts = line.split('=').map(s => s.trim());
                             if (parts.length >= 3) {
-                                return `<span class="example-line">
-                                        <span class="ex-kanji">${parts[0]}</span> = 
-                                        <span class="ex-kana">${parts[1]}</span> = 
-                                        <span class="ex-mean">${parts[2]}</span>
-                                    </span>`;
+                                return `<span class="example-line"><span class="ex-kanji">${parts[0]}</span> = <span class="ex-kana">${parts[1]}</span> = <span class="ex-mean">${parts[2]}</span></span>`;
                             }
                         }
                         return line;
@@ -256,20 +241,20 @@ const app = {
                 return {
                     id: `${this.state.currentLevel}-K-${index}`,
                     front: cols[0],
-                    reading: `${cols[1] || '-'} | ${cols[2] || '-'}`,
+                    // Store split readings for labels
+                    onyomi: cols[1] || '-',
+                    kunyomi: cols[2] || '-',
                     backMain: `${cols[3] || ''}\n(${cols[4] || ''})`,
                     detailHtml: formattedDetail,
                     type: 'kanji'
                 };
             } else {
-                // Format: Kanji, Kana, Arti
-                // [0]Kanji, [1]Kana, [2]Arti
                 return {
                     id: `${this.state.currentLevel}-W-${index}`,
-                    front: cols[0] || cols[1], // Use Kana if Kanji empty
+                    front: cols[0] || cols[1],
                     reading: cols[1],
                     backMain: cols[2],
-                    detail: cols[0], // Kanji as detail
+                    detail: cols[0],
                     type: 'kotoba'
                 };
             }
@@ -286,7 +271,27 @@ const app = {
 
     renderPartsList() {
         const container = document.getElementById('parts-list');
-        container.innerHTML = `<h3>${this.state.currentLevel} - ${this.state.currentMode === 'kanji' ? 'Kanji' : 'Kotoba'} List</h3>`;
+        const modeTitle = this.state.currentMode === 'kanji' ? 'Kanji' : 'Kotoba';
+        container.innerHTML = `<h3>${this.state.currentLevel} - ${modeTitle} List</h3>`;
+
+        // --- NEW: Review Button INSIDE list ---
+        const prefix = `${this.state.currentLevel}-${this.state.currentMode === 'kanji' ? 'K' : 'W'}-`;
+        const hardCount = this.state.hardItems.filter(id => id.startsWith(prefix)).length;
+
+        if (hardCount > 0) {
+            const reviewBtn = document.createElement('div');
+            reviewBtn.className = 'list-group-item review-item';
+            reviewBtn.style.border = '2px solid #FFCDD2';
+            reviewBtn.style.background = '#FFEBEE';
+            reviewBtn.innerHTML = `
+                <div class="part-info" style="color:#C62828; justify-content:center;">
+                     <span>🔥 Review ${hardCount} Item Sulit</span>
+                </div>
+            `;
+            reviewBtn.onclick = () => this.startReviewSession();
+            container.appendChild(reviewBtn);
+        }
+        // ------------------------------------
 
         this.state.categories.forEach((chunk, index) => {
             const partId = `${this.state.currentLevel}-${this.state.currentMode}-${index}`;
@@ -322,16 +327,13 @@ const app = {
     },
 
     startReviewSession() {
-        // Filter logic: Find items in current loaded course that match Hard IDs
-        if (!this.state.courses || this.state.courses.length === 0) {
-            alert("Silakan masuk ke menu Kanji/Kotoba terlebih dahulu untuk memuat data.");
-            return;
-        }
+        if (!this.state.courses || this.state.courses.length === 0) return;
 
         const hardItems = this.state.courses.filter(item => this.state.hardItems.includes(item.id));
 
         if (hardItems.length === 0) {
-            alert("Tidak ada item sulit di mode ini.");
+            alert("Tidak ada item sulit di bagian ini.");
+            this.renderPartsList(); // Refresh
             return;
         }
 
@@ -342,28 +344,17 @@ const app = {
         this.renderCard();
     },
 
-    updateReviewCount() {
-        // Count hard items starting with current level prefix
-        const prefix = `${this.state.currentLevel}-`;
-        const count = this.state.hardItems.filter(id => id.startsWith(prefix)).length;
-        document.getElementById('hard-count').innerText = count;
-        if (count > 0) {
-            document.getElementById('review-area').classList.remove('hidden');
-        } else {
-            document.getElementById('review-area').classList.add('hidden');
-        }
-    },
-
     // Flashcard Actions
     renderCard() {
         const item = this.state.currentCategoryData[this.state.currentIndex];
         const card = document.getElementById('current-card');
 
-        // Ensure flip is reset
         card.classList.remove('flipped');
 
-        // Add click listener dynamically or ensure unique
-        card.onclick = () => this.flipCard();
+        // FIX: Update the ONCLICK to handle TAP ANYWHERE
+        card.onclick = (e) => {
+            this.flipCard();
+        };
 
         setTimeout(() => {
             // Front
@@ -371,18 +362,15 @@ const app = {
 
             // Back - Labels for Kanji
             if (item.type === 'kanji') {
-                const parts = item.reading.split('|');
-                const onyomi = parts[0] ? parts[0].trim() : '-';
-                const kunyomi = parts[1] ? parts[1].trim() : '-';
-
+                // FORCE LABELS
                 document.getElementById('card-back-sub').innerHTML = `
-                    <div class="reading-row">
-                        <span class="reading-label">ONYOMI</span>
-                        <span class="reading-val">${onyomi}</span>
+                    <div style="margin-bottom:8px; text-align:center;">
+                        <span style="display:block; font-size:0.75rem; color:#888; letter-spacing:1px; margin-bottom:2px;">ONYOMI</span>
+                        <span style="font-size:1.1rem; font-weight:500;">${item.onyomi}</span>
                     </div>
-                    <div class="reading-row">
-                        <span class="reading-label">KUNYOMI</span>
-                        <span class="reading-val">${kunyomi}</span>
+                    <div style="text-align:center;">
+                        <span style="display:block; font-size:0.75rem; color:#888; letter-spacing:1px; margin-bottom:2px;">KUNYOMI</span>
+                        <span style="font-size:1.1rem; font-weight:500;">${item.kunyomi}</span>
                     </div>
                 `;
             } else {
@@ -402,8 +390,10 @@ const app = {
             const btnHard = document.querySelector('.btn-hard');
             if (this.state.hardItems.includes(item.id)) {
                 btnHard.style.background = '#FFCDD2';
+                btnHard.style.color = '#B71C1C';
             } else {
                 btnHard.style.background = '#FFEBEE';
+                btnHard.style.color = '#C62828';
             }
         }, 200);
 
@@ -421,34 +411,32 @@ const app = {
         if (!this.state.hardItems.includes(item.id)) {
             this.state.hardItems.push(item.id);
             this.saveHardItems();
-            this.updateReviewCount();
         }
-        // Hard doesn't increment "Mastered" progress
+        // Does NOT increment progress
         this.nextCard();
     },
 
     markEasy() {
         const item = this.state.currentCategoryData[this.state.currentIndex];
 
-        // If in review mode, removing it from hard list
+        // Logic: If Review Mode, remove from hard list immediately
         if (this.state.isReviewMode) {
             this.state.hardItems = this.state.hardItems.filter(id => id !== item.id);
             this.saveHardItems();
-            this.updateReviewCount();
 
-            // If empty, exit review
-            if (this.state.currentCategoryData.length === 1) {
-                alert("Review Selesai! Semua item sudah mudah.");
+            // Check if last item
+            const remaining = this.state.currentCategoryData.filter(i => i.id !== item.id);
+            if (remaining.length === 0) {
+                alert("Review Selesai!");
                 this.navigateBack();
                 return;
             }
-
-            // Remove current item from view queue
+            // Splice and stay on index (which becomes next item)
             this.state.currentCategoryData.splice(this.state.currentIndex, 1);
             if (this.state.currentIndex >= this.state.currentCategoryData.length) {
                 this.state.currentIndex = 0;
             }
-            this.renderCard(); // Re-render current index (which is now next item)
+            this.renderCard();
             return;
         }
 
@@ -456,8 +444,10 @@ const app = {
         if (this.state.hardItems.includes(item.id)) {
             this.state.hardItems = this.state.hardItems.filter(id => id !== item.id);
             this.saveHardItems();
-            this.updateReviewCount();
         } else {
+            // Only increment progress if NOT previously hard (Mastered first try) OR if we allow re-mastery?
+            // User said: "ketika mudah bertambah persentasenya".
+            // We just increment.
             this.incrementProgress(this.state.currentPartId);
         }
 
@@ -508,7 +498,6 @@ const app = {
     }
 };
 
-// Start
 document.addEventListener('DOMContentLoaded', () => {
     app.init();
 });

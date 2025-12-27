@@ -353,20 +353,6 @@ body {
     font-family: var(--font-kanji);
 }
 
-.review-card {
-    width: 100%;
-    background: #FFF3E0;
-    /* Light Orange for Alert/Action */
-    border: 1px solid #FFB74D;
-    padding: 1rem;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    color: #E65100;
-}
-
 .section-divider {
     display: flex;
     align-items: center;
@@ -569,6 +555,27 @@ body {
     justify-content: center;
 }
 
+/* Review Button in List */
+.review-item {
+    background-color: #ffebee !important;
+    border: 2px solid #ffcdd2 !important;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 /* Progress Bar */
 .progress-bar-container {
     width: 100%;
@@ -584,31 +591,6 @@ body {
     background: var(--theme-primary);
     width: 0%;
     transition: width 0.3s ease;
-}
-
-/* New: Reading Rows for Kanji */
-.reading-row {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.5rem;
-    align-items: center;
-    /* Center for card */
-}
-
-.reading-label {
-    font-size: 0.75rem;
-    color: #999;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-
-.reading-val {
-    font-size: 1.2rem;
-    color: var(--text-main);
-    font-family: 'Calibri', sans-serif;
-    font-weight: 500;
 }
 
 /* Part List Progress */
@@ -661,7 +643,6 @@ body {
     box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    /* Changed to column for progress */
     cursor: pointer;
     border-left: 5px solid transparent;
 }
