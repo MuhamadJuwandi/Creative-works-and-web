@@ -19,24 +19,24 @@ const app = {
     // Data Sources
     sources: {
         N5: {
-            kanji: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3A1iCgW_6uXV_mOqvR8u1Nkd4XK5Jiz4NUfI/pub?gid=0&single=true&output=csv',
-            kotoba: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3A1iCgW_6uXV_mOqvR8u1Nkd4XK5Jiz4NUfI/pub?gid=1474825098&single=true&output=csv'
+            kanji: 'https://docs.google.com/spreadsheets/d/1QJ7q5wMKjuBu69sXpc_OgozoV8u1Nkd4XK5Jiz4NUfI/export?format=csv&gid=0',
+            kotoba: 'https://docs.google.com/spreadsheets/d/1QJ7q5wMKjuBu69sXpc_OgozoV8u1Nkd4XK5Jiz4NUfI/export?format=csv&gid=1474825098'
         },
         N4: {
-            kanji: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTr8yMjjRljO97INBvDw7hPHefmh4ZoFb9SwLfYI/pub?gid=0&single=true&output=csv',
-            kotoba: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTr8yMjjRljO97INBvDw7hPHefmh4ZoFb9SwLfYI/pub?gid=1203753908&single=true&output=csv'
+            kanji: 'https://docs.google.com/spreadsheets/d/1jX_-IBKIijwRljO97INBvDw7hPHefmh4ZoFb9SwLfYI/export?format=csv&gid=0',
+            kotoba: 'https://docs.google.com/spreadsheets/d/1jX_-IBKIijwRljO97INBvDw7hPHefmh4ZoFb9SwLfYI/export?format=csv&gid=1203753908'
         },
         N3: {
-            kanji: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSm_lBKsDhgZFBxdkeFObf4cK5WsimzeE3mT1pO5Fw/pub?gid=0&single=true&output=csv',
-            kotoba: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSm_lBKsDhgZFBxdkeFObf4cK5WsimzeE3mT1pO5Fw/pub?gid=1577608173&single=true&output=csv'
+            kanji: 'https://docs.google.com/spreadsheets/d/14TZzILBKsDhgZFBxdkeFObf4cK5WsimzeE3mT1pO5Fw/export?format=csv&gid=0',
+            kotoba: 'https://docs.google.com/spreadsheets/d/14TZzILBKsDhgZFBxdkeFObf4cK5WsimzeE3mT1pO5Fw/export?format=csv&gid=1577608173'
         },
         N2: {
-            kanji: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRp_DKPD9hplqCs7eKvFtjjZE8XKk7o7b03YH5D8jZk/pub?gid=0&single=true&output=csv',
-            kotoba: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRp_DKPD9hplqCs7eKvFtjjZE8XKk7o7b03YH5D8jZk/pub?gid=738690938&single=true&output=csv'
+            kanji: 'https://docs.google.com/spreadsheets/d/13YEnDKPD9hplqCs7eKvFtjjZE8XKk7o7b03YH5D8jZk/export?format=csv&gid=0',
+            kotoba: 'https://docs.google.com/spreadsheets/d/13YEnDKPD9hplqCs7eKvFtjjZE8XKk7o7b03YH5D8jZk/export?format=csv&gid=738690938'
         },
         N1: {
-            kanji: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSC_bWNv-mkN0cQU5qiHkAbS6JOnJmMDJXsner7iFmNQo/pub?gid=0&single=true&output=csv',
-            kotoba: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSC_bWNv-mkN0cQU5qiHkAbS6JOnJmMDJXsner7iFmNQo/pub?gid=1573233696&single=true&output=csv'
+            kanji: 'https://docs.google.com/spreadsheets/d/1FKbWNv-mkN0cQU5qiHkAbS6JOnJmMDJXsner7iFmNQo/export?format=csv&gid=0',
+            kotoba: 'https://docs.google.com/spreadsheets/d/1FKbWNv-mkN0cQU5qiHkAbS6JOnJmMDJXsner7iFmNQo/export?format=csv&gid=1573233696'
         }
     },
 
@@ -150,76 +150,99 @@ const app = {
     },
 
     parseCSV(text) {
-        // Simple CSV Parser assuming standard Google Sheets CSV format (comma separated)
-        // Needs robust handling for quoted strings containing commas
-        const rows = text.split('\n').filter(r => r.trim() !== '');
-        // Headers are typically row 0. We assume columns based on index:
-        // Kanji: [Kanji, Onyomi, Kunyomi, Arti, Contoh] roughly
-        // Kotoba: [Kanji, Kana, Romaji, Arti] roughly
+        // Robust CSV Parser
+        const rows = [];
+        let currentRow = [];
+        let curStr = '';
+        let inQuote = false;
 
-        // Better: Use a regex for CSV parsing to handle quotes
-        const parseRow = (row) => {
-            const matches = [];
-            let match;
-            const regex = /(?:^|,)(?:"([^"]*)"|([^",]*))/g;
-            while (match = regex.exec(row)) {
-                // value is match[1] (quoted) or match[2] (unquoted)
-                let val = match[1] !== undefined ? match[1] : match[2];
-                matches.push(val ? val.trim() : '');
+        // Normalize line endings
+        text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            const nextChar = text[i + 1];
+
+            if (inQuote) {
+                if (char === '"' && nextChar === '"') {
+                    curStr += '"';
+                    i++;
+                } else if (char === '"') {
+                    inQuote = false;
+                } else {
+                    curStr += char;
+                }
+            } else {
+                if (char === '"') {
+                    inQuote = true;
+                } else if (char === ',') {
+                    currentRow.push(curStr);
+                    curStr = '';
+                } else if (char === '\n') {
+                    currentRow.push(curStr);
+                    curStr = '';
+                    if (currentRow.length > 0) rows.push(currentRow);
+                    currentRow = [];
+                } else {
+                    curStr += char;
+                }
             }
-            // The regex adds an empty match at the end, pop it
-            // matches.pop(); // Correction: logic might vary, let's stick to simple split if complexity is low for now, or use mapped logic
-            return matches;
-        };
+        }
+        if (curStr || currentRow.length > 0) {
+            currentRow.push(curStr);
+            rows.push(currentRow);
+        }
 
-        const data = rows.slice(1).map(row => { // Skip header
-            // Handling simple split for now, assuming no commas in fields for MVP or robust later
-            // Actually Google Sheets CSV exports quote fields with commas.
-            // Let's use a simpler known parser approach for now.
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            return cols.map(c => c.replace(/^"|"$/g, '').trim());
-        });
+        // Headers are first row, remove them
+        if (rows.length < 2) return [];
+        rows.shift();
 
-        return data.map((cols, index) => {
-            // Map columns based on Mode
+        return rows.map((cols, index) => {
             if (this.state.currentMode === 'kanji') {
                 // New Format: Kanji, Onyomi, Kunyomi, Arti Indo, Arti Inggris, Contoh
-                // Process "Contoh" with simple parser for formatting
-                // Expected format per line: "1. Kanji = Kana = Meaning"
+                // [0]Kanji, [1]Onyomi, [2]Kunyomi, [3]Arti Indo, [4]Arti Inggris, [5]Contoh
+
+                // Format "Contoh" column
                 let rawDetail = cols[5] || '';
-                let formattedDetail = rawDetail.split('\n').map(line => {
-                    if (line.includes('=')) {
-                        const parts = line.split('=').map(s => s.trim());
-                        // 0: Kanji (Black), 1: Kana (Red), 2: Meaning (Blue)
-                        if (parts.length >= 3) {
-                            return `<span class="example-line">
-                                <span class="ex-kanji">${parts[0]}</span> = 
-                                <span class="ex-kana">${parts[1]}</span> = 
-                                <span class="ex-mean">${parts[2]}</span>
-                            </span>`;
+                let formattedDetail = rawDetail;
+
+                if (rawDetail) {
+                    formattedDetail = rawDetail.split('\n').map(line => {
+                        if (line.includes('=')) {
+                            const parts = line.split('=').map(s => s.trim());
+                            if (parts.length >= 3) {
+                                return `<span class="example-line">
+                                        <span class="ex-kanji">${parts[0]}</span> = 
+                                        <span class="ex-kana">${parts[1]}</span> = 
+                                        <span class="ex-mean">${parts[2]}</span>
+                                    </span>`;
+                            }
                         }
-                    }
-                    return line; // Fallback
-                }).join('<br>');
+                        return line;
+                    }).join('<br>');
+                }
 
                 return {
                     id: `${this.state.currentLevel}-K-${index}`,
-                    front: cols[0], // Kanji
-                    reading: `${cols[1] || '-'} | ${cols[2] || '-'}`, // Onyomi | Kunyomi
-                    backMain: `${cols[3] || ''}\n(${cols[4] || ''})`, // Arti Indo (Arti Inggris)
-                    detailHtml: formattedDetail // Use HTML for coloring
+                    front: cols[0],
+                    reading: `${cols[1] || '-'} | ${cols[2] || '-'}`,
+                    backMain: `${cols[3] || ''}\n(${cols[4] || ''})`,
+                    detailHtml: formattedDetail,
+                    type: 'kanji'
                 };
             } else {
-                // New Format: Kanji, Kana, Arti
+                // Format: Kanji, Kana, Arti
+                // [0]Kanji, [1]Kana, [2]Arti
                 return {
                     id: `${this.state.currentLevel}-W-${index}`,
-                    front: cols[0] || cols[1], // Kanji or Kana if no Kanji
-                    reading: cols[1], // Kana
-                    backMain: cols[2], // Arti
-                    detail: cols[0] // Kanji original for ref
+                    front: cols[0] || cols[1], // Use Kana if Kanji empty
+                    reading: cols[1],
+                    backMain: cols[2],
+                    detail: cols[0], // Kanji as detail
+                    type: 'kotoba'
                 };
             }
-        });
+        }).filter(item => item && item.front);
     },
 
     chunkData(data) {
