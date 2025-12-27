@@ -1,7 +1,7 @@
 /**
  * Daily Card - JLPT Flashcard PWA Logic
  * Author: Antigravity
- * Version: 2.1 (Fixes Review location, Labels, Back Button)
+ * Version: 2.2 (Fixes Refresh on Back, Cap 100% Progress)
  */
 
 const app = {
@@ -69,7 +69,13 @@ const app = {
         // Handle Hardware Back Button
         window.onpopstate = (event) => {
             if (event.state && event.state.view) {
-                this.restoreView(event.state.view);
+                // Special check: if finding view via history, ensure we also refresh data if needed
+                if (event.state.view === 'parts-view') {
+                    this.restoreView('parts-view');
+                    this.renderPartsList(); // Ensure list is fresh on hardware back
+                } else {
+                    this.restoreView(event.state.view);
+                }
             } else {
                 // If popping state goes to null (initial), go home
                 this.restoreView('home-view');
@@ -100,7 +106,10 @@ const app = {
         const views = ['home-view', 'dashboard-view', 'parts-view', 'flashcard-view', 'about-view'];
         let activeId = views.find(id => document.getElementById(id).classList.contains('active'));
 
-        if (activeId === 'flashcard-view') this.showView('parts-view');
+        if (activeId === 'flashcard-view') {
+            this.showView('parts-view');
+            this.renderPartsList(); // FIX: REFRESH LIST to show Review Button update immediately
+        }
         else if (activeId === 'parts-view') this.showView('dashboard-view');
         else if (activeId === 'dashboard-view') this.showView('home-view');
         else if (activeId === 'about-view') this.showView('home-view');
@@ -130,8 +139,6 @@ const app = {
         this.applyTheme(level);
         document.getElementById('page-title').innerText = `${level} Dashboard`;
         this.showView('dashboard-view');
-
-        // Removed global updateReviewCount (review moved to mode)
     },
 
     applyTheme(level) {
@@ -241,7 +248,6 @@ const app = {
                 return {
                     id: `${this.state.currentLevel}-K-${index}`,
                     front: cols[0],
-                    // Store split readings for labels
                     onyomi: cols[1] || '-',
                     kunyomi: cols[2] || '-',
                     backMain: `${cols[3] || ''}\n(${cols[4] || ''})`,
@@ -274,7 +280,7 @@ const app = {
         const modeTitle = this.state.currentMode === 'kanji' ? 'Kanji' : 'Kotoba';
         container.innerHTML = `<h3>${this.state.currentLevel} - ${modeTitle} List</h3>`;
 
-        // --- NEW: Review Button INSIDE list ---
+        // --- Review Button ---
         const prefix = `${this.state.currentLevel}-${this.state.currentMode === 'kanji' ? 'K' : 'W'}-`;
         const hardCount = this.state.hardItems.filter(id => id.startsWith(prefix)).length;
 
@@ -291,13 +297,16 @@ const app = {
             reviewBtn.onclick = () => this.startReviewSession();
             container.appendChild(reviewBtn);
         }
-        // ------------------------------------
 
+        // --- Parts List ---
         this.state.categories.forEach((chunk, index) => {
             const partId = `${this.state.currentLevel}-${this.state.currentMode}-${index}`;
             const progress = this.state.progress[partId] || 0;
             const total = chunk.length;
-            const percent = Math.round((progress / total) * 100);
+
+            // FIX: CAP AT 100%
+            let percent = Math.round((progress / total) * 100);
+            if (percent > 100) percent = 100;
 
             const btn = document.createElement('div');
             btn.className = 'list-group-item';
@@ -351,7 +360,6 @@ const app = {
 
         card.classList.remove('flipped');
 
-        // FIX: Update the ONCLICK to handle TAP ANYWHERE
         card.onclick = (e) => {
             this.flipCard();
         };
@@ -362,7 +370,6 @@ const app = {
 
             // Back - Labels for Kanji
             if (item.type === 'kanji') {
-                // FORCE LABELS
                 document.getElementById('card-back-sub').innerHTML = `
                     <div style="margin-bottom:8px; text-align:center;">
                         <span style="display:block; font-size:0.75rem; color:#888; letter-spacing:1px; margin-bottom:2px;">ONYOMI</span>
@@ -412,26 +419,24 @@ const app = {
             this.state.hardItems.push(item.id);
             this.saveHardItems();
         }
-        // Does NOT increment progress
         this.nextCard();
     },
 
     markEasy() {
         const item = this.state.currentCategoryData[this.state.currentIndex];
 
-        // Logic: If Review Mode, remove from hard list immediately
+        // Review Mode
         if (this.state.isReviewMode) {
             this.state.hardItems = this.state.hardItems.filter(id => id !== item.id);
             this.saveHardItems();
 
-            // Check if last item
             const remaining = this.state.currentCategoryData.filter(i => i.id !== item.id);
             if (remaining.length === 0) {
                 alert("Review Selesai!");
+                // When navigating back, logic above will call renderPartsList()
                 this.navigateBack();
                 return;
             }
-            // Splice and stay on index (which becomes next item)
             this.state.currentCategoryData.splice(this.state.currentIndex, 1);
             if (this.state.currentIndex >= this.state.currentCategoryData.length) {
                 this.state.currentIndex = 0;
@@ -445,9 +450,6 @@ const app = {
             this.state.hardItems = this.state.hardItems.filter(id => id !== item.id);
             this.saveHardItems();
         } else {
-            // Only increment progress if NOT previously hard (Mastered first try) OR if we allow re-mastery?
-            // User said: "ketika mudah bertambah persentasenya".
-            // We just increment.
             this.incrementProgress(this.state.currentPartId);
         }
 

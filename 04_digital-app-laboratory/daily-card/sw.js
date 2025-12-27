@@ -1,9 +1,9 @@
-const CACHE_NAME = 'daily-card-v1';
+const CACHE_NAME = 'daily-card-v3.0-final';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
-    './style.css',
-    './app.js',
+    './style.v2.2.css',
+    './app.v2.2.js',
     './manifest.json',
     './assets/icon-app.png',
     './assets/Banner Logo.png',
