@@ -1,9 +1,24 @@
-// db.js - Native IndexedDB Implementation (No External Dependencies)
+// db.js - Robust Database (IDB + Memory Fallback)
 
 const DB_NAME = 'exam-sim-db';
 const DB_VERSION = 1;
+let USE_MEMORY_DB = false;
+let dbInstance = null; // Singleton Connection
 
-// Helper to wrap request in Promise
+const MEMORY_REQ = {
+    exams: {},
+    sessions: {}
+};
+
+// Helper: Timeout Promise
+const timeoutWrapper = (promise, ms = 2000) => new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('DB_TIMEOUT')), ms);
+    promise
+        .then(res => { clearTimeout(timer); resolve(res); })
+        .catch(err => { clearTimeout(timer); reject(err); });
+});
+
+// Helper: Promisify IDB Request
 function prom(request) {
     return new Promise((resolve, reject) => {
         request.onsuccess = () => resolve(request.result);
@@ -13,94 +28,172 @@ function prom(request) {
 
 const DB_CORE = {
     async open() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, DB_VERSION);
+        if (USE_MEMORY_DB) return null;
+        if (dbInstance) return dbInstance;
 
+        return new Promise((resolve, reject) => {
+            if (!('indexedDB' in window)) return reject(new Error('NO_IDB_SUPPORT'));
+
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
             request.onupgradeneeded = (e) => {
                 const db = e.target.result;
-                // Store for Exams
                 if (!db.objectStoreNames.contains('exams')) {
-                    const examStore = db.createObjectStore('exams', { keyPath: 'id' });
-                    examStore.createIndex('createdAt', 'createdAt');
+                    db.createObjectStore('exams', { keyPath: 'id' });
                 }
-                // Store for Sessions
                 if (!db.objectStoreNames.contains('sessions')) {
-                    const sessionStore = db.createObjectStore('sessions', { keyPath: 'id' });
-                    sessionStore.createIndex('examId', 'examId');
+                    db.createObjectStore('sessions', { keyPath: 'id' });
                 }
             };
-
-            request.onsuccess = (e) => resolve(e.target.result);
+            request.onsuccess = (e) => {
+                dbInstance = e.target.result;
+                // Handle unexpected close
+                dbInstance.onclose = () => { dbInstance = null; };
+                dbInstance.onversionchange = () => { dbInstance.close(); dbInstance = null; };
+                resolve(dbInstance);
+            };
             request.onerror = (e) => reject(e.target.error);
         });
     },
 
-    async runTransaction(storeName, mode, callback) {
-        const db = await this.open();
-        return new Promise((resolve, reject) => {
-            const tx = db.transaction(storeName, mode);
-            const store = tx.objectStore(storeName);
+    close() {
+        if (dbInstance) {
+            dbInstance.close();
+            dbInstance = null;
+        }
+    },
 
-            let result;
-            try {
-                result = callback(store);
-            } catch (err) {
-                reject(err);
-                return;
-            }
-
-            // For readwrite, we might need to wait for tx completion
-            // For simple requests, we can just return the request promise
-            if (result instanceof IDBRequest) {
-                result.onsuccess = () => resolve(result.result);
-                result.onerror = () => reject(result.error);
-            } else {
-                // If callback returns something else (like null or a value), just resolve it
-                // But usually we return the request.
-                // If we need to wait for transaction complete:
-                tx.oncomplete = () => resolve(result); // This might be tricky if result is not what we want
-                tx.onerror = () => reject(tx.error);
-            }
-        });
+    async init() {
+        try {
+            await timeoutWrapper(this.open(), 2500);
+            console.log('IndexedDB Connection: OK (Singleton)');
+        } catch (err) {
+            console.warn('IndexedDB Failed/Blocked. Switching to Memory DB.', err);
+            USE_MEMORY_DB = true;
+        }
     }
 };
 
 const DB = {
+    async _checkReady() { },
+
     // --- EXAMS ---
     async saveExam(exam) {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('exams', 'readwrite').objectStore('exams').put(exam));
+        if (USE_MEMORY_DB) {
+            MEMORY_REQ.exams[exam.id] = exam;
+            return;
+        }
+        try {
+            const db = await DB_CORE.open();
+            return await prom(db.transaction('exams', 'readwrite').objectStore('exams').put(exam));
+        } catch (e) {
+            USE_MEMORY_DB = true;
+            return this.saveExam(exam);
+        }
     },
 
     async getAllExams() {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('exams', 'readonly').objectStore('exams').getAll());
+        if (USE_MEMORY_DB) {
+            return Object.values(MEMORY_REQ.exams);
+        }
+        try {
+            const db = await DB_CORE.open(); // Uses singleton
+            // No timeout wrapper needed here if init passed, but let's be safe?
+            // Actually, if db passed init, open returns object immediately.
+            return await prom(db.transaction('exams', 'readonly').objectStore('exams').getAll());
+        } catch (e) {
+            console.warn('GetExams failed', e);
+            USE_MEMORY_DB = true;
+            return this.getAllExams();
+        }
     },
 
     async getExam(id) {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('exams', 'readonly').objectStore('exams').get(id));
+        if (USE_MEMORY_DB) return MEMORY_REQ.exams[id];
+        try {
+            const db = await DB_CORE.open();
+            return await prom(db.transaction('exams', 'readonly').objectStore('exams').get(id));
+        } catch (e) {
+            USE_MEMORY_DB = true;
+            return this.getExam(id);
+        }
     },
 
     async deleteExam(id) {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('exams', 'readwrite').objectStore('exams').delete(id));
+        if (USE_MEMORY_DB) {
+            delete MEMORY_REQ.exams[id];
+            return;
+        }
+        try {
+            const db = await DB_CORE.open();
+            return await prom(db.transaction('exams', 'readwrite').objectStore('exams').delete(id));
+        } catch (e) {
+            USE_MEMORY_DB = true;
+            return this.deleteExam(id);
+        }
     },
 
     // --- SESSIONS ---
     async saveSession(session) {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('sessions', 'readwrite').objectStore('sessions').put(session));
+        if (USE_MEMORY_DB) {
+            MEMORY_REQ.sessions[session.id] = session;
+            return;
+        }
+        try {
+            const db = await DB_CORE.open();
+            return await prom(db.transaction('sessions', 'readwrite').objectStore('sessions').put(session));
+        } catch (e) {
+            USE_MEMORY_DB = true;
+            return this.saveSession(session);
+        }
     },
 
     async getSession(id) {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('sessions', 'readonly').objectStore('sessions').get(id));
+        if (USE_MEMORY_DB) return MEMORY_REQ.sessions[id];
+        try {
+            const db = await DB_CORE.open();
+            return await prom(db.transaction('sessions', 'readonly').objectStore('sessions').get(id));
+        } catch (e) {
+            USE_MEMORY_DB = true;
+            return this.getSession(id);
+        }
     },
 
     async getAllSessions() {
-        const db = await DB_CORE.open();
-        return prom(db.transaction('sessions', 'readonly').objectStore('sessions').getAll());
+        if (USE_MEMORY_DB) return Object.values(MEMORY_REQ.sessions);
+        try {
+            const db = await DB_CORE.open();
+            return await prom(db.transaction('sessions', 'readonly').objectStore('sessions').getAll());
+        } catch (e) {
+            USE_MEMORY_DB = true;
+            return this.getAllSessions();
+        }
+    },
+
+    async reset() {
+        if (USE_MEMORY_DB) {
+            MEMORY_REQ.exams = {};
+            MEMORY_REQ.sessions = {};
+            location.reload();
+            return;
+        }
+        if (!confirm('Hapus semua data permanen?')) return;
+
+        // Close header before deleting
+        DB_CORE.close();
+
+        try {
+            const req = indexedDB.deleteDatabase(DB_NAME);
+            req.onsuccess = () => location.reload();
+            req.onerror = () => alert('Gagal reset.');
+            req.onblocked = () => alert('Database blocked. Close other tabs.');
+        } catch (e) {
+            alert('Gagal reset: ' + e);
+        }
+    },
+
+    // Expose Init for App control
+    async init() {
+        return DB_CORE.init();
     }
 };
 

@@ -16,8 +16,16 @@ const app = {
 
     async init() {
         console.log('App Initializing...');
-        // DB is defined in db.js which is loaded synchronously.
         this.bindEvents();
+
+        // Explicit DB Init Sequence
+        // This ensures Memory/IDB decision is made BEFORE we try to render
+        try {
+            await DB.init();
+        } catch (e) {
+            console.error('DB Init failed', e);
+        }
+
         this.navigateTo('dashboard');
     },
 
@@ -78,17 +86,24 @@ const app = {
     async renderDashboard() {
         const listContainer = document.getElementById('exam-list-container');
         try {
+            // Set Loading State
             listContainer.innerHTML = `
                 <div class="col-span-full flex flex-col items-center justify-center py-12 text-gray-400">
                     <i data-lucide="loader-2" class="w-8 h-8 animate-spin"></i>
                     <span class="mt-2">Memuat data...</span>
                 </div>
             `;
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
 
-            const exams = await DB.getAllExams();
+            // Timeout Race to catch "stuck" DB promises
+            const examsPromise = DB.getAllExams();
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Database timeout (5s). IndexedDB might be blocked or corrupt.')), 5000)
+            );
 
-            if (exams.length === 0) {
+            const exams = await Promise.race([examsPromise, timeoutPromise]);
+
+            if (!Array.isArray(exams) || exams.length === 0) {
                 listContainer.innerHTML = `
                     <div class="col-span-full text-center py-12 bg-white rounded-lg border border-dashed border-gray-300">
                         <p class="text-gray-500 mb-4">Belum ada ujian.</p>
@@ -114,15 +129,18 @@ const app = {
                     </div>
                 </div>
             `).join('');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
 
         } catch (err) {
             console.error('Dashboard Error:', err);
             listContainer.innerHTML = `
                 <div class="col-span-full bg-red-50 border border-red-200 text-red-700 p-4 rounded text-center">
                     <p class="font-bold">Gagal memuat data.</p>
-                    <p class="text-sm">${err.message}</p>
-                    <button onclick="location.reload()" class="mt-2 text-blue-600 underline text-sm">Muat Ulang</button>
+                    <p class="text-sm cursor-text select-text">${err.message}</p>
+                    <div class="mt-2 flex gap-2 justify-center">
+                        <button onclick="location.reload()" class="text-blue-600 underline text-sm">Muat Ulang</button>
+                        <button onclick="DB.reset()" class="text-red-600 underline text-sm">Reset Database</button>
+                    </div>
                 </div>
             `;
         }
@@ -142,7 +160,7 @@ const app = {
             <i data-lucide="upload-cloud" class="w-10 h-10 text-gray-400 mx-auto mb-2"></i>
             <p class="text-sm text-gray-500">Klik atau tarik file PDF ke sini</p>
         `;
-        lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
     },
 
     parseKeyPreview(text) {
@@ -179,6 +197,11 @@ const app = {
         return { keys, count };
     },
 
+    // Helper for IDs (Safe for non-secure contexts)
+    generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    },
+
     async handleCreateExamSave() {
         const title = document.getElementById('exam-title').value;
         const code = document.getElementById('exam-code').value;
@@ -204,7 +227,7 @@ const app = {
             }
 
             const exam = {
-                id: crypto.randomUUID(),
+                id: this.generateId(),
                 title,
                 code,
                 pdfBlob: new Blob([pdfFile], { type: 'application/pdf' }),
@@ -219,7 +242,7 @@ const app = {
 
         } catch (err) {
             console.error(err);
-            alert('Gagal membaca PDF: ' + err.message);
+            alert(`Gagal membuat ujian. Detail error: ${err.message || err}`);
         }
     },
 
@@ -231,19 +254,13 @@ const app = {
 
         this.state.currentExam = exam;
 
-        // Initialize Session (or reuse logic if we wanted resume, simplified here: new session)
-        // For persistence "close and open again", we should check if there is an active session
-        // Simplified: We'll create a new session ID based on Time or something fixed if we want per-exam single attempt.
-        // Let's make a unique ID per attempt.
-
-        // Wait! Requirement: "ketika diclose dan nanti akan saya buka lagi data data sebelumnya masih ada"
-        // This implies resuming. Let's look for an incomplete session for this exam.
+        // Initialize Session
         const allSessions = await DB.getAllSessions();
         let session = allSessions.find(s => s.examId === examId && !s.isComplete);
 
         if (!session) {
             session = {
-                id: crypto.randomUUID(),
+                id: this.generateId(),
                 examId: examId,
                 studentInfo: { name: 'Mahasiswa', nim: '052550559' },
                 answers: {},
@@ -345,28 +362,61 @@ const app = {
     },
 
     renderQuestionList() {
-        const container = document.getElementById('question-list-container');
+        const desktopContainer = document.getElementById('question-list-container');
+        const mobileContainer = document.getElementById('mobile-question-slider');
+
         const count = this.state.currentExam.questionCount;
-        let html = '';
+        let desktopHtml = '';
+        let mobileHtml = '';
 
         for (let i = 1; i <= count; i++) {
             const ans = this.state.currentSession.answers[i];
             const isActive = i === this.state.currentPage;
+
+            // Desktop Styles
             const bgClass = isActive ? 'bg-yellow-200' : (ans ? 'bg-black text-white' : 'bg-transparent text-black');
             const borderClass = isActive ? 'border-yellow-600' : 'border-b border-gray-300';
 
-            html += `
+            desktopHtml += `
                 <div onclick="app.jumpToPage(${i})" 
                      class="cursor-pointer flex items-center h-8 text-xs ${bgClass} ${borderClass} hover:bg-gray-200 transition">
                     <div class="w-8 text-center border-r border-gray-300 py-2">${i}.</div>
                     <div class="flex-1 text-center font-bold text-red-600">${ans || ''}</div>
                 </div>
             `;
-        }
-        container.innerHTML = html;
 
-        // Auto scroll to current
-        // (Optional enhancement)
+            // Mobile Slider Styles (Buttons)
+            // Active: Blue border, light blue bg
+            // Answered: Black bg, white text
+            // Normal: Gray border
+            let mobileClass = 'border border-gray-300 text-gray-700 bg-white';
+            if (isActive) {
+                mobileClass = 'border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transform scale-105';
+            } else if (ans) {
+                mobileClass = 'bg-black text-white border-black';
+            }
+
+            mobileHtml += `
+                <button onclick="app.jumpToPage(${i})" 
+                    id="mob-q-${i}"
+                    class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-sm shadow-sm transition-all ${mobileClass}">
+                    ${i}
+                    ${ans ? `<span class="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full -mr-1 -mt-1 shadow-sm"></span>` : ''}
+                </button>
+            `;
+        }
+
+        if (desktopContainer) desktopContainer.innerHTML = desktopHtml;
+        if (mobileContainer) {
+            mobileContainer.innerHTML = mobileHtml;
+            // Auto-scroll mobile slider to active element
+            setTimeout(() => {
+                const activeBtn = document.getElementById(`mob-q-${this.state.currentPage}`);
+                if (activeBtn) {
+                    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 100);
+        }
     },
 
     async renderCurrentPage() {
@@ -416,26 +466,23 @@ const app = {
         } catch (e) {
             console.error('Page render error', e);
         }
+
+        // 2. Update Answers UI for this page
+        const currentAns = this.state.currentSession.answers[pageNum];
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            const val = btn.dataset.val;
+            if (val === currentAns) {
+                btn.classList.add('bg-black', 'text-white', 'border-black');
+                btn.classList.remove('text-gray-700', 'border-gray-300');
+            } else {
+                btn.classList.remove('bg-black', 'text-white', 'border-black');
+                btn.classList.add('text-gray-700', 'border-gray-300');
+            }
+        });
+
+        // 3. Update Sidebar Highlight
+        this.renderQuestionList();
     },
-
-    // 2. Update Answers UI for this page
-    const currentAns = this.state.currentSession.answers[pageNum];
-    document.querySelectorAll('.answer-btn').forEach(btn => {
-        const val = btn.dataset.val;
-        if (val === currentAns) {
-            btn.classList.add('bg-black', 'text-white', 'border-black');
-            btn.classList.remove('text-gray-700', 'border-gray-300');
-        } else {
-            btn.classList.remove('bg-black', 'text-white', 'border-black');
-            btn.classList.add('text-gray-700', 'border-gray-300');
-        }
-    });
-
-    // 3. Update Sidebar Highlight
-    this.renderQuestionList();
-
-    // 4. Update Header Page Display (if existing in UI)
-},
 
     jumpToPage(num) {
         this.state.currentPage = num;
@@ -447,149 +494,146 @@ const app = {
         }
     },
 
-        changePage(delta) {
-    const newPage = this.state.currentPage + delta;
-    if (newPage >= 1 && newPage <= this.state.currentExam.questionCount) {
-        this.state.currentPage = newPage;
-        this.renderCurrentPage();
-    }
-},
+    changePage(delta) {
+        const newPage = this.state.currentPage + delta;
+        if (newPage >= 1 && newPage <= this.state.currentExam.questionCount) {
+            this.state.currentPage = newPage;
+            this.renderCurrentPage();
+        }
+    },
 
-changeZoom(delta) {
-    this.state.scale = Math.max(0.5, this.state.scale + delta);
-    this.renderCurrentPage();
-},
+    changeZoom(delta) {
+        this.state.scale = Math.max(0.5, this.state.scale + delta);
+        this.renderCurrentPage();
+    },
 
     async handleAnswer(val) {
-    if (!this.state.currentSession) return;
+        if (!this.state.currentSession) return;
 
-    // Save Answer
-    this.state.currentSession.answers[this.state.currentPage] = val;
+        // Save Answer
+        this.state.currentSession.answers[this.state.currentPage] = val;
 
-    // Update DB
-    await DB.saveSession(this.state.currentSession);
+        // Update DB
+        await DB.saveSession(this.state.currentSession);
 
-    // Update UI
-    this.renderCurrentPage();
-
-    // Auto-next? (Optional: The screenshots don't imply auto-next, but it's common)
-    // Let's stay on page to allow review.
-},
+        // Update UI
+        this.renderCurrentPage();
+    },
 
     async finishExam() {
-    if (!confirm('Apakah anda yakin ingin mengakhiri ujian?')) return;
+        if (!confirm('Apakah anda yakin ingin mengakhiri ujian?')) return;
 
-    clearInterval(this.state.timerInterval);
-    this.state.currentSession.isComplete = true;
-    this.state.currentSession.score = this.calculateScore();
-    await DB.saveSession(this.state.currentSession);
+        clearInterval(this.state.timerInterval);
+        this.state.currentSession.isComplete = true;
+        this.state.currentSession.score = this.calculateScore();
+        await DB.saveSession(this.state.currentSession);
 
-    this.navigateTo('result', { sessionId: this.state.currentSession.id });
-},
+        this.navigateTo('result', { sessionId: this.state.currentSession.id });
+    },
 
-calculateScore() {
-    let correct = 0;
-    const answers = this.state.currentSession.answers;
-    const key = this.state.currentExam.answerKey;
+    calculateScore() {
+        let correct = 0;
+        const answers = this.state.currentSession.answers;
+        const key = this.state.currentExam.answerKey;
 
-    for (const [qNum, ans] of Object.entries(answers)) {
-        if (key[qNum] === ans) correct++;
-    }
-    return correct;
-},
+        for (const [qNum, ans] of Object.entries(answers)) {
+            if (key[qNum] === ans) correct++;
+        }
+        return correct;
+    },
 
     // --- RESULTS ---
     async renderResult(sessionId) {
-    const session = await DB.getSession(sessionId);
-    const exam = await DB.getExam(session.examId);
+        const session = await DB.getSession(sessionId);
+        const exam = await DB.getExam(session.examId);
 
-    document.getElementById('res-score').textContent = session.score;
-    document.getElementById('res-total').textContent = exam.questionCount;
+        document.getElementById('res-score').textContent = session.score;
+        document.getElementById('res-total').textContent = exam.questionCount;
 
-    // Generate Review List
-    const reviewList = document.getElementById('review-list');
-    const key = exam.answerKey;
-    const answers = session.answers;
-    let html = '';
+        // Generate Review List
+        const reviewList = document.getElementById('review-list');
+        const key = exam.answerKey;
+        const answers = session.answers;
+        let html = '';
 
-    for (let i = 1; i <= exam.questionCount; i++) {
-        const userAns = answers[i];
-        const correctAns = key[i];
-        const isCorrect = userAns === correctAns;
-        const isAnswered = !!userAns;
+        for (let i = 1; i <= exam.questionCount; i++) {
+            const userAns = answers[i];
+            const correctAns = key[i];
+            const isCorrect = userAns === correctAns;
+            const isAnswered = !!userAns;
 
-        let statusClass = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-        if (!isAnswered) statusClass = 'bg-orange-50 border-orange-200';
+            let statusClass = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+            if (!isAnswered) statusClass = 'bg-orange-50 border-orange-200';
 
-        let icon = isCorrect
-            ? '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>'
-            : '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
+            let icon = isCorrect
+                ? '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>'
+                : '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
 
-        html += `
-                <div class="border rounded-xl p-4 ${statusClass} flex flex-col gap-2 shadow-sm">
-                    <div class="flex justify-between items-start">
-                        <span class="font-bold text-gray-800 text-lg">Soal ${i}</span>
-                        ${icon}
+            html += `
+                    <div class="border rounded-xl p-4 ${statusClass} flex flex-col gap-2 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold text-gray-800 text-lg">Soal ${i}</span>
+                            ${icon}
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-gray-500 w-24">Jawaban Anda:</span>
+                            <span class="font-bold px-2 py-0.5 rounded ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${userAns || 'Tidak Dijawab'}
+                            </span>
+                        </div>
+
+                        ${!isCorrect ? `
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-gray-500 w-24">Kunci Benar:</span>
+                            <span class="font-bold px-2 py-0.5 rounded bg-green-100 text-green-800">
+                                ${correctAns || 'N/A'}
+                            </span>
+                        </div>
+                        ` : ''}
                     </div>
-                    
-                    <div class="flex items-center gap-2 text-sm">
-                        <span class="text-gray-500 w-24">Jawaban Anda:</span>
-                        <span class="font-bold px-2 py-0.5 rounded ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                            ${userAns || 'Tidak Dijawab'}
-                        </span>
-                    </div>
+                `;
+        }
+        reviewList.innerHTML = html;
+        if (window.lucide) lucide.createIcons();
+    },
 
-                    ${!isCorrect ? `
-                    <div class="flex items-center gap-2 text-sm">
-                        <span class="text-gray-500 w-24">Kunci Benar:</span>
-                        <span class="font-bold px-2 py-0.5 rounded bg-green-100 text-green-800">
-                            ${correctAns || 'N/A'}
-                        </span>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
+    toggleReview() {
+        const el = document.getElementById('review-container');
+        el.classList.toggle('hidden');
+        if (!el.classList.contains('hidden')) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    },
+
+    toggleFocusMode() {
+        const wrapper = document.getElementById('pdf-wrapper');
+        const btn = document.getElementById('btn-focus-top');
+        const indicator = document.getElementById('crop-indicator');
+
+        this.state.isFocusMode = !this.state.isFocusMode;
+
+        if (this.state.isFocusMode) {
+            // "Crop" mode: Limit height and overflow hidden
+            wrapper.style.maxHeight = '50vh'; // Show roughly top half of mobile screen
+            wrapper.style.overflowY = 'hidden';
+            wrapper.classList.add('border-b-4', 'border-orange-500');
+
+            btn.classList.add('bg-orange-600');
+            btn.classList.remove('bg-blue-600');
+            btn.innerHTML = '<i data-lucide="maximize" class="w-4 h-4"></i> Full';
+        } else {
+            // Normal mode
+            wrapper.style.maxHeight = '';
+            wrapper.style.overflowY = '';
+            wrapper.classList.remove('border-b-4', 'border-orange-500');
+
+            btn.classList.remove('bg-orange-600');
+            btn.classList.add('bg-blue-600');
+            btn.innerHTML = '<i data-lucide="crop" class="w-4 h-4"></i> Potong';
+        }
+        if (window.lucide) lucide.createIcons();
     }
-    reviewList.innerHTML = html;
-    lucide.createIcons();
-},
-
-toggleReview() {
-    const el = document.getElementById('review-container');
-    el.classList.toggle('hidden');
-    if (!el.classList.contains('hidden')) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-},
-
-toggleFocusMode() {
-    const wrapper = document.getElementById('pdf-wrapper');
-    const btn = document.getElementById('btn-focus-top');
-    const indicator = document.getElementById('crop-indicator');
-
-    this.state.isFocusMode = !this.state.isFocusMode;
-
-    if (this.state.isFocusMode) {
-        // "Crop" mode: Limit height and overflow hidden
-        wrapper.style.maxHeight = '50vh'; // Show roughly top half of mobile screen
-        wrapper.style.overflowY = 'hidden';
-        wrapper.classList.add('border-b-4', 'border-orange-500');
-
-        btn.classList.add('bg-orange-600');
-        btn.classList.remove('bg-blue-600');
-        btn.innerHTML = '<i data-lucide="maximize" class="w-4 h-4"></i> Full';
-    } else {
-        // Normal mode
-        wrapper.style.maxHeight = '';
-        wrapper.style.overflowY = '';
-        wrapper.classList.remove('border-b-4', 'border-orange-500');
-
-        btn.classList.remove('bg-orange-600');
-        btn.classList.add('bg-blue-600');
-        btn.innerHTML = '<i data-lucide="crop" class="w-4 h-4"></i> Potong';
-    }
-    lucide.createIcons();
-}
 };
 
 // Start
