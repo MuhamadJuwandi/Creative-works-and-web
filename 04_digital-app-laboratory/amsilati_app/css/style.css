@@ -737,8 +737,8 @@ body {
     display: none;
     flex-direction: column;
     height: 100vh;
-    background-color: #525659; /* Standard PDF viewer bg color */
-    overflow: hidden;
+    background-color: #525659;
+    padding-bottom: 0;
 }
 
 #view-hafalan.active {
@@ -752,11 +752,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 10;
+    flex-shrink: 0;
 }
 
-.pdf-controls, .pdf-zoom {
+.pdf-controls,
+.pdf-zoom {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -764,7 +766,7 @@ body {
 
 .pdf-btn {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     padding: 5px 10px;
     border-radius: 4px;
@@ -774,7 +776,11 @@ body {
 }
 
 .pdf-btn:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pdf-btn:active {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .back-btn-small {
@@ -785,18 +791,42 @@ body {
     padding: 5px;
 }
 
+.page-num-input {
+    width: 40px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 4px;
+    padding: 4px 2px;
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.page-num-input::-webkit-outer-spin-button,
+.page-num-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.page-num-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .pdf-container {
     flex: 1;
     overflow: auto;
-    position: relative;
-    display: flex;
-    justify-content: center;
+    -webkit-overflow-scrolling: touch;
+    text-align: center;
     padding: 20px 0;
 }
 
 canvas#the-canvas {
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     background-color: white;
-    max-width: 100%; /* Ensure it doesn't overflow horizontally on mobile initially */
-    height: auto;
+    display: inline-block;
 }
