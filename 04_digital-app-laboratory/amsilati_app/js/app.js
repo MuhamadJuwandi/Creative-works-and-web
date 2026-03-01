@@ -15,6 +15,38 @@ const CONF = {
 };
 
 /**
+ * Simple Markdown Parser Helper
+ */
+function parseMateriMarkdown(text) {
+    if (!text) return '';
+    let html = text;
+
+    // Support Arabic block syntax: ```arab ... ``` or [[arab]] ... [[/arab]]
+    // but the main way will be HTML in spreadsheet, or wrapping with arab markers.
+    html = html.replace(/\[\[arab\]\]([\s\S]*?)\[\[\/arab\]\]/g, '<div class="arabic-text">$1</div>');
+
+    // Headers (Map # and ## to <h2>, ### to <h3>)
+    html = html.replace(/^###\s+(.*$)/gim, '<h3>$1</h3>');
+    html = html.replace(/^##\s+(.*$)/gim, '<h2>$1</h2>');
+    html = html.replace(/^#\s+(.*$)/gim, '<h2>$1</h2>');
+
+    // Horizontal Rule
+    html = html.replace(/^---$/gim, '<hr style="border:0; border-top:1px dashed #ccc; margin:20px 0;">');
+
+    // Bold
+    html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+    // Newlines to <br>
+    html = html.replace(/\n/g, '<br>');
+
+    // Clean up excessive <br> around block elements to avoid huge gaps
+    html = html.replace(/(<\/h2>|<\/h3>|<\/div>|<hr[^>]*>)<br>\s*<br>/gi, '$1<br>');
+    html = html.replace(/<br>\s*(<h2>|<h3>|<hr|<div class="arabic-text")/gi, '\n$1');
+
+    return html;
+}
+
+/**
  * Parse CSV text into an array of objects.
  * Handles quoted fields with commas and newlines inside.
  */
@@ -219,9 +251,7 @@ const app = {
                     app.state.currentMateri = state.materiItem;
                     document.getElementById('materi-detail-title').textContent = state.materiItem.judul;
                     let content = state.materiItem.konten_md || '';
-                    content = content.replace(/\n/g, '<br>');
-                    content = content.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                    document.getElementById('materi-content').innerHTML = content;
+                    document.getElementById('materi-content').innerHTML = parseMateriMarkdown(content);
                 }
                 app.showView('materi-detail');
                 break;
@@ -573,9 +603,7 @@ const app = {
         document.getElementById('materi-detail-title').textContent = item.judul;
 
         let content = item.konten_md || '';
-        content = content.replace(/\n/g, '<br>');
-        content = content.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-        document.getElementById('materi-content').innerHTML = content;
+        document.getElementById('materi-content').innerHTML = parseMateriMarkdown(content);
 
         app.showView('materi-detail');
         app.pushState('materi-detail', { type: 'materi', jilid: app.state.currentJilid, materiItem: item });
