@@ -1,0 +1,11 @@
+{
+  "appId": "com.gen1project.ngarti",
+  "appName": "Ngarti",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

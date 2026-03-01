@@ -15,7 +15,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    
+
     <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
@@ -83,16 +83,20 @@
                     <h4>Tim Pengembang</h4>
                     <ul class="contributor-list">
                         <li>
-                            <span class="role">Pengajar & Pembimbing</span>
+                            <span class="role">Pengajar &amp; Pembimbing</span>
                             <span class="name">Ust. Yassir MZ</span>
                         </li>
                         <li>
-                            <span class="role">Template & Sistem</span>
+                            <span class="role">Developer &amp; Creator</span>
                             <span class="name">Muhamad Juwandi</span>
                         </li>
                         <li>
-                            <span class="role">Optimasi & Support</span>
+                            <span class="role">Content Reviewer</span>
                             <span class="name">Yusman Alidzar Abdullah</span>
+                        </li>
+                        <li>
+                            <span class="role">Content Reviewer</span>
+                            <span class="name">Sidiq Fadillah</span>
                         </li>
                     </ul>
                 </div>
@@ -180,7 +184,7 @@
             <!-- JILID Selection -->
             <section id="view-jilid-select" class="view">
                 <div class="nav-header">
-                    <button onclick="app.goHome()" class="back-btn">←</button>
+                    <button onclick="app.goBack()" class="back-btn">←</button>
                     <h2 id="jilid-select-title">Pilih Jilid</h2>
                 </div>
                 <div id="jilid-list-container" class="list-vertical"></div>
@@ -189,7 +193,7 @@
             <!-- MATERI LIST -->
             <section id="view-materi-list" class="view">
                 <div class="nav-header">
-                    <button onclick="app.navigate('materi')" class="back-btn">←</button>
+                    <button onclick="app.goBack()" class="back-btn">←</button>
                     <h2 id="materi-list-title">Materi</h2>
                 </div>
                 <div class="search-box">
@@ -206,7 +210,7 @@
             <!-- MATERI DETAIL -->
             <section id="view-materi-detail" class="view">
                 <div class="nav-header">
-                    <button onclick="app.backToMateriList()" class="back-btn">←</button>
+                    <button onclick="app.goBack()" class="back-btn">←</button>
                     <h2 id="materi-detail-title" class="truncate">Detail</h2>
                 </div>
                 <div id="materi-content" class="content-paper"></div>
@@ -236,14 +240,14 @@
                 </div>
                 <div class="result-actions">
                     <button onclick="app.reviewQuiz()" class="btn-secondary">Lihat Pembahasan</button>
-                    <button onclick="app.navigate('quiz')" class="btn-primary">Selesai</button>
+                    <button onclick="app.goHome()" class="btn-primary">Selesai</button>
                 </div>
             </section>
 
             <!-- REVIEW -->
             <section id="view-quiz-review" class="view">
                 <div class="nav-header">
-                    <button onclick="app.finishQuiz()" class="back-btn">←</button>
+                    <button onclick="app.goBack()" class="back-btn">←</button>
                     <h2>Pembahasan</h2>
                 </div>
                 <div id="review-container" class="list-vertical"></div>
@@ -252,15 +256,19 @@
             <!-- HAFALAN (PDF Viewer) -->
             <section id="view-hafalan" class="view">
                 <div class="pdf-toolbar">
-                    <button onclick="app.goHome()" class="back-btn-small">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    <button onclick="app.goBack()" class="back-btn-small">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
                     </button>
                     <div class="pdf-controls">
                         <button id="prev-page" class="pdf-btn">❮</button>
-                        <span id="page-num">1</span> / <span id="page-count">--</span>
+                        <input type="number" id="page-num" class="page-num-input" value="1" min="1"> / <span
+                            id="page-count">--</span>
                         <button id="next-page" class="pdf-btn">❯</button>
                     </div>
-                     <div class="pdf-zoom">
+                    <div class="pdf-zoom">
                         <button id="zoom-out" class="pdf-btn">-</button>
                         <button id="zoom-in" class="pdf-btn">+</button>
                     </div>
