@@ -1,101 +1,62 @@
+# 📱 UBM Simulator: Aplikasi Ujian UT Berbasis Mobile
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:004073,100:00BCD4&height=250&section=header&text=UBM%20Simulator&fontSize=45&fontAlignY=40&desc=Simulasi%20Ujian%20Mobile%20UT%20%7C%20PWA%20Ready%20%7C%20No%20Backend&descAlignY=60&descSize=18&animation=fadeIn&fontColor=ffffff)
+
 <div align="center">
-  <img src="assets/logo.png" alt="Logo UT" width="120" />
-  # UBM Simulator
-  **Aplikasi Simulasi Ujian Berbasis Mobile (UBM) Universitas Terbuka**
+  <img src="assets/logo.png" width="120" alt="Logo UT">
   
-  <p align="center">
-    <a href="#fitur-utama">Fitur Utama</a> •
-    <a href="#teknologi">Teknologi</a> •
-    <a href="#cara-penggunaan">Cara Penggunaan</a> •
-    <a href="#instalasi">Instalasi & PWA</a>
-  </p>
-  ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-  ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-  ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-  ![PWA Ready](https://img.shields.io/badge/PWA-Ready-4CAF50?style=for-the-badge&logo=pwa&logoColor=white)
+  <br><br>
+
+  <img src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/HTML5-Mobile_First-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/IndexedDB-Local_Database-1572B6?style=for-the-badge&logo=databricks&logoColor=white" />
+  <img src="https://img.shields.io/badge/PDF.js-Renderer-B30B00?style=for-the-badge&logo=adobe-acrobat-reader&logoColor=white" />
+
+  <br/>
+
+  [English](#-english) | [Bahasa Indonesia](#-bahasa-indonesia)
+
 </div>
-<br/>
-## 📖 Tentang Aplikasi
-**UBM Simulator** adalah sebuah aplikasi web (Single Page Application) yang dirancang khusus untuk mahasiswa Universitas Terbuka (UT) sebagai sarana latihan soal Ujian Akhir Semester (UAS). Aplikasi ini meniru secara akurat *User Interface* (UI) dan *User Experience* (UX) dari aplikasi resmi Ujian Berbasis Mobile UT, sehingga mahasiswa dapat membiasakan diri dengan lingkungan ujian sesungguhnya.
+
 ---
-## ✨ Fitur Utama
-- 📱 **Mobile-First Design**: Tampilan yang dioptimalkan untuk layar ponsel, memberikan pengalaman yang identik dengan aplikasi asli.
-- 📄 **Integrasi Modul PDF**: Mendukung pengunggahan soal dalam bentuk PDF. Termasuk fitur *Zoom In/Out*, *Pan/Drag*, dan *Fullscreen* untuk membaca soal dengan nyaman.
-- 💾 **Local Storage & Auto-Save**: Menggunakan `IndexedDB`. Progres ujian Anda tidak akan hilang meski aplikasi tertutup tanpa sengaja. Anda bisa melanjutkannya (Resume) kapan saja!
-- ⏱️ **Real-time Timer & Auto Submit**: Simulasi waktu ujian selama 2 Jam secara *real-time*.
-- 📊 **Skoring & Review Otomatis**: Ketahui skor Anda segera setelah ujian selesai, lengkap dengan animasi *confetti* 🎉, serta fitur review untuk melihat jawaban yang salah beserta kunci jawaban yang benar.
-- 📥 **Progressive Web App (PWA)**: Dapat diinstal langsung ke *Homescreen* HP Anda seperti aplikasi native dengan logo UT!
+
+## 🎯 Core Concept
+> **Unique Selling Point:** Aplikasi ini berjalan 100% di sisi klien (*client-side*) tanpa memerlukan backend server. Dibangun menyerupai antarmuka asli Ujian Berbasis Mobile Universitas Terbuka, aplikasi ini memberikan pengalaman simulasi ujian UAS sesungguhnya langsung dari *browser* atau layar beranda HP Anda (sebagai PWA).
+
 ---
-## 🛠️ Teknologi yang Digunakan
-Aplikasi ini dibangun menggunakan teknologi web dasar yang kuat, tanpa bergantung pada framework berat (seperti React/Vue), memastikan performa yang secepat kilat:
-| Komponen | Teknologi |
-| :--- | :--- |
-| **Struktur** | `HTML5` Semantic |
-| **Styling** | `CSS3` Vanilla (Flexbox, Grid, CSS Variables) |
-| **Logika** | `Vanilla JavaScript` (ES6+) |
-| **Database** | `IndexedDB` (Penyimpanan lokal asinkron) |
-| **PDF Renderer**| `PDF.js` (oleh Mozilla) |
+
+## 🇮🇩 Bahasa Indonesia
+
+### ⚡ Gambaran Umum
+**UBM Simulator** adalah aplikasi web ringan (*Single Page Application*) yang dibuat khusus sebagai sarana simulasi Ujian Akhir Semester (UAS) Universitas Terbuka. Aplikasi ini mengimitasi UI/UX aplikasi resmi UT secara presisi. Mulai dari pengunggahan modul PDF hingga perhitungan skor otomatis, semuanya berjalan mulus dan cepat.
+
+### 🛠️ Fitur Teknis
+* **📱 Mobile-First PWA:** Terasa seperti aplikasi *native* di HP Anda. Bisa diinstal ke layar beranda tanpa perlu lewat Play Store.
+* **📄 Integrasi PDF Dinamis:** Menggunakan `PDF.js` untuk merender soal secara langsung. Termasuk *floating toolbar* untuk fitur *Zoom In/Out*, *Fullscreen*, dan dukungan *drag/pan* layar sentuh.
+* **💾 Database Lokal (`IndexedDB`):** Progress ujian, jawaban, hingga file PDF tersimpan di memori lokal browser. Anda bisa melanjutkan (resume) sesi ujian kapan saja walau aplikasi tak sengaja tertutup.
+* **⏱️ Timer & Auto-Scoring:** Menyimulasikan durasi ujian nyata (2 Jam) beserta sistem skoring langsung, lengkap dengan opsi *review* jawaban salah.
+
 ---
-## 🚀 Cara Penggunaan
-1. **Buka Aplikasi**: Akses aplikasi ini melalui browser (disarankan via Chrome/Safari di HP).
-2. **Tambah Ujian**: Di halaman *Dashboard*, klik tombol **(+)**.
-3. **Upload Soal**: Pilih file PDF soal latihan Anda. *(Catatan: 1 halaman PDF diasumsikan berisi 1 soal untuk tampilan optimal)*.
-4. **Masukkan Kunci Jawaban**: Masukkan kunci jawaban dengan format huruf yang rapat (Contoh: `ABCDABCD`) atau penomoran (Contoh: `1.A 2.B`). Sistem akan otomatis mendeteksi jumlah soal.
-5. **Simpan & Mulai**: Klik Simpan, lalu tekan tombol **Mulai Ujian ▶** di dashboard.
-6. **Selesaikan Ujian**: Ujian dapat diakhiri kapan saja dengan menekan tombol **Selesai Ujian**.
+
+## 🇬🇧 English
+
+### ⚡ Project Overview
+**UBM Simulator** is a lightweight, client-side web application designed to simulate the Mobile-Based Exam (UBM) environment of Universitas Terbuka. It accurately replicates the official app's UI/UX, allowing students to practice and familiarize themselves with the testing system using their own PDF question banks.
+
+### 🛠️ Key Features
+* **📱 Progressive Web App (PWA):** Installs directly to your home screen. Fully responsive mobile-first design.
+* **📄 Native PDF Rendering:** Leverages `PDF.js` to render PDF questions inside the app, complete with zoom controls, fullscreen mode, and touch-drag panning capabilities.
+* **💾 Persistent Offline Storage:** Utilizes `IndexedDB` to securely save your active session, timer, and answers. Close the app accidentally? Just open it back up and resume exactly where you left off.
+* **⏱️ Realistic Exam Mechanics:** Features a built-in 2-hour countdown timer, automated scoring with confetti animations, and an interactive review system for incorrect answers.
+
 ---
-## 📲 Instalasi (PWA)
-Anda tidak perlu mengunduh aplikasi ini dari Play Store. Anda dapat menginstalnya langsung dari browser:
-**Pengguna Android (Chrome):**
-1. Buka link web aplikasi ini di Chrome.
-2. Ketuk ikon titik tiga di pojok kanan atas browser.
-3. Pilih **"Tambahkan ke Layar Utama"** (*Add to Homescreen*).
-4. Aplikasi akan terinstal dan logonya muncul di deretan aplikasi HP Anda.
-**Pengguna iOS (Safari):**
-1. Buka link web aplikasi ini di Safari.
-2. Ketuk tombol **Share** (ikon kotak dengan panah ke atas) di bagian bawah.
-3. Scroll ke bawah dan pilih **"Add to Home Screen"**.
-4. Selesai!
+
+### 💻 Cara Menggunakan (How to Use)
+
+1. **Akses Aplikasi**: Buka file `index.html` di browser Anda atau gunakan *Live Server* / GitHub Pages.
+2. **Tambah Ujian**: Di halaman *Dashboard*, tekan tombol `(+)` di pojok kanan bawah.
+3. **Upload Modul Soal**: Masukkan file PDF soal Anda. 
+4. **Input Kunci Jawaban**: Ketik kunci jawaban dengan format rapat (contoh: `AABBCD...`) atau bernomor (contoh: `1.A 2.B...`).
+5. **Mulai Latihan**: Kembali ke *Dashboard*, klik **Mulai Ujian ▶**, dan selamat berlatih!
+
 ---
-## 📂 Cara Menjalankan Secara Lokal (Untuk Developer)
-Karena aplikasi ini adalah *static web app*, Anda bisa langsung menjalankannya dengan *Live Server* atau server HTTP lokal.
-```bash
-# Menggunakan Python
-python -m http.server 8080
-# Menggunakan Node.js (http-server)
-npx http-server -p 8080
-```
-Lalu buka `http://localhost:8080` di browser Anda.
----
-<div align="center">
-  <p>Dibuat dengan ❤️ untuk kemudahan belajar mahasiswa UT.</p>
-</div>
-<!DOCTYPE html>
-<html lang="id">
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-    </script>
-    <!-- Custom Styles -->
-    <!-- Custom Styles & PWA -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="assets/logo.png" type="image/png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="assets/logo.png">
-</head>
-<body>
-</html>
-{
-  "name": "UBM Simulator (Universitas Terbuka)",
-  "short_name": "UBM Sim",
-  "description": "Aplikasi simulator latihan soal Ujian Akhir Semester (UAS) Universitas Terbuka berbasis mobile.",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#004073",
-  "icons": [
-    {
-      "src": "assets/logo.png",
-      "sizes": "192x192 512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+*Dibuat untuk memudahkan simulasi pembelajaran mandiri mahasiswa Universitas Terbuka.*
