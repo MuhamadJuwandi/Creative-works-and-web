@@ -2,7 +2,7 @@
 ![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:004073,100:00BCD4&height=250&section=header&text=UBM%20Simulator&fontSize=45&fontAlignY=40&desc=Simulasi%20Ujian%20Mobile%20UT%20%7C%20PWA%20Ready%20%7C%20No%20Backend&descAlignY=60&descSize=18&animation=fadeIn&fontColor=ffffff)
 
 <div align="center">
-  <img src="assets/logo.png" width="120" alt="Logo UT">
+
   
   <br><br>
 
