@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#004073">
+    <meta name="description" content="Simulator Ujian Berbasis Mobile - Universitas Terbuka. Latihan soal UAS dengan tampilan mirip aplikasi UBM resmi.">
+
+    <title>Ujian Berbasis Mobile - Universitas Terbuka</title>
+
+    <!-- PDF.js -->
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    </script>
+
+    <!-- Custom Styles & PWA -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/logo.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+
+<body>
+    <!-- App Shell (Mobile Container) -->
+    <div class="app-shell" id="app-shell">
+
+        <!-- ========================================= -->
+        <!-- VIEW: DASHBOARD                           -->
+        <!-- ========================================= -->
+        <div id="view-dashboard" class="view-section active">
+
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="dashboard-header-top">
+                    <img src="assets/logo.png" class="dashboard-logo" alt="Logo UT">
+                    <div class="dashboard-title">
+                        <h1>Ujian Berbasis Mobile</h1>
+                        <p>Universitas Terbuka</p>
+                    </div>
+                </div>
+                <div class="dashboard-user-info">
+                    <div class="user-avatar">MJ</div>
+                    <div class="user-details">
+                        <div class="user-name">MUHAMAD JUWANDI</div>
+                        <div class="user-nim">NIM 052550559 • Laki-laki</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="dashboard-body">
+                <div class="section-title">
+                    Daftar Ujian Tersedia
+                    <span class="badge" id="exam-count-badge">0</span>
+                </div>
+
+                <div id="exam-list-container">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <span>Memuat data...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAB Add Button -->
+            <button class="fab-add" onclick="app.navigateTo('create')" id="btn-fab-add" aria-label="Tambah Ujian Baru">
+                +
+            </button>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW: CREATE EXAM                         -->
+        <!-- ========================================= -->
+        <div id="view-create" class="view-section">
+
+            <div class="create-header">
+                <button class="btn-back" onclick="app.navigateTo('dashboard')" aria-label="Kembali">
+                    ←
+                </button>
+                <h2>Tambah Ujian Baru</h2>
+            </div>
+
+            <div class="create-body">
+                <form id="create-exam-form">
+
+                    <!-- 1. PDF Upload -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            1. Upload File Soal (PDF)
+                            <span class="form-label-hint">(1 Halaman = 1 Soal)</span>
+                        </label>
+                        <div class="upload-area" id="upload-area">
+                            <input type="file" id="exam-pdf" accept="application/pdf" required>
+                            <div id="file-upload-preview">
+                                <span class="upload-icon">📄</span>
+                                <p class="upload-text">Ketuk untuk memilih file PDF</p>
+                                <p class="upload-hint">atau tarik file ke sini</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Metadata -->
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div>
+                                <label class="form-label" for="exam-code">Kode MK</label>
+                                <input type="text" id="exam-code" class="form-input" placeholder="Misal: MKWN4108" required>
+                            </div>
+                            <div>
+                                <label class="form-label" for="exam-title">Nama MK</label>
+                                <input type="text" id="exam-title" class="form-input" placeholder="Misal: Bahasa Indonesia" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Answer Key -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            2. Kunci Jawaban
+                            <span class="form-label-hint">Format: "ABCD..." atau "1.A 2.B ..."</span>
+                        </label>
+                        <textarea id="exam-key" class="form-textarea" rows="5"
+                            placeholder="Contoh: ADCBADCBADCB..."></textarea>
+                        <div class="key-status" id="key-parsing-status">Menunggu input...</div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-save-exam" id="btn-save-exam">
+                        💾 Simpan Ujian
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW: EXAM SIMULATOR                      -->
+        <!-- ========================================= -->
+        <div id="view-exam" class="view-section">
+
+            <!-- Exam Header - Student Info (Blue) -->
+            <div class="exam-header">
+                <div class="exam-header-top">
+                    <div class="exam-student-name" id="sim-student-name">MUHAMAD JUWANDI</div>
+                </div>
+                <div class="exam-student-detail" id="sim-student-detail">NIM 052550559 • Jenis Kelamin: Laki-laki</div>
+            </div>
+
+            <!-- Info Bar - Course + Timer -->
+            <div class="exam-info-bar">
+                <div class="exam-info-row">
+                    <div class="exam-info-code" id="sim-code">MKWN4108</div>
+                    <div class="exam-info-subject" id="sim-title">Bahasa Indonesia</div>
+                </div>
+                <div class="exam-info-row2">
+                    <div>
+                        <div class="exam-timer-label">Sisa Waktu</div>
+                        <div class="exam-timer" id="sim-timer">01:09:23</div>
+                    </div>
+                    <div class="exam-answered-info">
+                        <div class="exam-answered-label">Terjawab</div>
+                        <div class="exam-answered-count" id="sim-answered-count">0/0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finish Button -->
+            <button class="btn-finish-exam" onclick="app.showFinishModal()" id="btn-finish-exam">
+                ✓ Selesai Ujian
+            </button>
+
+            <!-- Toolbar -->
+            <div class="exam-toolbar">
+                <button class="toolbar-btn" onclick="app.togglePdfVisibility()">
+                    <span class="toolbar-icon">📖</span> Tutup Buku
+                </button>
+                <button class="toolbar-btn disabled">
+                    <span class="toolbar-icon">🔢</span> Kalkulator
+                </button>
+                <button class="toolbar-btn disabled">
+                    <span class="toolbar-icon">📊</span> Tabel
+                </button>
+                <button class="toolbar-btn disabled">
+                    <span class="toolbar-icon">📚</span> Kamus
+                </button>
+            </div>
+
+            <!-- Question Navigator -->
+            <div class="question-nav">
+                <div class="question-nav-scroll" id="question-nav-scroll">
+                    <!-- Dynamic question numbers -->
+                </div>
+            </div>
+
+            <!-- Soal Info -->
+            <div class="soal-info">
+                <div class="soal-info-text">
+                    Soal <strong id="sim-current-num">1</strong> <span>dari <span id="sim-total-num">50</span></span>
+                </div>
+                <div class="soal-page-indicator">
+                    📄 <span id="sim-page-indicator">1/1</span>
+                </div>
+            </div>
+
+            <!-- PDF Content Area -->
+            <div class="exam-content" id="exam-content-area">
+                <div class="pdf-container" id="pdf-container">
+                    <canvas id="pdf-render"></canvas>
+                </div>
+            </div>
+
+            <!-- Floating Toolbar (Outside scrollable area) -->
+            <div class="pdf-floating-toolbar">
+                <div class="pdf-toolbar-handle">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <button class="pdf-toolbar-btn" onclick="app.toggleFullscreen()" aria-label="Fullscreen">⛶</button>
+                <button class="pdf-toolbar-btn play-btn" aria-label="Play">▶</button>
+                <button class="pdf-toolbar-btn" onclick="app.changeZoom(0.2)" aria-label="Zoom In">➕</button>
+                <button class="pdf-toolbar-btn" onclick="app.changeZoom(-0.2)" aria-label="Zoom Out">➖</button>
+            </div>
+
+            <!-- Petunjuk Accordion -->
+            <div class="petunjuk-section">
+                <button class="petunjuk-toggle" onclick="app.togglePetunjuk()" id="petunjuk-toggle">
+                    ⓘ PETUNJUK MENJAWAB SOAL UJIAN <span class="arrow">▼</span>
+                </button>
+                <div class="petunjuk-content" id="petunjuk-content">
+                    <p>• Pilih salah satu jawaban yang paling tepat dengan menekan tombol A, B, C, atau D.</p>
+                    <p>• Anda dapat berpindah soal dengan menekan tombol "Sebelumnya" atau "Berikutnya".</p>
+                    <p>• Anda juga dapat langsung menuju soal tertentu dengan menekan nomor soal di bagian atas.</p>
+                    <p>• Jawaban Anda otomatis tersimpan saat dipilih.</p>
+                    <p>• Soal berwarna hijau = sudah dijawab, orange = belum dijawab.</p>
+                </div>
+            </div>
+
+            <!-- Answer Section -->
+            <div class="answer-section">
+                <div class="answer-label">JAWABAN</div>
+                <div class="answer-buttons">
+                    <button class="answer-btn" data-val="A" onclick="app.handleAnswer('A')">A</button>
+                    <button class="answer-btn" data-val="B" onclick="app.handleAnswer('B')">B</button>
+                    <button class="answer-btn" data-val="C" onclick="app.handleAnswer('C')">C</button>
+                    <button class="answer-btn" data-val="D" onclick="app.handleAnswer('D')">D</button>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav prev" onclick="app.changePage(-1)">Sebelumnya</button>
+                    <button class="btn-nav next" onclick="app.changePage(1)">Berikutnya</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW: RESULT                              -->
+        <!-- ========================================= -->
+        <div id="view-result" class="view-section result-view">
+            <div class="confetti-container" id="confetti-container"></div>
+
+            <div class="result-content">
+                <h2 class="result-title">Informasi Perolehan<br>Jumlah Jawaban Benar</h2>
+
+                <div class="result-meta" id="res-subject">Bahasa Indonesia</div>
+                <div class="result-meta name" id="res-name">MUHAMAD JUWANDI</div>
+                <div class="result-meta" id="res-date">06 June 2026 / 1</div>
+                <div class="result-meta name" id="res-name2">MUHAMAD JUWANDI</div>
+                <div class="result-meta nim" id="res-nim">052550559</div>
+
+                <!-- Score Card -->
+                <div class="result-score-card">
+                    <div class="result-check-icon">✓</div>
+                    <div class="result-score-label">Jawaban Benar</div>
+                    <div class="result-score-number">
+                        <span class="result-score-correct" id="res-score">0</span>
+                        <span class="result-score-from">dari</span>
+                        <span class="result-score-total" id="res-total">0</span>
+                    </div>
+                    <div class="result-score-hint">Cek total jawaban benar Anda di sini.</div>
+                </div>
+
+                <!-- Violation Box -->
+                <div class="result-violation-box">
+                    <div class="result-violation-title">Total pelanggaran sesi ujian: 0</div>
+                    <div class="result-violation-text">Bagian ini menampilkan total dan detail pelanggaran sesi ujian jika ada.</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="result-actions">
+                    <button class="btn-result primary" onclick="app.toggleReviewDetail()">
+                        📋 LIHAT HASIL TERPERINCI
+                    </button>
+                    <button class="btn-result danger" onclick="app.reviewWrongAnswers()">
+                        📕 REVIEW JAWABAN SALAH
+                    </button>
+                </div>
+
+                <!-- Review Detail Container -->
+                <div class="review-container" id="review-container">
+                    <div class="review-title">✅ Rincian Jawaban</div>
+                    <div id="review-list">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="result-footer">
+                <p class="result-thanks">
+                    Terimakasih atas peran <span>serta anda</span><br>dalam mengikuti <span>ujian online</span>
+                </p>
+                <img src="assets/logo.png" class="result-footer-logo" alt="Logo UT">
+                <div class="result-footer-name">Universitas Terbuka</div>
+                <button class="btn-exit" onclick="app.navigateTo('dashboard')">
+                    🚪 KELUAR APLIKASI
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- MODAL: Konfirmasi Selesai Ujian           -->
+        <!-- ========================================= -->
+        <div class="modal-overlay" id="modal-finish">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <span class="modal-warning-icon">⚠️</span>
+                    <h3>Konfirmasi<br>Selesai Ujian</h3>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-info-text">
+                        Periksa kembali jawaban Anda sebelum benar-benar mengakhiri ujian.
+                    </p>
+                    <p class="modal-info-text" style="font-size:11px; color:#888;">
+                        Tombol selesai tersedia setelah jawaban mencapai minimal 60% atau setelah 45 menit sejak ujian dimulai.
+                    </p>
+
+                    <div class="modal-progress">
+                        <div class="modal-progress-label" id="modal-progress-label">Jawaban terkirim: 0 / 0 (0%)</div>
+                        <div class="modal-progress-bar">
+                            <div class="modal-progress-fill" id="modal-progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="modal-status" id="modal-status">Belum semua soal dijawab.</div>
+                    </div>
+
+                    <div class="modal-notice">
+                        <div class="modal-notice-title">Perhatian</div>
+                        <div class="modal-notice-text">
+                            • Jawaban sudah mencapai minimal 60% dari total soal.
+                        </div>
+                    </div>
+
+                    <p class="modal-confirm-text">Anda yakin ingin mengakhiri ujian sekarang?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel" onclick="app.closeFinishModal()">Batal</button>
+                    <button class="modal-btn confirm" onclick="app.confirmFinish()">Selesai</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
